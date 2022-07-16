@@ -1,8 +1,8 @@
 import React from 'react';
 import { useState } from 'react';
-import { Link, TextField, Grid, Container, Paper, Button, Box, Icon, Typography, InputLabel, OutlinedInput, IconButton, InputAdornment, FormControl } from '@mui/material';
-import { Construction, FacebookOutlined, Google, Twitter, Visibility, VisibilityOff } from '@mui/icons-material'
-// import {useAuth} from '../Context/authContext';
+import { Link, TextField,  Button, Box, Typography, InputLabel, OutlinedInput, IconButton, InputAdornment, FormControl } from '@mui/material';
+import {  FacebookOutlined, Google, Visibility, VisibilityOff } from '@mui/icons-material'
+import {useAuth} from '../Contexts/AuthContext';
 
  export function LogInform() {
     const [values, setValues] = useState({
@@ -23,10 +23,23 @@ import { Construction, FacebookOutlined, Google, Twitter, Visibility, Visibility
       const handleMouseDownPassword = (event) => {
         event.preventDefault();
       };
+// const {currentUser} = useAuth();
+const [email , setEmail] = useState('');
+// const [password , setPassword] = useState('');
+const {loginUser} = useAuth();
 
+// console.log(currentUser);
   return (
     <div className="App">
-      <form action="">
+      <form action=""
+      onSubmit={async (e) => {
+      e.preventDefault();
+      console.log(email, values.password);
+        loginUser(email, values.password).then((response) => console.log(response))
+        .catch((err) =>
+          console.log( `we have an errror ${err}`));
+        }}
+      >
         <Box
           display={'flex'}
           flexDirection={'column'}
@@ -40,7 +53,7 @@ import { Construction, FacebookOutlined, Google, Twitter, Visibility, Visibility
           <Typography fontWeight={'Bold'} variant='h4' paddingBottom={4}>
             We1come back
           </Typography>
-          <TextField type={'email'} margin='normal' id="outlined" label="Email" variant="outlined" fullWidth required />
+          <TextField onChange={(e)=>{setEmail(e.target.value)}} type={'email'} margin='normal' id="outlined" label="Email" variant="outlined" fullWidth required />
           {/* <TextField  type={'password'} margin='normal' id="outlined" label="Password" variant="outlined" fullWidth required /> */}
 
           <FormControl margin='normal' sx={{}} variant="outlined">
@@ -66,7 +79,7 @@ import { Construction, FacebookOutlined, Google, Twitter, Visibility, Visibility
             />
           </FormControl>
           <Link href='#' fontWeight={'Bold'} textAlign={'right'} underline='none' color='inherit' sx={{ marginBottom: '20px', marginTop: '10px' }}> Forgot Password?</Link>
-          <Button size='medium' variant="contained" fullWidth style={{ textTransform: 'none' }}>
+          <Button type='submit' size='medium' variant="contained" fullWidth style={{ textTransform: 'none' }}>
             <Typography variant='body1'>
               Log In
             </Typography>

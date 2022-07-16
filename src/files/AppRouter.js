@@ -3,18 +3,15 @@ import {SignUp} from './Sign_up.js';
 import {Routes, Route} from "react-router-dom";
 import { Container, Grid} from "@mui/material";
 
-function App() {
+ export function AppRouter() {
   return (
-    <div className="App">
+    <div className="AppRouter">
       <Container>
         <Grid>
           <Grid item>
             <Routes>
-              {/* <AuthcontextProvider> */}
-
               <Route path="/" element={<LogInform />} />
               <Route path="/signup" element={<SignUp />} />
-              {/* </AuthcontextProvider> */}
             </Routes>
         </Grid>
         </Grid>
@@ -22,4 +19,4 @@ function App() {
     </div>
   );
 }
-export default App;
+// export default AppRouter;

@@ -1,9 +1,10 @@
 import React from 'react';
-import { useState,createContext } from 'react';
+import { useState } from 'react';
 import { Alert, Typography, Box, TextField, FormControl, InputLabel, OutlinedInput, InputAdornment, IconButton, Button, Link, } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 // import { LoadingButton } from '@mui/lab';
-// import {useAuth} from '../Context/authContext';
+import {useAuth} from '../Contexts/AuthContext';
+
 
  export function SignUp() {
   const [values, setValues] = useState({
@@ -27,20 +28,25 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
-  const [IsSubmitting, setIsSubmitting] = useState(false);
-  const [IssPasswordSame, setIsPasswordSame] = useState(true);
-//   const {register} = useAuth();
+  // const [IsSubmitting, setIsSubmitting] = useState(false);
+  // const [IssPasswordSame, setIsPasswordSame] = useState(true);
+  const {registerUser}= useAuth();
+  console.log(registerUser);
+  
   return (
     <div className="signUp">
       <form action=""
         onSubmit={async (e) => {
           e.preventDefault();
-          setIsSubmitting(true);
           console.log(firstName, lastName, email, values.password);
-          // setIsSubmitting(false);
+            // if (values.password === values.confirmPassword) {
+              registerUser(email, values.password).then((response) => {console.log(response);})
+                .catch((err) => 
+                    console.log( `we have an errror ${err}`));
          }}
         >
         <Box
@@ -113,7 +119,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
             />
           </FormControl>
 
-          <Button type='submit' loading={IsSubmitting} size='medium' variant="contained" fullWidth sx={{ textTransform: 'none', marginTop: '20px' }}>
+          <Button type='submit' size='medium' variant="contained" fullWidth sx={{ textTransform: 'none', marginTop: '20px' }}>
             <Typography variant='body1'>
               Sign Up
             </Typography>
