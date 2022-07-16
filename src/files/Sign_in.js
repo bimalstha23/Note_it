@@ -1,43 +1,44 @@
 import React from 'react';
-import { useState } from 'react';
-import { Link, TextField,  Button, Box, Typography, InputLabel, OutlinedInput, IconButton, InputAdornment, FormControl } from '@mui/material';
-import {  FacebookOutlined, Google, Visibility, VisibilityOff } from '@mui/icons-material'
-import {useAuth} from '../Contexts/AuthContext';
+import { useState} from 'react';
+import {useNavigate} from 'react-router-dom';
+import { Link, TextField, Button, Box, Typography, InputLabel, OutlinedInput, IconButton, InputAdornment, FormControl } from '@mui/material';
+import { FacebookOutlined, Google, Visibility, VisibilityOff } from '@mui/icons-material'
+import { useAuth } from '../Contexts/AuthContext';
 
- export function LogInform() {
-    const [values, setValues] = useState({
-        password: '',
-      });
-    
-      const handleChange = (prop) => (event) => {
-        setValues({ ...values, [prop]: event.target.value });
-      };
-    
-      const handleClickShowPassword = () => {
-        setValues({
-          ...values,
-          showPassword: !values.showPassword,
-        });
-      };
-    
-      const handleMouseDownPassword = (event) => {
-        event.preventDefault();
-      };
-// const {currentUser} = useAuth();
-const [email , setEmail] = useState('');
-// const [password , setPassword] = useState('');
-const {loginUser} = useAuth();
+export function LogInform() {
+  const [values, setValues] = useState({
+    password: '',
+  });
 
-// console.log(currentUser);
+  const handleChange = (prop) => (event) => {
+    setValues({ ...values, [prop]: event.target.value });
+  };
+
+  const handleClickShowPassword = () => {
+    setValues({
+      ...values,
+      showPassword: !values.showPassword,
+    });
+  };    
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+  const [email, setEmail] = useState('');
+  const { loginUser, signinWithGoogle , signinWithFacebook } = useAuth();
+  const Navigate = useNavigate();
   return (
     <div className="App">
       <form action=""
-      onSubmit={async (e) => {
-      e.preventDefault();
-      console.log(email, values.password);
-        loginUser(email, values.password).then((response) => console.log(response))
-        .catch((err) =>
-          console.log( `we have an errror ${err}`));
+        onSubmit={async (e) => {
+          e.preventDefault();
+          console.log(email, values.password);
+          loginUser(email, values.password).then((response) =>{ 
+            console.log(response);
+            Navigate('/home');
+          })
+            .catch((err) =>
+              console.log(`we have an errror ${err}`));
         }}
       >
         <Box
@@ -53,7 +54,7 @@ const {loginUser} = useAuth();
           <Typography fontWeight={'Bold'} variant='h4' paddingBottom={4}>
             We1come back
           </Typography>
-          <TextField onChange={(e)=>{setEmail(e.target.value)}} type={'email'} margin='normal' id="outlined" label="Email" variant="outlined" fullWidth required />
+          <TextField onChange={(e) => { setEmail(e.target.value) }} type={'email'} margin='normal' id="outlined" label="Email" variant="outlined" fullWidth required />
           {/* <TextField  type={'password'} margin='normal' id="outlined" label="Password" variant="outlined" fullWidth required /> */}
 
           <FormControl margin='normal' sx={{}} variant="outlined">
@@ -88,11 +89,26 @@ const {loginUser} = useAuth();
             ----- OR -----
           </Typography>
 
-          <Button size='medium' variant='contained' sx={{ textTransform: 'none' }} startIcon={<Google />}>
+          <Button onClick={()=>{
+            signinWithGoogle().then((response) => {
+              console.log(response);
+              Navigate('/home');
+            }).catch((err) =>
+              console.log(`we have an errror ${err}`))
+          }
+          } size='medium' variant='contained' sx={{ textTransform: 'none' }} startIcon={<Google />}>
             <Typography variant='body1'>
               Join with Google
             </Typography></Button>
-          <Button size='medium' variant='contained' sx={{ textTransform: 'none', marginTop: '20px' }} startIcon={<FacebookOutlined />}>
+          <Button 
+          onClick={()=>{  signinWithFacebook().then((response) => {
+            console.log(response);
+            Navigate('/home');
+          }).catch((err) =>
+            console.log(`we have an errror ${err}`))
+          }}
+
+          size='medium' variant='contained' sx={{ textTransform: 'none', marginTop: '20px' }} startIcon={<FacebookOutlined />}>
             <Typography variant='body1'>
               Join with Faceboook
             </Typography></Button>

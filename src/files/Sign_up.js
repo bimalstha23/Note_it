@@ -1,5 +1,6 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import {useNavigate} from 'react-router-dom';
 import { Alert, Typography, Box, TextField, FormControl, InputLabel, OutlinedInput, InputAdornment, IconButton, Button, Link, } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 // import { LoadingButton } from '@mui/lab';
@@ -8,8 +9,6 @@ import {useAuth} from '../Contexts/AuthContext';
 
  export function SignUp() {
   const [values, setValues] = useState({
-    // name: '',  
-    // email: '',
     password: '',
     confirmPassword: '',
     showPassword: false,
@@ -23,6 +22,7 @@ import {useAuth} from '../Contexts/AuthContext';
   };
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
+    setConfirmPasswordDirty(true);
   };
 
   const handleMouseDownPassword = (event) => {
@@ -32,8 +32,21 @@ import {useAuth} from '../Contexts/AuthContext';
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
-  // const [IsSubmitting, setIsSubmitting] = useState(false);
-  // const [IssPasswordSame, setIsPasswordSame] = useState(true);
+  const [showErrorMessege, setShowErrorMessege] = useState(false);
+  const [errorMessege, setErrorMessege] = useState('');
+  const [confirmPasswordDirty, setConfirmPasswordDirty] = useState(false);
+
+useEffect(() => {
+  if(values.password !== values.confirmPassword){
+    setShowErrorMessege(true);
+    setErrorMessege('Passwords do not match');
+  }
+  else{
+    setShowErrorMessege(false);
+    setErrorMessege('');
+  }
+}, [values.password, values.confirmPassword]);
+
   const {registerUser}= useAuth();
   console.log(registerUser);
   
@@ -42,8 +55,6 @@ import {useAuth} from '../Contexts/AuthContext';
       <form action=""
         onSubmit={async (e) => {
           e.preventDefault();
-          console.log(firstName, lastName, email, values.password);
-            // if (values.password === values.confirmPassword) {
               registerUser(email, values.password).then((response) => {console.log(response);})
                 .catch((err) => 
                     console.log( `we have an errror ${err}`));
@@ -80,6 +91,7 @@ import {useAuth} from '../Contexts/AuthContext';
               id="outlined-adornment-password"
               type={values.showPassword ? 'text' : 'password'}
               value={values.password}
+              required
               onChange={handleChange('password')}
               endAdornment={
                 <InputAdornment position="end">
@@ -102,6 +114,10 @@ import {useAuth} from '../Contexts/AuthContext';
               id="outlined-adornment-password"
               type={values.showPassword ? 'text' : 'password'}
               value={values.confirmPassword}
+              required
+              error={showErrorMessege && confirmPasswordDirty? true: false}
+              // helperText={errorMessege}
+              placeholder={errorMessege}       
               onChange={handleChange('confirmPassword')}
               endAdornment={
                 <InputAdornment position="end">
