@@ -1,11 +1,11 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import {useNavigate} from 'react-router-dom';
-import { Alert, Typography, Box, TextField, FormControl, InputLabel, OutlinedInput, InputAdornment, IconButton, Button, Link, } from '@mui/material';
+import { Alert, Typography, Box, TextField, FormControl, InputLabel, OutlinedInput, InputAdornment, IconButton, Link, } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-// import { LoadingButton } from '@mui/lab';
+import { LoadingButton } from '@mui/lab';
 import {useAuth} from '../Contexts/AuthContext';
-
+import { useMounted } from '../Hooks/useMounted';
 
  export function SignUp() {
   const [values, setValues] = useState({
@@ -28,14 +28,18 @@ import {useAuth} from '../Contexts/AuthContext';
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+  
+  const navigate = useNavigate();
+  const mounted = useMounted();
 
+  const [isloading, setIsloading] = useState(false);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [showErrorMessege, setShowErrorMessege] = useState(false);
   const [errorMessege, setErrorMessege] = useState('');
   const [confirmPasswordDirty, setConfirmPasswordDirty] = useState(false);
-
+ //   password and confirm passowrd validation 
 useEffect(() => {
   if(values.password !== values.confirmPassword){
     setShowErrorMessege(true);
@@ -47,6 +51,8 @@ useEffect(() => {
   }
 }, [values.password, values.confirmPassword]);
 
+
+
   const {registerUser}= useAuth();
   console.log(registerUser);
   
@@ -55,9 +61,14 @@ useEffect(() => {
       <form action=""
         onSubmit={async (e) => {
           e.preventDefault();
-              registerUser(email, values.password).then((response) => {console.log(response);})
+          setIsloading(true);
+              registerUser(email, values.password).then((response) => {
+                navigate('/home');
+                console.log("User added" );})
                 .catch((err) => 
-                    console.log( `we have an errror ${err}`));
+                    console.log( `we have an errror ${err}`)).finally(() => {
+                     mounted.current && setIsloading(false);
+                    })
          }}
         >
         <Box
@@ -135,12 +146,12 @@ useEffect(() => {
             />
           </FormControl>
 
-          <Button type='submit' size='medium' variant="contained" fullWidth sx={{ textTransform: 'none', marginTop: '20px' }}>
+          <LoadingButton loading = {isloading} type='submit' size='medium' variant="contained" fullWidth sx={{ textTransform: 'none', marginTop: '20px' }}>
             <Typography variant='body1'>
               Sign Up
             </Typography>
 
-          </Button>
+          </LoadingButton>
           <Typography textAlign={'center'}
             sx={{ marginBottom: '0px', marginTop: '15px' }}
           >

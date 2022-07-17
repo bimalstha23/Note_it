@@ -1,9 +1,12 @@
 import React from 'react';
 import { useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import { Link, TextField, Button, Box, Typography, InputLabel, OutlinedInput, IconButton, InputAdornment, FormControl } from '@mui/material';
+import { Link, TextField, Box, Typography, InputLabel, OutlinedInput, IconButton, InputAdornment, FormControl } from '@mui/material';
 import { FacebookOutlined, Google, Visibility, VisibilityOff } from '@mui/icons-material'
 import { useAuth } from '../Contexts/AuthContext';
+import { useMounted } from '../Hooks/useMounted';
+import { LoadingButton } from '@mui/lab';
+
 
 export function LogInform() {
   const [values, setValues] = useState({
@@ -24,6 +27,8 @@ export function LogInform() {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+  const mounted = useMounted();
+  const [isloading, setIsloading] = useState(false);
   const [email, setEmail] = useState('');
   const { loginUser, signinWithGoogle , signinWithFacebook } = useAuth();
   const Navigate = useNavigate();
@@ -32,13 +37,16 @@ export function LogInform() {
       <form action=""
         onSubmit={async (e) => {
           e.preventDefault();
+          setIsloading(true);
           console.log(email, values.password);
           loginUser(email, values.password).then((response) =>{ 
             console.log(response);
             Navigate('/home');
           })
             .catch((err) =>
-              console.log(`we have an errror ${err}`));
+              console.log(`we have an errror ${err}`)).finally(() => {
+                setIsloading(false);
+              });
         }}
       >
         <Box
@@ -80,38 +88,44 @@ export function LogInform() {
             />
           </FormControl>
           <Link href='#' fontWeight={'Bold'} textAlign={'right'} underline='none' color='inherit' sx={{ marginBottom: '20px', marginTop: '10px' }}> Forgot Password?</Link>
-          <Button type='submit' size='medium' variant="contained" fullWidth style={{ textTransform: 'none' }}>
+          <LoadingButton loading={isloading} type='submit' size='medium' variant="contained" fullWidth style={{ textTransform: 'none' }}>
             <Typography variant='body1'>
               Log In
             </Typography>
-          </Button>
+          </LoadingButton>
           <Typography textAlign={'center'} color={'GrayText'} variant='subtitle2' fontWeight={'Bold'} sx={{ margin: '15px' }}>
             ----- OR -----
           </Typography>
 
-          <Button onClick={()=>{
+          <LoadingButton loading={isloading} onClick={()=>{
+            setIsloading(true);
             signinWithGoogle().then((response) => {
               console.log(response);
               Navigate('/home');
             }).catch((err) =>
-              console.log(`we have an errror ${err}`))
+              console.log(`we have an errror ${err}`)
+              ).finally(()=>{
+               mounted.current && setIsloading(false);
+              })
           }
           } size='medium' variant='contained' sx={{ textTransform: 'none' }} startIcon={<Google />}>
             <Typography variant='body1'>
               Join with Google
-            </Typography></Button>
-          <Button 
+            </Typography></LoadingButton>
+          <LoadingButton 
           onClick={()=>{  signinWithFacebook().then((response) => {
             console.log(response);
             Navigate('/home');
           }).catch((err) =>
-            console.log(`we have an errror ${err}`))
+            console.log(`we have an errror ${err}`)).finally(()=>{
+             mounted.current && setIsloading(false);
+            })
           }}
 
           size='medium' variant='contained' sx={{ textTransform: 'none', marginTop: '20px' }} startIcon={<FacebookOutlined />}>
             <Typography variant='body1'>
               Join with Faceboook
-            </Typography></Button>
+            </Typography></LoadingButton>
           <Typography textAlign={'center'}
             sx={{ marginBottom: '0px', marginTop: '15px' }}
           >

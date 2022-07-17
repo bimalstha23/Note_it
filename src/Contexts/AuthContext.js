@@ -16,6 +16,7 @@ const AuthContext = createContext({
     loginUser: () => Promise,
     signinWithFacebook: () => Promise,
     signinWithGoogle: () => Promise,
+    SignOut: () => Promise,
 });
 
 
@@ -50,7 +51,7 @@ export function AuthcontextProvider({children}) {
         return signInWithPopup(auth, provider);
     }
 
-    const signOut = () => {
+    const SignOut = () => {
         return signOut(auth);
     }
 
@@ -60,6 +61,7 @@ export function AuthcontextProvider({children}) {
         loginUser,
         signinWithGoogle,
         signinWithFacebook,
+        SignOut
     };
     return(
      <AuthContext.Provider value={values}> 
