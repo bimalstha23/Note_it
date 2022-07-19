@@ -62,7 +62,7 @@ useEffect(() => {
         onSubmit={async (e) => {
           e.preventDefault();
           setIsloading(true);
-              registerUser(email, values.password).then((response) => {
+             await registerUser(email, values.password).then((response) => {
                 navigate('/home');
                 console.log("User added" );})
                 .catch((err) => 

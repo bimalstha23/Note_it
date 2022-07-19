@@ -1,6 +1,5 @@
 import React from 'react';
 import {Navigate} from 'react-router-dom';
-// import { Route } from "react-router-dom";
 import { useAuth } from "../Contexts/AuthContext";
 
 export function ProtectedRoute(props) {
@@ -11,10 +10,5 @@ export function ProtectedRoute(props) {
     pathname: "/",
     state: { from: path}
   }}
-   />
-    // if (!currentUser) {
-    //     return <Navigate to={'/'} />;
-    // }
-    // return children;
-
+    />
 }

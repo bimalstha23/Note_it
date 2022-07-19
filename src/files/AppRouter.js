@@ -15,9 +15,9 @@ import {ProtectedRoute} from './ProtectedRoute.js';
               <Route path="/" element={<LogInform />} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="/home" element={
-              //<ProtectedRoute>
+              <ProtectedRoute>
                 <Home />
-              //  </ProtectedRoute>
+              </ProtectedRoute>
               } />
             </Routes>
         </Grid>
