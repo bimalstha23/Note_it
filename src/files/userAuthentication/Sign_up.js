@@ -4,8 +4,8 @@ import {useNavigate} from 'react-router-dom';
 import { Alert, Typography, Box, TextField, FormControl, InputLabel, OutlinedInput, InputAdornment, IconButton, Link, } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
-import {useAuth} from '../Contexts/AuthContext';
-import { useMounted } from '../Hooks/useMounted';
+import { useAuth } from '../../Contexts/AuthContext';
+import { useMounted } from '../../Hooks/useMounted';
 
  export function SignUp() {
   const [values, setValues] = useState({
@@ -33,8 +33,7 @@ import { useMounted } from '../Hooks/useMounted';
   const mounted = useMounted();
 
   const [isloading, setIsloading] = useState(false);
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  
   const [email, setEmail] = useState('');
   const [showErrorMessege, setShowErrorMessege] = useState(false);
   const [errorMessege, setErrorMessege] = useState('');
@@ -52,10 +51,7 @@ useEffect(() => {
 }, [values.password, values.confirmPassword]);
 
 
-
   const {registerUser}= useAuth();
-  console.log(registerUser);
-  
   return (
     <div className="signUp">
       <form action=""
@@ -63,8 +59,9 @@ useEffect(() => {
           e.preventDefault();
           setIsloading(true);
              await registerUser(email, values.password).then((response) => {
-                navigate('/home');
-                console.log("User added" );})
+                navigate('/UpdateuserProfile');
+                // console.log("User added" );
+              })
                 .catch((err) => 
                     console.log( `we have an errror ${err}`)).finally(() => {
                      mounted.current && setIsloading(false);
@@ -86,15 +83,7 @@ useEffect(() => {
           <Typography fontWeight={'Bold'} variant='h4' paddingBottom={4}>
             Get Started
           </Typography>
-          <Box display={'flex'}
-            flexDirection={'row'}
-          // sx={{paddingBottom:'10px'}}
-          >
-            <TextField value={firstName} onChange={(e) => { setFirstName(e.target.value) }} type={'text'} margin='normal' id="outlined" label="First Name" variant="outlined"
-              sx={{ paddingRight: '10px' }}
-              required />
-            <TextField value={lastName} onChange={(e) => { setLastName(e.target.value) }} type={'text'} margin='normal' id="outlined" label="Last Name" variant="outlined" required />
-          </Box>
+         
           <TextField value={email} onChange={(e) => { setEmail(e.target.value) }} type={'email'} margin='normal' id="outlined" label="Email" variant="outlined" fullWidth required />
           <FormControl margin='normal' sx={{}} variant="outlined">
             <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>

@@ -3,8 +3,8 @@ import { useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import { Link, TextField, Box, Typography, InputLabel, OutlinedInput, IconButton, InputAdornment, FormControl } from '@mui/material';
 import { FacebookOutlined, Google, Visibility, VisibilityOff } from '@mui/icons-material'
-import { useAuth } from '../Contexts/AuthContext';
-import { useMounted } from '../Hooks/useMounted';
+import { useAuth } from '../../Contexts/AuthContext';
+import { useMounted } from '../../Hooks/useMounted';
 import { LoadingButton } from '@mui/lab';
 
 
@@ -35,7 +35,7 @@ export function LogInform() {
   return (
     <div className="App">
       <form action=""
-        onSubmit={async (e) => {
+        onSubmit={ (e) => {
           e.preventDefault();
           setIsloading(true);
           console.log(email, values.password);
@@ -87,7 +87,7 @@ export function LogInform() {
               label="Password"
             />
           </FormControl>
-          <Link href='#' fontWeight={'Bold'} textAlign={'right'} underline='none' color='inherit' sx={{ marginBottom: '20px', marginTop: '10px' }}> Forgot Password?</Link>
+          <Link href='/ForgotPassword' fontWeight={'Bold'} textAlign={'right'} underline='none' color='inherit' sx={{ marginBottom: '20px', marginTop: '10px' }}> Forgot Password?</Link>
           <LoadingButton loading={isloading} type='submit' size='medium' variant="contained" fullWidth style={{ textTransform: 'none' }}>
             <Typography variant='body1'>
               Log In

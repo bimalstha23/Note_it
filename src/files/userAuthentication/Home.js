@@ -1,5 +1,5 @@
 import { Typography, Box, Button } from "@mui/material";
-import { useAuth } from "../Contexts/AuthContext";
+import { useAuth } from "../../Contexts/AuthContext";
 
  export function Home() {
     const {currentUser,SignOut}= useAuth();
