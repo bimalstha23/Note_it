@@ -1,6 +1,6 @@
 import {LogInform} from './userAuthentication/Sign_in.js';
 import {SignUp} from './userAuthentication/Sign_up.js';
-import {Home} from './userAuthentication/Home.js';
+import {Home} from './DashBoard/Home.js';
 import {ForgotPassword} from './userAuthentication/ForgotPassword.js';
 import {Routes, Route} from "react-router-dom";
 import { Container, Grid} from "@mui/material";
