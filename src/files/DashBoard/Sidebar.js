@@ -7,16 +7,20 @@ import ClassOutlinedIcon from '@mui/icons-material/ClassOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import NoteOutlinedIcon from '@mui/icons-material/NoteOutlined';
 import {useAuth} from '../../Contexts/AuthContext';
+import { SidebarTheme } from '../../utils/Themes';
+import {ThemeProvider} from '@mui/material/styles';
 
 export function Sidebar() {
     const drawerWidth = 240;
     const {currentUser,SignOut} = useAuth();
     return (
-    <Box sx={{ display: 'flex' }}>
-      {/* <CssBaseline /> */}
+<Box>
+
+      <CssBaseline />
+      <ThemeProvider theme={SidebarTheme}> 
       <Drawer
-        sx={{
-          width: drawerWidth,
+       sx={{
+         width: drawerWidth,
           flexShrink: 0,
           '& .MuiDrawer-paper': {
             width: drawerWidth,
@@ -25,7 +29,7 @@ export function Sidebar() {
         }}
         variant="permanent"
         anchor="left"
-      >
+        >
         <Toolbar>
         <Box
         display={'flex'}
@@ -34,20 +38,24 @@ export function Sidebar() {
         marginTop={'50px'}
         >
         <Card
-        borderRadius={'24px'}
+        // Shape={'circle'}
         margin={'auto'}
-        marginButtom={'10px'}
+        // marginButtom={'50px'}
         >
             <CardMedia
+            
             component="img"
             alt = "Profile"
             height="174px"
             width="174px"
-            borderRadius={'25px'}
+            sx={{
+                borderRadius: '25px',
+                marginBottom: '20px',
+            }}
             image={currentUser.photoURL}
             />
         </Card>       
-            <Typography variant="body" align="center" color="textPrimary">
+            <Typography paddingBottom={'15px'} variant="body" align="center" color="textPrimary">
             {currentUser.displayName}
             </Typography>
 
@@ -69,12 +77,12 @@ export function Sidebar() {
         {/* <Divider /> */}
         <List>
             {['Sign Out'].map((text, index) => (
-            <ListItem key={text} disablePadding>
+              <ListItem key={text} disablePadding>
                 <ListItemButton 
                 onClick={()=>{
-                    console.log('signout');
-                    SignOut();
-                  }} >
+                  console.log('signout');
+                  SignOut();
+                }} >
                     <ListItemIcon>
                         <LogoutOutlinedIcon />
                     </ListItemIcon>
@@ -84,13 +92,7 @@ export function Sidebar() {
             ))}
         </List>
       </Drawer>
-      <Box
-        component="main"
-        sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
-      >
-        <Toolbar />
-        
-      </Box>
-    </Box>
+      </ThemeProvider>
+            </Box> 
   );
 }

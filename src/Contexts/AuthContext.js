@@ -24,7 +24,7 @@ const AuthContext = createContext({
     SignOut: () => Promise,
     PasswordResetEmail: () => Promise,
     updateUser: () => Promise,
-    verifyEmail: () => Promise,
+    // verifyEmail: () => Promise,
 });
 
 
@@ -72,9 +72,9 @@ export function AuthcontextProvider({ children }) {
         return signOut(auth);
     }
  
-    const verifyEmail = () => {
-    return sendEmailVerification(auth.currentUser);
-    }
+    // const verifyEmail = () => {
+    // return sendEmailVerification(auth.currentUser);
+    // }
 
     const PasswordResetEmail=(email)=>{
         return sendPasswordResetEmail(auth,email,{
@@ -91,7 +91,7 @@ export function AuthcontextProvider({ children }) {
         SignOut,
         PasswordResetEmail,
         updateUser,
-        verifyEmail,
+        // verifyEmail,
     };
     return (
         <AuthContext.Provider value={values}>

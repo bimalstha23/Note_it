@@ -50,6 +50,7 @@ export function LogInform() {
         }}
       >
         <Box
+        bgcolor={'primary'}
           display={'flex'}
           flexDirection={'column'}
           maxWidth={350}

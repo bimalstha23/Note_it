@@ -3,12 +3,13 @@ import { auth, } from '../../utils/firebaseDB';
 import {Link, Box, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { useAuth } from '../../Contexts/AuthContext';
+import { sendEmailVerification } from 'firebase/auth';
 
 export const EmailVerification = () => {
 
     const [isloading, setIsloading] = useState(false);
 
-    const { currentUser, verifyEmail } = useAuth();
+    const { currentUser } = useAuth();
     const Name = currentUser.displayName;
     console.log(Name);
     // const firstName = Name.split(' ')[0];
@@ -19,7 +20,7 @@ export const EmailVerification = () => {
             async (e) => {
                 e.preventDefault();
                 setIsloading(true);
-                await verifyEmail().then((response) => {
+                await sendEmailVerification(currentUser).then((response) => {
                 console.log(response);
                 // console.log('Email sent');
                 }).catch((error) => {
@@ -27,7 +28,13 @@ export const EmailVerification = () => {
                 }).finally(() => {
                     setIsloading(false);
                 })
-                
+                // try{
+                //     await sendEmailVerification(currentUser);
+                //     console.log('Email sent');
+                // }
+                // catch(error){
+                //     console.log(error);
+                // }
             }
         }
         >
