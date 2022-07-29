@@ -8,7 +8,6 @@ export const useUiContext = () => useContext(UiContext);
 
 export const UiControlContext = ({children}) => {
     const [createClassDialog, setCreateClassDialog] = useState(false);
-
     const value = {
     createClassDialog,
     setCreateClassDialog,

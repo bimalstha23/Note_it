@@ -5,6 +5,7 @@ import { useAuth } from "../Contexts/AuthContext";
 export function ProtectedRoute(props) {
   const { currentUser } = useAuth();
   const { children, path } = props;
+
   return currentUser ? children : <Navigate
   to ={{
     pathname: "/",

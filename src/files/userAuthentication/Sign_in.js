@@ -6,6 +6,7 @@ import { FacebookOutlined, Google, Visibility, VisibilityOff } from '@mui/icons-
 import { useAuth } from '../../Contexts/AuthContext';
 import { useMounted } from '../../Hooks/useMounted';
 import { LoadingButton } from '@mui/lab';
+import { updateCurrentUser } from 'firebase/auth';
 
 
 export function LogInform() {
@@ -39,9 +40,8 @@ export function LogInform() {
           e.preventDefault();
           setIsloading(true);
           console.log(email, values.password);
-          loginUser(email, values.password).then((response) =>{ 
-            console.log(response);
-            Navigate('/home');
+           const user = loginUser(email, values.password).then((response) =>{ 
+           Navigate('/home');
           })
             .catch((err) =>
               console.log(`we have an errror ${err}`)).finally(() => {

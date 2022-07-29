@@ -13,6 +13,7 @@ import {ThemeProvider} from '@mui/material/styles';
 export function Sidebar() {
     const drawerWidth = 240;
     const {currentUser,SignOut} = useAuth();
+    console.log(currentUser.photoURL)
     return (
 <Box>
 

@@ -4,6 +4,7 @@ import { TextField, Box, Typography, Stack, Avatar } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import {useAuth}  from '../../Contexts/AuthContext';
 
+
 export const UpdateuserProfile = () => {
     const navigate = useNavigate();
     const [firstName, setFirstName] = useState('');
@@ -16,7 +17,7 @@ export const UpdateuserProfile = () => {
                 e.preventDefault();
                 setIsloading(true);
                  try {
-                     updateUser(firstName, lastName);
+                    await updateUser(firstName, lastName);
                     navigate('/EmailVerification');
                     setIsloading(false);
                 }

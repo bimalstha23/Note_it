@@ -1,19 +1,21 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Alert, Typography, Box, TextField, FormControl, InputLabel, OutlinedInput, InputAdornment, IconButton, Link, } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import { useAuth } from '../../Contexts/AuthContext';
 import { useMounted } from '../../Hooks/useMounted';
+import { addDoc, doc, setDoc, collection, getDoc, query, where } from 'firebase/firestore';
+import { db } from '../../utils/firebaseDB'
 
- export function SignUp() {
+export function SignUp() {
   const [values, setValues] = useState({
     password: '',
     confirmPassword: '',
     showPassword: false,
   });
-;
+  ;
   const handleClickShowPassword = () => {
     setValues({
       ...values,
@@ -28,46 +30,59 @@ import { useMounted } from '../../Hooks/useMounted';
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
-  
+
   const navigate = useNavigate();
   const mounted = useMounted();
-
   const [isloading, setIsloading] = useState(false);
-  
   const [email, setEmail] = useState('');
   const [showErrorMessege, setShowErrorMessege] = useState(false);
   const [errorMessege, setErrorMessege] = useState('');
   const [confirmPasswordDirty, setConfirmPasswordDirty] = useState(false);
- //   password and confirm passowrd validation 
-useEffect(() => {
-  if(values.password !== values.confirmPassword){
-    setShowErrorMessege(true);
-    setErrorMessege('Passwords do not match');
-  }
-  else{
-    setShowErrorMessege(false);
-    setErrorMessege('');
-  }
-}, [values.password, values.confirmPassword]);
+  //   password and confirm passowrd validation 
+  useEffect(() => {
+    if (values.password !== values.confirmPassword) {
+      setShowErrorMessege(true);
+      setErrorMessege('Passwords do not match');
+    }
+    else {
+      setShowErrorMessege(false);
+      setErrorMessege('');
+    }
+  }, [values.password, values.confirmPassword]);
 
 
-  const {registerUser}= useAuth();
+  const { registerUser } = useAuth();
   return (
     <div className="signUp">
       <form action=""
         onSubmit={async (e) => {
           e.preventDefault();
           setIsloading(true);
-             await registerUser(email, values.password).then((response) => {
-                navigate('/UpdateuserProfile');
-                // console.log("User added" );
-              })
-                .catch((err) => 
-                    console.log( `we have an errror ${err}`)).finally(() => {
-                     mounted.current && setIsloading(false);
-                    })
-         }}
-        >
+          try {
+            const Response = await registerUser(email, values.password);
+            const docRef = doc(db, "users", Response.user.uid);
+            // const docSnapshot = await getDoc(docRef);
+            // console.log(docSnapshot.empty);
+            // if (!docSnapshot.exists) {
+              const user = {
+                uid: Response.user.uid,
+                email: Response.user.email,
+                enrolledClasses: [],
+              };
+              await setDoc(docRef, user);
+              console.log("Document written with ID: ", docRef.id);
+            // }
+            navigate('/UpdateuserProfile');
+
+          } catch (err) {
+            console.log(err);
+          }
+
+
+
+        }
+        }
+      >
         <Box
           display={'flex'}
           flexDirection={'column'}
@@ -83,7 +98,7 @@ useEffect(() => {
           <Typography fontWeight={'Bold'} variant='h4' paddingBottom={4}>
             Get Started
           </Typography>
-         
+
           <TextField value={email} onChange={(e) => { setEmail(e.target.value) }} type={'email'} margin='normal' id="outlined" label="Email" variant="outlined" fullWidth required />
           <FormControl margin='normal' sx={{}} variant="outlined">
             <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
@@ -115,9 +130,9 @@ useEffect(() => {
               type={values.showPassword ? 'text' : 'password'}
               value={values.confirmPassword}
               required
-              error={showErrorMessege && confirmPasswordDirty? true: false}
+              error={showErrorMessege && confirmPasswordDirty ? true : false}
               // helperText={errorMessege}
-              placeholder={errorMessege}       
+              placeholder={errorMessege}
               onChange={handleChange('confirmPassword')}
               endAdornment={
                 <InputAdornment position="end">
@@ -135,7 +150,7 @@ useEffect(() => {
             />
           </FormControl>
 
-          <LoadingButton loading = {isloading} type='submit' size='medium' variant="contained" fullWidth sx={{ textTransform: 'none', marginTop: '20px' }}>
+          <LoadingButton loading={isloading} type='submit' size='medium' variant="contained" fullWidth sx={{ textTransform: 'none', marginTop: '20px' }}>
             <Typography variant='body1'>
               Sign Up
             </Typography>
