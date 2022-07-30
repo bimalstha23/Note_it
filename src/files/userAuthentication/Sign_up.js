@@ -61,17 +61,14 @@ export function SignUp() {
           try {
             const Response = await registerUser(email, values.password);
             const docRef = doc(db, "users", Response.user.uid);
-            // const docSnapshot = await getDoc(docRef);
-            // console.log(docSnapshot.empty);
-            // if (!docSnapshot.exists) {
-              const user = {
-                uid: Response.user.uid,
-                email: Response.user.email,
-                enrolledClasses: [],
-              };
-              await setDoc(docRef, user);
-              console.log("Document written with ID: ", docRef.id);
-            // }
+            const user = {
+              uid: Response.user.uid,
+              email: Response.user.email,
+              enrolledClasses: [],
+            };
+            await setDoc(docRef, user);
+            console.log("Document written with ID: ", docRef.id);
+
             navigate('/UpdateuserProfile');
 
           } catch (err) {
