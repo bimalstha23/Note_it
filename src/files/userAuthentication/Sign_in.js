@@ -58,7 +58,7 @@ export function LogInform() {
           margin={'auto'}
           marginTop={'50px'}
           padding={'30px'}
-          borderRadius={'20px'}
+          borderRadius={'25px'}
         >
           <Typography fontWeight={'Bold'} variant='h4' paddingBottom={4}>
             We1come back
