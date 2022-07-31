@@ -35,7 +35,7 @@ export const CreateClass = () => {
                                 institute: InstituteName,
                                 subjectNumber: subjectNumber,
                                 roomNumber: RoomNumber,
-                                admin: currentUser.uid,
+                                OwnerEmail: currentUser.email,
                                 Teacher: [{
                                     name: currentUser.displayName,
                                     email: currentUser.email,

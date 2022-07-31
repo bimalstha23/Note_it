@@ -2,7 +2,9 @@ import React, { useState } from 'react'
 import { Card, Avatar, Divider, Slide, Toolbar, AppBar, IconButton, Box, Grid, Typography, Button, Dialog, DialogContentText, DialogContent, DialogTitle, DialogActions, CardHeader, TextField } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close';
 import { useAuth } from '../../../Contexts/AuthContext';
-// import {style} from '../../App.module.css'
+import { setDoc,getDoc, doc, addDoc, collection, query } from 'firebase/firestore';
+import { db } from '../../../utils/firebaseDB';
+import { ConstructionOutlined } from '@mui/icons-material';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -12,6 +14,9 @@ export const JoinClass = () => {
     const [joinClassDialog, setJoinClassDialog] = useState(false);
     const [OwnerEmail, setOwnerEmail] = useState('');
     const [classCode, setClassCode] = useState('');
+    const [error, setError] = useState(false);
+    const [classData,setClassData] = useState(null);
+    const [classExists, setClassExists] = useState(false);
     const { currentUser, SignOut } = useAuth();
     console.log(currentUser.photoURL)
     console.log(currentUser)
@@ -22,6 +27,12 @@ export const JoinClass = () => {
         setJoinClassDialog(true);
     }
 
+    function    handleSubmit(e) {
+        e.preventDefault();
+        console.log('submit');
+        console.log(OwnerEmail, classCode); 
+        setJoinClassDialog(false);
+    }
     return (
         <Box>
             <Button onClick={handleClickOpen} color='primary' variant='contained'>Join Class</Button>
@@ -33,6 +44,45 @@ export const JoinClass = () => {
                 onClose={handleClose}
                 TransitionComponent={Transition}
             >
+                <form action=""
+                onSubmit={
+                   async (e) => {
+                    e.preventDefault();
+                    // console.log('submit');
+                    // console.log(OwnerEmail, classCode);
+                    try{
+                        const classRef = doc(db, 'CreatedClass', OwnerEmail, 'Classes', classCode);
+                        const classSnap = await getDoc(classRef);
+                        if(classSnap.exists() && classSnap.data().OwnerEmail!==currentUser.email)
+                        {
+                            console.log(classSnap.data());
+                            setClassExists(true);
+                            setError(false);
+                            setClassData(classSnap.data());
+                        }else{
+                            setClassExists(false);
+                            setError(true);
+                            return;
+                        }
+
+                    }catch(e){
+                        console.log(e);
+                    }
+                    if(classExists){
+                        try{
+                        const joinClassRef = doc(db, 'JoinedClasses', currentUser.email,'Classes', classCode);
+                        await setDoc(joinClassRef,classData);
+                        console.log("class Joined");
+                        }catch(e){
+                        console.log(e);
+                        console.log("Error joining class");
+                        }
+                    }
+
+
+                }
+                }>
+
                 <AppBar sx={{ position: 'relative' }}>
                     <Toolbar>
                         <IconButton
@@ -46,7 +96,9 @@ export const JoinClass = () => {
                         <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
                             Join Class
                         </Typography>
-                        <Button variant='outlined' autoFocus color="inherit" onClick={handleClose}>
+                        <Button type='submit' variant='outlined' autoFocus color="inherit" 
+                        // onClick={handleSubmit}
+                        >
                             Join
                         </Button>
                     </Toolbar>
@@ -56,7 +108,8 @@ export const JoinClass = () => {
                     flexDirection='column'
                     margin='auto'
                     marginTop='20px'
-                >
+                    width='40%'
+                    >
                     <Box
                         padding={'25px'}
                         boxShadow={'0 0 5px #ddd'}
@@ -70,12 +123,12 @@ export const JoinClass = () => {
                             <CardHeader
                                 avatar={
                                     <Avatar
-                                        alt={currentUser.displayName}
-                                        // src='https://www.slashfilm.com/img/gallery/doctor-strange-in-the-multiverse-of-madness-is-actually-the-wanda-maximoff-show/intro-1652138123.webp'
+                                    alt={currentUser.displayName}
+                                    // src='https://www.slashfilm.com/img/gallery/doctor-strange-in-the-multiverse-of-madness-is-actually-the-wanda-maximoff-show/intro-1652138123.webp'
                                         src={currentUser.photoURL}
-                                    />
+                                        />
                                 }
-
+                                
                                 action={
                                     <Button variant='outlined' autoFocus color="inherit" onClick={SignOut}>
                                         Logout
@@ -83,7 +136,7 @@ export const JoinClass = () => {
                                 }
                                 title={currentUser.displayName}
                                 subheader={currentUser.email}
-                            />
+                                />
                         </Card>
                     </Box>
                     <Box
@@ -100,11 +153,13 @@ export const JoinClass = () => {
                         <Box
                             display={'flex'}
                             flexDirection={'row'}
-                        >
+                            >
                             <TextField value={OwnerEmail} onChange={(e)=>setOwnerEmail(e.target.value)} label='Owner Email' id='outlined' margin='normal' variant='outlined'></TextField>
                             <TextField value={classCode} onChange={(e)=>setClassCode(e.target.value)} label='Class Code' id='outlined' margin='normal' variant='outlined' sx={{
                                 marginLeft: '20px',
                             }}></TextField>
+
+
                         </Box>
                     </Box>
 
@@ -121,6 +176,7 @@ export const JoinClass = () => {
                     </Box>
 
                 </Box>
+                    </form>
             </Dialog>
 
         </Box>
