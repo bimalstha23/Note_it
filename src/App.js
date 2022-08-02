@@ -1,5 +1,5 @@
 import React from 'react';
-import {AppRouter} from './files/AppRouter.js';
+import {AppRouter} from './Routes/AppRouter.js';
 import {AuthcontextProvider} from './Contexts/AuthContext';
 import {ThemeProvider} from '@mui/material/styles';
 import {MainTheme} from './utils/Themes.js';

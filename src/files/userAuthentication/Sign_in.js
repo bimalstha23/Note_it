@@ -41,7 +41,7 @@ export function LogInform() {
           setIsloading(true);
           console.log(email, values.password);
            const user = loginUser(email, values.password).then((response) =>{ 
-           Navigate('/home');
+           Navigate('/');
           })
             .catch((err) =>
               console.log(`we have an errror ${err}`)).finally(() => {

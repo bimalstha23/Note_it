@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { Box, Grid, Typography, Button, Dialog, DialogContentText, TextField, DialogContent, DialogTitle, DialogActions } from '@mui/material'
-import { classes } from '../../classobjectfortest'
-import { useUiContext } from '../../Contexts/UiControlContext'
-import { db } from '../../utils/firebaseDB'
-import { useAuth } from '../../Contexts/AuthContext'
-import { CreateClass } from './Classes/CreateClass'
-import { JoinClass } from './Classes/JoinClass'
+import { classes } from '../../../classobjectfortest'
+import { useUiContext } from '../../../Contexts/UiControlContext'
+import { db } from '../../../utils/firebaseDB'
+import { useAuth } from '../../../Contexts/AuthContext'
+import { CreateClass } from '../Classes/CreateClass'
+import { JoinClass } from '../Classes/JoinClass'
 
 
 

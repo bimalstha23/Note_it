@@ -8,7 +8,7 @@ export function ProtectedRoute(props) {
 
   return currentUser ? children : <Navigate
   to ={{
-    pathname: "/",
+    pathname: "/login",
     state: { from: path}
   }}
     />

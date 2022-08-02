@@ -9,6 +9,7 @@ import NoteOutlinedIcon from '@mui/icons-material/NoteOutlined';
 import {useAuth} from '../../Contexts/AuthContext';
 import { SidebarTheme } from '../../utils/Themes';
 import {ThemeProvider} from '@mui/material/styles';
+import {Link }  from 'react-router-dom';
 
 export function Sidebar() {
     const drawerWidth = 240;
@@ -66,6 +67,7 @@ export function Sidebar() {
         <List>
           {['Home', 'Messenger', 'Classroom', 'Notes','Settings'].map((text, index) => (
             <ListItem key={text} disablePadding>
+              
               <ListItemButton >
                 <ListItemIcon>
                   {index === 0 ? <HomeOutlinedIcon /> : index === 1 ? <ChatBubbleOutlineOutlinedIcon /> : index === 2 ? <NoteOutlinedIcon /> : index === 3 ? <ClassOutlinedIcon /> : index === 4 ? <SettingsIcon /> : null}

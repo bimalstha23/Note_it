@@ -27,7 +27,7 @@ export const JoinClass = () => {
         setJoinClassDialog(true);
     }
 
-    function    handleSubmit(e) {
+    function handleSubmit(e) {
         e.preventDefault();
         console.log('submit');
         console.log(OwnerEmail, classCode); 
@@ -48,8 +48,6 @@ export const JoinClass = () => {
                 onSubmit={
                    async (e) => {
                     e.preventDefault();
-                    // console.log('submit');
-                    // console.log(OwnerEmail, classCode);
                     try{
                         const classRef = doc(db, 'CreatedClass', OwnerEmail, 'Classes', classCode);
                         const classSnap = await getDoc(classRef);
