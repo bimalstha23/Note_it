@@ -1,3 +1,4 @@
+import React, { useState } from 'react'
 import { Typography, Box, Button, Toolbar } from "@mui/material";
 import { useAuth } from "../../Contexts/AuthContext";
 import { Sidebar } from "./Sidebar";

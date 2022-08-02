@@ -1,3 +1,4 @@
+import React from 'react';
 import { LogInform } from '../files/userAuthentication/Sign_in.js';
 import { SignUp } from '../files/userAuthentication/Sign_up.js';
 import { Home } from '../files/DashBoard/Home.js';
