@@ -9,7 +9,7 @@ import { ProtectedRoute } from './ProtectedRoute.js';
 import { UpdateuserProfile } from '../files/userAuthentication/UpdateuserProfile.js';
 import { EmailVerification } from '../files/userAuthentication/EmailVerification.js';
 import { InnerContent } from '../files/DashBoard/DashBoardComponents/InnerContent.js';
-import { MainHome } from '../files/DashBoard/DashBoardComponents/MainHome.js';
+import { MainHome } from '../files/DashBoard/DashBoardComponents/HomeContainer/MainHome.js';
 import { ChatRoom } from '../files/DashBoard/DashBoardComponents/ChatRoom.js';
 import { Navigate } from 'react-router-dom';
 

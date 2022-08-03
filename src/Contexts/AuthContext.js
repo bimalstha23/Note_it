@@ -36,7 +36,7 @@ export function AuthcontextProvider({ children }) {
 
     //geting current user from firebase
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, user => {
+        const unsubscribe =  onAuthStateChanged(auth, user => {
             setCurrentUser(user);
         });
         return () => unsubscribe();

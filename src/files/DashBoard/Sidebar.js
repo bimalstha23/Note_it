@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Typography, Card, CardMedia, CssBaseline, Drawer, Divider, Toolbar, List, Box, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { Paper, Typography, Card, CardMedia, CssBaseline, Drawer, Divider, Toolbar, List, Box, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
@@ -17,8 +17,9 @@ export function Sidebar() {
   const { currentUser, SignOut } = useAuth();
   console.log(currentUser.photoURL)
   return (
-    <Box>
-
+    <Box sx={{
+      width:'150px'
+      }}>
       <CssBaseline />
       <ThemeProvider theme={SidebarTheme}>
         <Drawer
@@ -66,20 +67,20 @@ export function Sidebar() {
           </Toolbar>
           <Divider variant={'middle'} />
           <List>
-            {sidebarNavigation.map((navigation,index) => (
+            {sidebarNavigation.map((navigation, index) => (
               <ListItem key={index} disablePadding>
-                  <ListItemButton component= {Link} to={navigation.to} >
-                    <ListItemIcon>
-                      {index === 0 ? <HomeOutlinedIcon /> : index === 1 ? <ChatBubbleOutlineOutlinedIcon /> : index === 2 ? <NoteOutlinedIcon /> : index === 3 ? <ClassOutlinedIcon /> : index === 4 ? <SettingsIcon /> : null}
-                    </ListItemIcon>
-                    <ListItemText primary={navigation.name} />
-                  </ListItemButton>
+                <ListItemButton component={Link} to={navigation.to} >
+                  <ListItemIcon>
+                    {index === 0 ? <HomeOutlinedIcon /> : index === 1 ? <ChatBubbleOutlineOutlinedIcon /> : index === 2 ? <NoteOutlinedIcon /> : index === 3 ? <ClassOutlinedIcon /> : index === 4 ? <SettingsIcon /> : null}
+                  </ListItemIcon>
+                  <ListItemText primary={navigation.name} />
+                </ListItemButton>
               </ListItem>
             ))}
           </List>
           {/* <Divider /> */}
           <List>
-            
+
             {['Sign Out'].map((text, index) => (
               <ListItem key={text} disablePadding>
                 <ListItemButton
@@ -97,6 +98,6 @@ export function Sidebar() {
           </List>
         </Drawer>
       </ThemeProvider>
-    </Box>
+      </Box>
   );
 }
