@@ -8,7 +8,14 @@ export const MainHome = () => {
 
     return (
         <Container>
+            <Grid container spacing={4}>
+                <Grid item xs={12} sm={8.5}>
             <RenderClass />
+            </Grid>
+            <Grid item xs={12} sm={3.5}>
+            {/* <RenderClass /> */}
+            </Grid>
+            </Grid>
         </Container>
     )
 }

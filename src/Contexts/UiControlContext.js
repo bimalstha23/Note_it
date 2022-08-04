@@ -3,6 +3,7 @@ import React,{useState,createContext,useContext} from 'react'
 
 const UiContext = () => createContext({
     createClassDialog:false,
+    setCreateClassDialog:false,
 });
 export const useUiContext = () => useContext(UiContext);
 

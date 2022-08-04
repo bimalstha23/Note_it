@@ -10,8 +10,9 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export const JoinClass = () => {
-    const [joinClassDialog, setJoinClassDialog] = useState(false);
+export const JoinClass = (props) => {
+    // const [joinClassDialog, setJoinClassDialog] = useState(false);
+    const {joinClassDialog, setJoinClassDialog} = props;
     const [OwnerEmail, setOwnerEmail] = useState('');
     const [classCode, setClassCode] = useState('');
     const [error, setError] = useState(false);

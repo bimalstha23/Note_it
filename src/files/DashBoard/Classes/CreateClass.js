@@ -4,24 +4,30 @@ import { setDoc, doc, addDoc, collection } from 'firebase/firestore'
 import { async } from '@firebase/util'
 import {db} from '../../../utils/firebaseDB'
 import { useAuth } from '../../../Contexts/AuthContext'
+// import { useUiContext } from '../../../Contexts/UiControlContext'
 
-export const CreateClass = () => {
-    const [createClassDialog, setCreateClassDialog] = useState(false);
+export const CreateClass = (props) => {
+    // const [createClassDialog, setCreateClassDialog] = useState(false);
+    const {createClassDialog, setCreateClassDialog} = props;
     const [className, setClassName] = useState('');
     const [InstituteName, setInstituteName] = useState('');
     const [subjectNumber, setSubjectNumber] = useState('');
     const [RoomNumber, setRoomNumber] = useState('');
+    // const {createClassDialog,setCreateClassDialog} = useUiContext();
     const { currentUser } = useAuth();
+    function SetCreateClassDialog(value) {
+        setCreateClassDialog(value);
+    }
     function handleClose() {
-        setCreateClassDialog(false);
+        SetCreateClassDialog(false);
     }
     function handleClickOpen() {
-        setCreateClassDialog(true);
+        SetCreateClassDialog(true);
     }
 
     return (
         <Box>
-            <Button onClick={handleClickOpen} color='primary' variant='contained'>Create Class</Button>
+            {/* <Button onClick={handleClickOpen} color='primary' variant='contained'>Create Class</Button> */}
             <Dialog fullWidth={''} open={createClassDialog} onClose={handleClose}>
                 <form action=""
                     onSubmit={
