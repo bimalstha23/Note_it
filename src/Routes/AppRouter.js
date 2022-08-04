@@ -12,8 +12,11 @@ import { InnerContent } from '../files/DashBoard/DashBoardComponents/InnerConten
 import { MainHome } from '../files/DashBoard/DashBoardComponents/HomeContainer/MainHome.js';
 import { ChatRoom } from '../files/DashBoard/DashBoardComponents/ChatRoom.js';
 import { Navigate } from 'react-router-dom';
+import { Subjects } from '../files/DashBoard/DashBoardComponents/Subjects/Subjects.js';
+import { useDB } from '../Contexts/DBContext';
 
 export function AppRouter() {
+  const { createdClassData, joinedClassData } = useDB();
   return (
     <div className="AppRouter">
       <Container>
@@ -31,6 +34,14 @@ export function AppRouter() {
               } >
                 <Route path="/" element={<InnerContent />}>
                   <Route path="/" element={<Navigate replace to='home' />} />
+                  {/* path for the created classes */}
+                  {createdClassData.map((data, index) => (
+                    <Route key={index} path={`/${data.id}`} element={<Subjects data={data} />} />
+                  ))}
+                  {/* path for the created classes */}
+                  {joinedClassData.map((data, index) => (
+                    <Route key={index} path={`/${data.id}`} element={<Subjects data={data} />} />
+                  ))}
                   <Route path="home" element={<MainHome />} />
                   <Route path="chatroom" element={<ChatRoom />} />
                 </Route>

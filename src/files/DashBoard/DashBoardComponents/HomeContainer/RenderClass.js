@@ -1,58 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import { CreateClass } from '../../Classes/CreateClass'
 import { JoinClass } from '../../Classes/JoinClass'
-import { SpeedDial, SpeedDialAction, IconButton, Container, Box, Grid, Typography, Button, Dialog, DialogContentText, TextField, DialogContent, DialogTitle, DialogActions } from '@mui/material'
-import { db } from '../../../../utils/firebaseDB'
-import { collection, getDocs, query, onSnapshot } from 'firebase/firestore'
+import { SpeedDial, SpeedDialAction, Box, Grid, Typography, Button, Dialog, DialogContentText, TextField, DialogContent, DialogTitle, DialogActions } from '@mui/material'
 import { useAuth } from '../../../../Contexts/AuthContext'
 import { ClassCard } from '../HomeContainer/ClassCard'
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
-import { styled } from '@mui/material/styles'
 import GroupAddOutlinedIcon from '@mui/icons-material/GroupAddOutlined';
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
+import { useDB } from '../../../../Contexts/DBContext'
 
 export const RenderClass = () => {
     const [createClassDialog, setCreateClassDialog] = useState(false);
     const [joinClassDialog, setJoinClassDialog] = useState(false);
-    const [createdClassData, setCreatedClassData] = useState([]);
-    const [joinedClassData, setJoinedClassData] = useState([]);
-    const { currentUser } = useAuth();
-    useEffect(() => {
-        if (currentUser.email) {
-            const q = query(collection(db, 'CreatedClass', currentUser.email, 'Classes'));
-            const unSubscribe = onSnapshot(q, (querySnapshot) => {
-                setCreatedClassData(querySnapshot.docs.map((doc) => {
-                    return {
-                        ...doc.data(),
-                        id: doc.id
-                    }
-                }));
-            })
-            return () => unSubscribe();
-        }
-    }, [currentUser.email])
-
-    useEffect(() => {
-        if (currentUser.email) {
-            const q = query(collection(db, 'JoinedClasses', currentUser.email, 'Classes'));
-            const unSubscribe = onSnapshot(q, (querySnapshot) => {
-                setJoinedClassData(querySnapshot.docs.map((doc) => {
-                    return {
-                        ...doc.data(),
-                        id: doc.id
-                    }
-                }));
-            }
-            )
-            return () => unSubscribe();
-        }
-    }, [currentUser.email]);
-    // console.log(createdClassData);
+    const { createdClassData, joinedClassData } = useDB();
     console.log(joinedClassData);
-    const [openDialog, setOpenDialog] = useState(false);
     const actions = [
         { icon: <CreateOutlinedIcon />, name: 'Create Class', onClick: () => setCreateClassDialog(true) },
-        { icon: <GroupAddOutlinedIcon />, name: 'Join Class', onClick: () => setJoinClassDialog(true) } ,
+        { icon: <GroupAddOutlinedIcon />, name: 'Join Class', onClick: () => setJoinClassDialog(true) },
     ];
     return (
         <Box marginTop={4} sx={{ flexGrow: 1 }}>
@@ -79,7 +43,6 @@ export const RenderClass = () => {
                         />
                     ))}
                 </SpeedDial>
-
             </Box>
             <Grid container spacing={2}>
                 {/* <Grid item xs={12} sm={6}> */}
@@ -89,9 +52,8 @@ export const RenderClass = () => {
                 {joinedClassData.map((item) => (
                     <ClassCard key={item.id} classData={item} />
                 ))}
-
-                <CreateClass createClassDialog ={createClassDialog} setCreateClassDialog={setCreateClassDialog}/>
-                <JoinClass joinClassDialog={joinClassDialog} setJoinClassDialog={setJoinClassDialog}/>
+                <CreateClass createClassDialog={createClassDialog} setCreateClassDialog={setCreateClassDialog} />
+                <JoinClass joinClassDialog={joinClassDialog} setJoinClassDialog={setJoinClassDialog} />
             </Grid>
         </Box>
     )

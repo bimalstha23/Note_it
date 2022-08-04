@@ -44,38 +44,8 @@ export function AuthcontextProvider({ children }) {
 
     const registerUser =  async (email, password) => {
 
-        // try {
             return createUserWithEmailAndPassword(auth, email, password);
-            // console.log(response);
-            // const user = response.user;
-            // const q = query(collection(db,"users"), where("uid", "==", user.uid));
-            // const userDoc = getDocs(q);
-            // console.log(userDoc);
-            // if(userDoc.docs.length === 0){
-            //     const data = {
-                    // uid: user.uid,
-                    // email: user.email,
-                    // displayName: user.displayName,
-                    // photoURL: user.photoURL,
-                    // createdAt: user.metadata.creationTime,
-                    // updatedAt: user.metadata.lastUpdateTime,
-                    // emailVerified: user.emailVerified,
-                    // isAnonymous: user.isAnonymous,
-                    // providerData: user.providerData,
-                    // providerId: user.providerId,
-                    // refreshToken: user.refreshToken,
-                    // signInMethod: user.signInMethod,
-                    // ...user,
-                    // enrolledClassrooms: [],
-                // }
-                // const userRef = doc(collection(db,"users"));
-                // await setDoc(userRef, data);
-            // }
-
-        // }
-        // catch (error) {
-            // console.log(error);
-        // }
+    
     }
 
 

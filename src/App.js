@@ -1,17 +1,20 @@
 import React from 'react';
-import {AppRouter} from './Routes/AppRouter.js';
-import {AuthcontextProvider} from './Contexts/AuthContext';
-import {ThemeProvider} from '@mui/material/styles';
-import {MainTheme} from './utils/Themes.js';
+import { AppRouter } from './Routes/AppRouter.js';
+import { AuthcontextProvider } from './Contexts/AuthContext';
+import { ThemeProvider } from '@mui/material/styles';
+import { MainTheme } from './utils/Themes.js';
+import { DBContextProvider } from './Contexts/DBContext';
 
-function App(props) {
-const Theme = MainTheme;
+function App() {
+  const Theme = MainTheme;
   return (
-        <ThemeProvider theme={Theme}>
+    <ThemeProvider theme={Theme}>
       <AuthcontextProvider>
-        <AppRouter />
+        <DBContextProvider>
+          <AppRouter />
+        </DBContextProvider>
       </AuthcontextProvider>
-        </ThemeProvider>
+    </ThemeProvider>
   );
 }
 export default App;

@@ -1,5 +1,6 @@
 import React from 'react'
 import { Box, Typography, Grid } from '@mui/material'
+import { Link } from 'react-router-dom';
 export const ClassCard = (props) => {
     const { classData } = props;
     console.log(classData)
@@ -16,7 +17,9 @@ export const ClassCard = (props) => {
                 borderRadius={'25px'}
                 padding={'30px'}
             >
-                <Typography>{classData.name}</Typography>
+                <Link to={`/${classData.id}`}>
+                    <Typography>{classData.name}</Typography>
+                </Link>
                 <Typography>{classData.institute}</Typography>
                 <Typography>Subject:{classData.subjectNumber}</Typography>
             </Box>
