@@ -8,21 +8,24 @@ export const Subjects = (props) => {
     const [openDialog, setOpenDialog] = useState(false);
     const { currentUser } = useAuth();
     const { data } = props;
+    const { name,OwnerEmail } = data;
     function handleOpenDialog() {
         setOpenDialog(true);
     }
-    // console.log('hello world');
-    // console.log(data);
+    
     return (
         <Box>
-            <Box>
-                <Typography paddingRight={2} fontWeight={'Bold'} variant='h5' >{data.name}</Typography>
-                {currentUser.email === data.OwnerEmail ?
+            <Box
+                display={'flex'}
+                flexDirection={'row'}
+            >
+                <Typography paddingRight={2} fontWeight={'Bold'} variant='h5' >{name}</Typography>
+                {currentUser.email === OwnerEmail ?
                     <Button onClick={handleOpenDialog} variant='outlined' endIcon={<AddRoundedIcon />}>
                         Add Subject
                     </Button>
                     : null}
-
+                <CreateSubjects openDialog={openDialog} setOpenDialog={setOpenDialog} ownerEmail={OwnerEmail} classID = {data.id} />
             </Box>
         </Box>
     )

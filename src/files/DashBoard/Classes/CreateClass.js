@@ -27,13 +27,11 @@ export const CreateClass = (props) => {
 
     return (
         <Box>
-            {/* <Button onClick={handleClickOpen} color='primary' variant='contained'>Create Class</Button> */}
             <Dialog fullWidth={''} open={createClassDialog} onClose={handleClose}>
                 <form action=""
                     onSubmit={
-                        // console.log("submitted");
                         async (e) => {
-                            console.log('submit');
+                            
                             e.preventDefault();
                             // try {
                             const classData = {
