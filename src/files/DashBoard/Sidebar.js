@@ -23,7 +23,7 @@ export function Sidebar() {
       <CssBaseline />
       <ThemeProvider theme={SidebarTheme}>
         <Drawer
-          sx={{
+          sx={{ 
             width: drawerWidth,
             flexShrink: 0,
             '& .MuiDrawer-paper': {
