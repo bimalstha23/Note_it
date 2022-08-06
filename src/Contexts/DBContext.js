@@ -1,4 +1,4 @@
-import React, { useContext, createContext, useEffect,useState, } from 'react'
+import React, { useContext, createContext, useEffect, useState, } from 'react'
 import { useAuth } from './AuthContext'
 import { db } from '../utils/firebaseDB'
 import { collection, query, onSnapshot } from 'firebase/firestore'
@@ -10,7 +10,7 @@ const DBContext = createContext({
 
 export const useDB = () => useContext(DBContext);
 
-export const DBContextProvider = ({children}) => {
+export const DBContextProvider = ({ children }) => {
     const { currentUser } = useAuth();
     const [createdClassData, setCreatedClassData] = useState([]);
     const [joinedClassData, setJoinedClassData] = useState([]);
@@ -45,6 +45,8 @@ export const DBContextProvider = ({children}) => {
             return () => unSubscribe();
         }
     }, [currentUser.email]);
+
+   
 
     const value = {
         createdClassData,

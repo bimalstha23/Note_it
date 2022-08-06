@@ -43,9 +43,8 @@ export function AuthcontextProvider({ children }) {
     }, []);
 
     const registerUser =  async (email, password) => {
-
             return createUserWithEmailAndPassword(auth, email, password);
-    
+
     }
 
 
