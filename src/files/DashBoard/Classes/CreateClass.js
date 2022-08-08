@@ -27,7 +27,7 @@ export const CreateClass = (props) => {
 
     return (
         <Box>
-            <Dialog fullWidth={''} open={createClassDialog} onClose={handleClose}>
+            <Dialog open={createClassDialog} onClose={handleClose}>
                 <form action=""
                     onSubmit={
                         async (e) => {

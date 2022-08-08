@@ -58,10 +58,10 @@ export const JoinClass = (props) => {
                                     setClassData(classSnap.data());
                                 } else {
                                     setClassExists(false);
+                                    console.log("class does not exist");
                                     setError(true);
                                     return;
                                 }
-
                             } catch (e) {
                                 console.log(e);
                             }

@@ -22,13 +22,13 @@ export const ClassCard = (props) => {
                 borderRadius={'25px'}
                 padding={'30px'}
                 >
-                <Link to={`/${classData.id}`}>
+                <Link to={`/home/${classData.id}`}>
                     <Typography>{classData.name}</Typography>
                 </Link>
                 <Typography>{classData.institute}</Typography>
                 <Typography>Subject:{classData.subjectNumber}</Typography>
             </Box>
-                    </ThemeProvider>
+         </ThemeProvider>
         </Grid>
 
     )

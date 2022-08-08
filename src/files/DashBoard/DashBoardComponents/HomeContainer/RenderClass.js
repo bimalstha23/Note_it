@@ -7,12 +7,60 @@ import { ClassCard } from '../HomeContainer/ClassCard'
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import GroupAddOutlinedIcon from '@mui/icons-material/GroupAddOutlined';
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
-import { useDB } from '../../../../Contexts/DBContext'
+import {db} from '../../../../utils/firebaseDB'
+import { collection, query, onSnapshot } from 'firebase/firestore'
+import { Navigate } from 'react-router-dom'
 
 export const RenderClass = () => {
     const [createClassDialog, setCreateClassDialog] = useState(false);
     const [joinClassDialog, setJoinClassDialog] = useState(false);
-    const { createdClassData, joinedClassData } = useDB();
+    const [createdClassData, setCreatedClassData] = useState([]);
+    const[joinedClassData, setJoinedClassData] = useState([]);
+    const {currentUser} = useAuth();
+    function fetchCreatedClasses() {
+        try {
+            const q = query(collection(db, 'CreatedClass', currentUser.email, 'Classes'));
+            const unSubscribe = onSnapshot(q, (querySnapshot) => {
+                setCreatedClassData(querySnapshot.docs.map((doc) => {
+                    return {
+                        ...doc.data(),
+                        id: doc.id
+                    }
+                }));
+            })
+        } catch (err) {
+            console.log(err);
+        }
+    }
+    function fetchJoinedClasses() {
+        try {
+            const q = query(collection(db, 'JoinedClasses', currentUser.email, 'Classes'));
+            const unSubscribe = onSnapshot(q, (querySnapshot) => {
+                setJoinedClassData(querySnapshot.docs.map((doc) => {
+                    return {
+                        ...doc.data(),
+                        id: doc.id
+                    }
+                }));
+            }
+            )
+        } catch (err) {
+            console.log(err);
+        }
+    }
+    useEffect(() => {
+        if (!currentUser) Navigate("/login", { replace: true });
+    }, [currentUser]);
+
+    useEffect(() => {
+        fetchCreatedClasses();
+    }, [currentUser]);
+
+    useEffect(() => {
+        fetchJoinedClasses();
+    } ,[currentUser]);
+
+    console.log(createdClassData);
     console.log(joinedClassData);
     const actions = [
         { icon: <CreateOutlinedIcon />, name: 'Create Class', onClick: () => setCreateClassDialog(true) },

@@ -1,4 +1,5 @@
 import React, { useContext, useState, createContext, useEffect } from 'react';
+import { collection, query, onSnapshot } from 'firebase/firestore'
 import { auth, db } from '../utils/firebaseDB';
 import {
     createUserWithEmailAndPassword,
@@ -15,7 +16,7 @@ import {
     sendEmailVerification,
 } from "firebase/auth";
 
-const AuthContext = createContext({
+export  const AuthContext = createContext({
     currentUser: null,
     registerUser: () => Promise,
     loginUser: () => Promise,
@@ -24,6 +25,9 @@ const AuthContext = createContext({
     SignOut: () => Promise,
     PasswordResetEmail: () => Promise,
     updateUser: () => Promise,
+    setSubjects: () => {},
+    createdClassData: [],
+    subject: [],
     // verifyEmail: () => Promise,
 });
 
@@ -32,8 +36,47 @@ const AuthContext = createContext({
 export const useAuth = () => useContext(AuthContext);
 
 export function AuthcontextProvider({ children }) {
+    const [createdClassData, setCreatedClassData] = useState([]);
+    const [joinedClassData, setJoinedClassData] = useState([]);
+    const [subject, setSubjects] = useState([]);
+    const [classID, setClassID] = useState();
+    const [state, setState] = useState('');
+    console.log(subject);
+    
     const [currentUser, setCurrentUser] = useState("null");
+    
+    useEffect(() => {
+        if(localStorage.getItem('classID')){
+            setClassID(localStorage.getItem('classID'));
+        }
+    })
+    useEffect(() => {
+        if(classID){
+            localStorage.setItem('classID', classID);
+        }
+    }, [classID])
+    
+    console.log(classID);
+    
+    useEffect(() => {
+        if (classID) {
+            const q = query(collection(db, "CreatedSubject", classID, "Subjects"));
+            const unSubscribe = onSnapshot(q, (querySnapshot) => {
+                setSubjects(
+                    querySnapshot.docs.map((doc) => {
+                        return {
+                            ...doc.data(),
+                            id: doc.id,
+                        };
+                    })
+                );
+            });
+            return () => unSubscribe();
+        }
+    }, [classID]);
+    
 
+   console.log(subject);
     //geting current user from firebase
     useEffect(() => {
         const unsubscribe =  onAuthStateChanged(auth, user => {
@@ -44,9 +87,7 @@ export function AuthcontextProvider({ children }) {
 
     const registerUser =  async (email, password) => {
             return createUserWithEmailAndPassword(auth, email, password);
-
     }
-
 
     const updateUser = (firstName, lastName) => {
         const user = auth.currentUser;
@@ -74,9 +115,6 @@ export function AuthcontextProvider({ children }) {
         return signOut(auth);
     }
 
-    // const verifyEmail = () => {
-    // return sendEmailVerification(auth.currentUser);
-    // }
 
     const PasswordResetEmail = (email) => {
         return sendPasswordResetEmail(auth, email, {
@@ -84,6 +122,11 @@ export function AuthcontextProvider({ children }) {
         });
     }
 
+ 
+
+    // console.log(createdClassData);
+   
+   
     const values = {
         currentUser,
         registerUser,
@@ -93,7 +136,11 @@ export function AuthcontextProvider({ children }) {
         SignOut,
         PasswordResetEmail,
         updateUser,
-        // verifyEmail,
+        setSubjects,
+        createdClassData,
+        joinedClassData,
+        subject,
+        setClassID,
     };
     return (
         <AuthContext.Provider value={values}>

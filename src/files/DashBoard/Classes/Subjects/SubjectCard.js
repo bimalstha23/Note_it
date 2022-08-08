@@ -1,8 +1,9 @@
 import React from 'react'
 import { Box, Typography, Grid } from '@mui/material'
+import { Link } from 'react-router-dom'
 
 export const SubjectCard = (props) => {
-    const { subjectData } = props;
+    const { subjectData,classID } = props;
   return (
     <Grid item xs={12} sm={6}>
     <Box
@@ -16,9 +17,9 @@ export const SubjectCard = (props) => {
         borderRadius={'25px'}
         padding={'30px'}
     >
-        {/* <Link to={`/${classData.id}`}> */}
+        <Link to={`/${subjectData.id}`}>
             <Typography>{subjectData.subjectName}</Typography>
-        {/* </Link> */}
+        </Link>
         <Typography>{subjectData.teacherName}</Typography>
         <Typography>{subjectData.teacherEmail}</Typography>
     </Box>

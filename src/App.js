@@ -9,11 +9,11 @@ function App() {
   const Theme = MainTheme;
   return (
     <ThemeProvider theme={Theme}>
-      <AuthcontextProvider>
-        <DBContextProvider>
+      {/* <DBContextProvider> */}
+        <AuthcontextProvider>
           <AppRouter />
-        </DBContextProvider>
-      </AuthcontextProvider>
+        </AuthcontextProvider>
+      {/* </DBContextProvider> */}
     </ThemeProvider>
   );
 }
