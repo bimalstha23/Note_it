@@ -10,7 +10,7 @@ import { useAuth } from '../../Contexts/AuthContext';
 import { SidebarTheme } from '../../utils/Themes';
 import { ThemeProvider } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
-import { sidebarNavigation } from '../config/SidebarNavigation';
+import { sidebarNavigation } from '../../config/SidebarNavigation';
 
 export function Sidebar() {
   const drawerWidth = 240;

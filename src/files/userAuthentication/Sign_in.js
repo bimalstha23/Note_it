@@ -1,6 +1,6 @@
 import React from 'react';
-import { useState} from 'react';
-import {useNavigate} from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Link, TextField, Box, Typography, InputLabel, OutlinedInput, IconButton, InputAdornment, FormControl } from '@mui/material';
 import { FacebookOutlined, Google, Visibility, VisibilityOff } from '@mui/icons-material'
 import { useAuth } from '../../Contexts/AuthContext';
@@ -23,7 +23,7 @@ export function LogInform() {
       ...values,
       showPassword: !values.showPassword,
     });
-  };    
+  };
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
@@ -31,17 +31,17 @@ export function LogInform() {
   const mounted = useMounted();
   const [isloading, setIsloading] = useState(false);
   const [email, setEmail] = useState('');
-  const { loginUser, signinWithGoogle , signinWithFacebook } = useAuth();
+  const { loginUser, signinWithGoogle, signinWithFacebook } = useAuth();
   const Navigate = useNavigate();
   return (
     <div className="App">
       <form action=""
-        onSubmit={ (e) => {
+        onSubmit={(e) => {
           e.preventDefault();
           setIsloading(true);
           console.log(email, values.password);
-           const user = loginUser(email, values.password).then((response) =>{ 
-           Navigate('/');
+          const user = loginUser(email, values.password).then((response) => {
+            Navigate('/');
           })
             .catch((err) =>
               console.log(`we have an errror ${err}`)).finally(() => {
@@ -50,7 +50,7 @@ export function LogInform() {
         }}
       >
         <Box
-        bgcolor={'primary'}
+          bgcolor={'primary'}
           display={'flex'}
           flexDirection={'column'}
           maxWidth={350}
@@ -98,32 +98,33 @@ export function LogInform() {
             ----- OR -----
           </Typography>
 
-          <LoadingButton loading={isloading} onClick={()=>{
+          <LoadingButton loading={isloading} onClick={() => {
             setIsloading(true);
             signinWithGoogle().then((response) => {
               console.log(response);
               Navigate('/home');
             }).catch((err) =>
               console.log(`we have an errror ${err}`)
-              ).finally(()=>{
-               mounted.current && setIsloading(false);
-              })
+            ).finally(() => {
+              mounted.current && setIsloading(false);
+            })
           }
           } size='medium' variant='contained' sx={{ textTransform: 'none' }} startIcon={<Google />}>
             <Typography variant='body1'>
               Join with Google
             </Typography></LoadingButton>
-          <LoadingButton 
-          onClick={()=>{  signinWithFacebook().then((response) => {
-            console.log(response);
-            Navigate('/home');
-          }).catch((err) =>
-            console.log(`we have an errror ${err}`)).finally(()=>{
-             mounted.current && setIsloading(false);
-            })
-          }}
+          <LoadingButton
+            onClick={() => {
+              signinWithFacebook().then((response) => {
+                console.log(response);
+                Navigate('/home');
+              }).catch((err) =>
+                console.log(`we have an errror ${err}`)).finally(() => {
+                  mounted.current && setIsloading(false);
+                })
+            }}
 
-          size='medium' variant='contained' sx={{ textTransform: 'none', marginTop: '20px' }} startIcon={<FacebookOutlined />}>
+            size='medium' variant='contained' sx={{ textTransform: 'none', marginTop: '20px' }} startIcon={<FacebookOutlined />}>
             <Typography variant='body1'>
               Join with Faceboook
             </Typography></LoadingButton>

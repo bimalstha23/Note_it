@@ -1,9 +1,12 @@
 import React, { useState } from 'react'
-import { Tooltip, Stack, IconButton, Link, TextField, Container, Button, Grid, Box, Typography, Avatar, BottomNavigation, BottomNavigationAction } from '@mui/material'
+import { Tooltip, Dialog, DialogTitle, DialogActions, Stack, IconButton, Link, TextField, Container, Button, Grid, Box, Typography, Avatar, BottomNavigation, BottomNavigationAction } from '@mui/material'
 // import SearchIcon from '@mui/icons-material/Search'
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import AddLinkOutlinedIcon from '@mui/icons-material/AddLinkOutlined';
 import { useAuth } from '../../../../Contexts/AuthContext';
+import DropFileInput from './DragandDrop/DropFileComponent';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { ImageConfig } from '../../../../config/imageConfig';
 
 export const SubjectContent = (props) => {
     const { data } = props;
@@ -12,6 +15,20 @@ export const SubjectContent = (props) => {
     const { id, name, institute, subjectNumber } = data;
     const [showinputField, setShowinputField] = useState(false);
     const [value, setValue] = useState(0);
+    const [showuploadDialog, setShowuploadDialog] = useState(false);
+    const [fileList, setFileList] = useState([]);
+
+    const onFileChange = (fileList) => {
+        setFileList(fileList);
+    }
+    const fileRemove = (file) => {
+        const updatedList = [...fileList];
+        updatedList.splice(fileList.indexOf(file), 1);
+        setFileList(updatedList);
+        props.onFileChange(updatedList);
+    }
+
+
     return (
         <Container maxWidth={'md'}>
             <Grid container justify='center' >
@@ -67,17 +84,52 @@ export const SubjectContent = (props) => {
                         marginTop={'50px'}
                         width={'70%'}
                         height={'400px'}
-
                     >
                         {showinputField ? (
                             <Box>
                                 <TextField
                                     multiline
+                                    autoFocus
                                     rows={4}
                                     label='Post Something to your class'
                                     fullWidth
                                     variant='filled'
                                 />
+
+                                {fileList.length > 0 ? (
+                                    <>
+                                        <Box>
+                                            {
+                                                fileList.map((item, index) => (
+                                                    <Box
+                                                        display="flex"
+                                                        flexDirection="row"
+                                                        boxShadow={'0 0 5px #ddd'}
+                                                        borderRadius={'25px'}
+                                                        padding={'10px'}
+                                                        sx={{
+                                                            justifyContent: 'space-between',
+                                                        }}
+                                                        key={index}>
+                                                        <img height={'50px'} src={ImageConfig[item.type.split('/')[1]] || ImageConfig['default']} alt="" />
+                                                        <Box display={'flex'}
+                                                            flexDirection={'column'}
+                                                            paddingLeft={'5px'}>
+                                                            <Typography variant="body" align="left" color="textPrimary">{item.name}</Typography>
+                                                            <Typography variant="body" align="left" color="textPrimary">{item.size}</Typography>
+                                                        </Box>
+                                                        <IconButton>
+                                                            <DeleteIcon onClick={() => fileRemove(item)} />
+                                                        </IconButton>
+                                                    </Box>
+                                                ))
+
+                                            }
+
+
+                                        </Box>
+                                    </>
+                                ) : null}
                                 <Box display={'flex'}
 
                                     flexDirection='row'
@@ -88,7 +140,7 @@ export const SubjectContent = (props) => {
                                 >
                                     <Stack direction="row" spacing={1}>
                                         <Tooltip title='Upload Files'>
-                                            <IconButton aria-label="Upload Files">
+                                            <IconButton onClick={() => { setShowuploadDialog(true) }} aria-label="Upload Files">
                                                 <FileUploadOutlinedIcon />
                                             </IconButton>
                                         </Tooltip>
@@ -130,6 +182,12 @@ export const SubjectContent = (props) => {
                                 </Box>
                             </Box>
                         }
+                    </Box>
+                    <Box>
+                        <DropFileInput
+                            showuploadDialog={showuploadDialog}
+                            setShowuploadDialog={setShowuploadDialog}
+                            onFileChange={(files) => onFileChange(files)} />
                     </Box>
                 </Box>
             </Grid>
