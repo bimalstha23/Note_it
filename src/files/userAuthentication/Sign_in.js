@@ -7,7 +7,8 @@ import { useAuth } from '../../Contexts/AuthContext';
 import { useMounted } from '../../Hooks/useMounted';
 import { LoadingButton } from '@mui/lab';
 import { updateCurrentUser } from 'firebase/auth';
-
+import { setDoc,doc } from 'firebase/firestore';
+import { db } from '../../utils/firebaseDB';
 
 export function LogInform() {
   const [values, setValues] = useState({
@@ -100,8 +101,17 @@ export function LogInform() {
 
           <LoadingButton loading={isloading} onClick={() => {
             setIsloading(true);
-            signinWithGoogle().then((response) => {
-              console.log(response);
+            signinWithGoogle().then((res) => {
+              const { user } = res;
+              console.log(user);
+              const userRef = doc(db,"users",user.uid);
+              setDoc(userRef,{
+                email: user.email,
+                displayName: user.displayName,
+                photoURL: user.photoURL,
+                uid: user.uid,
+                enrolledClasses: [],
+              })
               Navigate('/home');
             }).catch((err) =>
               console.log(`we have an errror ${err}`)

@@ -1,19 +1,37 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Tooltip, Dialog, DialogTitle, DialogContent, DialogActions, Stack, IconButton, Link, TextField, Container, Button, Grid, Box, Typography, Avatar, BottomNavigation, BottomNavigationAction } from '@mui/material'
 // import SearchIcon from '@mui/icons-material/Search'
 import { AddPost } from './AddPost';
-import { query } from 'firebase/firestore';
+import { query, collection, onSnapshot } from 'firebase/firestore';
+import { db } from '../../../../utils/firebaseDB';
+import { useAuth } from '../../../../Contexts/AuthContext';
 
 export const SubjectContent = (props) => {
+    const { currentUser } = useAuth();
     const { data } = props;
     // const { id, name, institute, subjectNumber } = data;
     const [value, setValue] = useState(0);
+    const [posts, setPosts] = useState([]);
 
     useEffect(() => {
-        if(currentUser.email){
-            const q = query()
+        if (currentUser.email) {
+            const q = query(collection(db, 'posts', data.id, 'posts'));
+            const unSubscribe = onSnapshot(q, (querySnapshot) => {
+                setPosts(
+                    querySnapshot.docs.map((doc) => {
+                        return {
+                            ...doc.data(),
+                            id: doc.id,
+                        };
+                    })
+                );
+            });
+            return () => {
+                unSubscribe();
+            }
         }
-    }, [])
+    }, [currentUser.email]);
+    console.log(posts);
 
     return (
         <Container maxWidth={'md'}>
@@ -64,7 +82,7 @@ export const SubjectContent = (props) => {
                         </BottomNavigation>
                     </Box>
 
-                    <AddPost subjectId = {data.id} />
+                    <AddPost subjectId={data.id} />
                 </Box>
             </Grid>
         </Container>

@@ -10,13 +10,16 @@ import {
     FacebookAuthProvider,
     signOut,
     updateProfile,
-    // createUser,
-    confirmPasswordReset,
-    sendPasswordResetEmail,
-    sendEmailVerification,
-} from "firebase/auth";
 
-export  const AuthContext = createContext({
+    // createUser,
+    // confirmPasswordReset,
+    sendPasswordResetEmail,
+    // sendEmailVerification,
+} from "firebase/auth";
+import { setDoc, doc, addDoc } from 'firebase/firestore';
+
+
+export const AuthContext = createContext({
     currentUser: null,
     registerUser: () => Promise,
     loginUser: () => Promise,
@@ -25,7 +28,7 @@ export  const AuthContext = createContext({
     SignOut: () => Promise,
     PasswordResetEmail: () => Promise,
     updateUser: () => Promise,
-    setSubjects: () => {},
+    setSubjects: () => { },
     createdClassData: [],
     subject: [],
     // verifyEmail: () => Promise,
@@ -42,20 +45,20 @@ export function AuthcontextProvider({ children }) {
     const [classID, setClassID] = useState();
     const [state, setState] = useState('');
     const [currentUser, setCurrentUser] = useState("null");
-    
+
     useEffect(() => {
-        if(classID){
+        if (classID) {
             localStorage.setItem('classID', classID);
         }
     }, [classID])
 
     useEffect(() => {
-        if(localStorage.getItem('classID')){
+        if (localStorage.getItem('classID')) {
             setClassID(localStorage.getItem('classID'));
         }
     })
-    
-    
+
+
     useEffect(() => {
         if (classID) {
             const q = query(collection(db, "CreatedSubject", classID, "Subjects"));
@@ -72,19 +75,19 @@ export function AuthcontextProvider({ children }) {
             return () => unSubscribe();
         }
     }, [classID]);
-    
 
-   console.log(subject);
+
+    console.log(subject);
     //geting current user from firebase
     useEffect(() => {
-        const unsubscribe =  onAuthStateChanged(auth, user => {
+        const unsubscribe = onAuthStateChanged(auth, user => {
             setCurrentUser(user);
         });
         return () => unsubscribe();
     }, []);
 
-    const registerUser =  async (email, password) => {
-            return createUserWithEmailAndPassword(auth, email, password);
+    const registerUser = async (email, password) => {
+        return createUserWithEmailAndPassword(auth, email, password);
     }
 
     const updateUser = (firstName, lastName) => {
@@ -99,9 +102,14 @@ export function AuthcontextProvider({ children }) {
         return signInWithEmailAndPassword(auth, email, password);
     }
 
-    const signinWithGoogle = () => {
+    const signinWithGoogle = async () => {
         const provider = new GoogleAuthProvider();
-        return signInWithPopup(auth, provider);
+        const res = await signInWithPopup(auth, provider);
+        // console.log(res);
+        // const userRef = doc(db, "users",res.user.uid);
+        // const user = { ...res.user, enrolledClasses: []};
+        // await setDoc(userRef, user);
+        return res;
     }
 
     const signinWithFacebook = () => {
@@ -120,11 +128,11 @@ export function AuthcontextProvider({ children }) {
         });
     }
 
- 
+
 
     // console.log(createdClassData);
-   
-   
+
+
     const values = {
         currentUser,
         registerUser,

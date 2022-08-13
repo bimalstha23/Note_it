@@ -64,6 +64,8 @@ export function SignUp() {
             const user = {
               uid: Response.user.uid,
               email: Response.user.email,
+              displayName: Response.user.displayName,
+              photoURL: Response.user.photoURL,
               enrolledClasses: [],
             };
             await setDoc(docRef, user);
