@@ -6,7 +6,7 @@ import { ThemeProvider } from '@mui/material/styles';
 
 export const ClassCard = (props) => {
     const { classData } = props;
-    console.log(classData)
+    // console.log(classData)
     return (
         
         <Grid item xs={12} sm={6}>

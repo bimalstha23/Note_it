@@ -41,22 +41,20 @@ export function AuthcontextProvider({ children }) {
     const [subject, setSubjects] = useState([]);
     const [classID, setClassID] = useState();
     const [state, setState] = useState('');
-    console.log(subject);
-    
     const [currentUser, setCurrentUser] = useState("null");
     
-    useEffect(() => {
-        if(localStorage.getItem('classID')){
-            setClassID(localStorage.getItem('classID'));
-        }
-    })
     useEffect(() => {
         if(classID){
             localStorage.setItem('classID', classID);
         }
     }, [classID])
+
+    useEffect(() => {
+        if(localStorage.getItem('classID')){
+            setClassID(localStorage.getItem('classID'));
+        }
+    })
     
-    console.log(classID);
     
     useEffect(() => {
         if (classID) {

@@ -68,14 +68,6 @@ const DropFileInput = props => {
                             </p>
                             {
                                 fileList.map((item, index) => (
-                                    // <div key={index} className="drop-file-preview__item">
-                                    //     <img src={ImageConfig[item.type.split('/')[1]] || ImageConfig['default']} alt="" />
-                                    //     <div className="drop-file-preview__item__info">
-                                    //         <p>{item.name}</p>
-                                    //         <p>{item.size}B</p>
-                                    //     </div>
-                                    //     <span className="drop-file-preview__item__del" onClick={() => fileRemove(item)}>x</span>
-                                    // </div>
                                     <Box
                                         display="flex"
                                         flexDirection="row"
