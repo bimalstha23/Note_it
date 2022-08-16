@@ -11,32 +11,14 @@ export const CreateSubjects = (props) => {
     const [subjectCode, setSubjectCode] = useState('');
     const [teacherName, setTeacherName] = useState('');
     const [teacherEmail, setTeacherEmail] = useState('');
+    const [adminEmail, setAdminEmail] = useState(currentUser.email);
 
     function handleCloseDialog() {
         setOpenDialog(false);
     }
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        console.log("submit");
-        if (currentUser.email === ownerEmail) {
-            const subjectData = {
-                subjectName: subjectName,
-                subjectCode: subjectCode,
-                teacherName: teacherName,
-                teacherEmail: teacherEmail,
-            }
-            const subjectRef = collection(db, 'CreatedSubject', classID, 'Subjects');
-            try {
-                await addDoc(subjectRef, subjectData)
-            }
-            catch (error) {
-                console.log(error);
-            }
-        }
-    }
     return (
         <Box>
-            <Dialog fullWidth={''} open={openDialog} onClose={handleCloseDialog}>
+            <Dialog open={openDialog} onClose={handleCloseDialog}>
                 <form action=""
                     onSubmit={
                         async (e) => {
@@ -45,6 +27,7 @@ export const CreateSubjects = (props) => {
 
                             if (currentUser.email===ownerEmail) {
                                 const subjectData = {
+                                    adminEmail: adminEmail,
                                     subjectName: subjectName,
                                     subjectCode: subjectCode,
                                     teacherName: teacherName,

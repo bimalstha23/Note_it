@@ -5,6 +5,7 @@ import { AddPost } from './AddPost';
 import { query, collection, onSnapshot } from 'firebase/firestore';
 import { db } from '../../../../utils/firebaseDB';
 import { useAuth } from '../../../../Contexts/AuthContext';
+import { PostCard } from './PostCard';
 
 export const SubjectContent = (props) => {
     const { currentUser } = useAuth();
@@ -12,9 +13,9 @@ export const SubjectContent = (props) => {
     // const { id, name, institute, subjectNumber } = data;
     const [value, setValue] = useState(0);
     const [posts, setPosts] = useState([]);
-
+    console.log(data.adminEmail);
     useEffect(() => {
-        if (currentUser.email) {
+        if (data.id) {
             const q = query(collection(db, 'posts', data.id, 'posts'));
             const unSubscribe = onSnapshot(q, (querySnapshot) => {
                 setPosts(
@@ -30,7 +31,8 @@ export const SubjectContent = (props) => {
                 unSubscribe();
             }
         }
-    }, [currentUser.email]);
+    }, [data.id]);
+    console.log('hello posts' + posts);
     console.log(posts);
 
     return (
@@ -58,11 +60,11 @@ export const SubjectContent = (props) => {
                         <Typography variant='h6'>{data.subjectName.toUpperCase()}</Typography>
                         <Typography variant='caption'>{data.teacherName.toUpperCase()}</Typography>
                     </Box>
-
+                    {/* 
                     <Box
                     >
                         <BottomNavigation
-                            margin={'auto'}
+                        margin={'auto'}
                             justify={'center'}
                             showLabels
                             value={value}
@@ -75,17 +77,20 @@ export const SubjectContent = (props) => {
                                 left: '100px',
                                 width: '100%',
                             }}
-                        >
+                            >
                             <BottomNavigationAction label="Recents" />
                             <BottomNavigationAction label="Favorites" />
                             <BottomNavigationAction label="Archive" />
                         </BottomNavigation>
-                    </Box>
-
+                    </Box> */}
                     <AddPost subjectId={data.id} />
+                    <Box>
+                        {posts.map((post) => (
+                            <PostCard key={post.id} subjectId  = {data.id} adminEmail={data.adminEmail} teacherEmail = {data.teacherEmail} post={post} />
+                        ))}
+                    </Box>
                 </Box>
             </Grid>
         </Container>
-
     )
 }

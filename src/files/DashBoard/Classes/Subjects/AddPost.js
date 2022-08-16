@@ -9,7 +9,7 @@ import { ImageConfig } from '../../../../config/imageConfig';
 import { Storage, db } from '../../../../utils/firebaseDB';
 import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import { async } from '@firebase/util';
+// import { async } from '@firebase/util';
 
 export const AddPost = ({ subjectId }) => {
 
@@ -35,7 +35,7 @@ export const AddPost = ({ subjectId }) => {
             postAutherEmail: currentUser.email,
             postAutherName: currentUser.displayName,
             postAutherPhotoURL: currentUser.photoURL,
-            isverified: false,
+            isVerified: false,
             likeCount: 0,
         }
         try {
@@ -51,14 +51,15 @@ export const AddPost = ({ subjectId }) => {
     const addFiles = async (id) => {
         console.log(id);
         fileList.map(async (file) => {
-            const storageRef = ref(Storage, subjectId + '/' + currentUser.id + '/' + file.name);
+            const storageRef = ref(Storage, subjectId + '/' +'files'+ '/' + file.name);
             try {
-                const uploadTask =  uploadBytesResumable(storageRef, file);
-                uploadTask.on('state_changed', async(snapshot) => {
+                const uploadTask = await uploadBytesResumable(storageRef, file);
+                // uploadTask.on('state_changed', async(snapshot) => {
                     // Observe state change events such as progress, pause, and resume
                     // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    console.log('Upload is ' + progress + '% done');
+                    // const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    // console.log('Upload is ' + progress + '% done');
+                // });
                     const downloadUrl = await getDownloadURL(storageRef);
                     console.log(downloadUrl);
                     const urlData = {
@@ -66,10 +67,10 @@ export const AddPost = ({ subjectId }) => {
                         name: file.name,
                         type: file.type,
                     }
-                    const DocRef = collection(db, 'afiles', id, 'files');
-                    const doc  = addDoc(DocRef, urlData);
-                    console.log(doc.id);
-                });
+                    const DocRef = collection(db, 'postFiles', id, 'files');
+                    const doc  = await addDoc(DocRef, urlData);
+                    console.log(id);
+                // });
 
 
             } catch (error) {
@@ -84,6 +85,7 @@ export const AddPost = ({ subjectId }) => {
             // addFiles();
             setShowinputField(false);
             console.log('posted');
+            e.target.reset();
         }
         catch (error) {
             console.log(error);
@@ -102,13 +104,7 @@ export const AddPost = ({ subjectId }) => {
         setFileList(updatedList);
         // props.onFileChange(updatedList);
     }
-    // const handleSubmit = () => {
-    //     if (postLink !== '') {
-    //         const updatedList = [...linkList, postLink];
-    //         setLinkList(updatedList);
-    //         setPostLink('');
-    //     }
-    // }
+
 
     return (
         <Box>
@@ -116,11 +112,9 @@ export const AddPost = ({ subjectId }) => {
                 margin={'auto'}
                 marginTop={'50px'}
                 width={'70%'}
-                height={'400px'}
             >  
             <form action=""
             onSubmit={(e)=>handleSubmit(e)}>
-
                 {showinputField ? (
                     <Box>
                         <TextField
@@ -209,7 +203,7 @@ export const AddPost = ({ subjectId }) => {
                             margin={'auto'}
                             sx={{ display: 'flex', alignItems: 'flex-end' }}>
                             <Avatar sx={{ width: '34px', height: '34px' }} alt='profile' src={currentUser.photoURL}></Avatar>
-                            <Link underline='none' onClick={() => { setShowinputField(true) }}>
+                            <Link href='#' underline='none' onClick={() => { setShowinputField(true) }}>
                                 <Typography paddingLeft={'15px'} variant={'overline'}>
                                     Add post in your Class
                                 </Typography>
