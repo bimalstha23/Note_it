@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Alert, Typography, Box, TextField, FormControl, InputLabel, OutlinedInput, InputAdornment, IconButton, Link, } from '@mui/material';
+import { Alert, Typography, Box, TextField, FormControl, Collapse, InputLabel, OutlinedInput, InputAdornment, IconButton, Link, } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import { useAuth } from '../../Contexts/AuthContext';
@@ -24,7 +24,7 @@ export function SignUp() {
   };
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
-    setConfirmPasswordDirty(true);
+    // setConfirmPasswordDirty(true);
   };
 
   const handleMouseDownPassword = (event) => {
@@ -38,47 +38,77 @@ export function SignUp() {
   const [showErrorMessege, setShowErrorMessege] = useState(false);
   const [errorMessege, setErrorMessege] = useState('');
   const [confirmPasswordDirty, setConfirmPasswordDirty] = useState(false);
+  const [ShowPasswordError, setShowPasswordError] = useState(false);
+  const [PasswordErrorMessage, setPasswordErrorMessage] = useState('');
   //   password and confirm passowrd validation 
   useEffect(() => {
     if (values.password !== values.confirmPassword) {
-      setShowErrorMessege(true);
-      setErrorMessege('Passwords do not match');
+      setShowPasswordError(true);
+      setPasswordErrorMessage('Password and Confirm Password Must be Same');
     }
     else {
-      setShowErrorMessege(false);
-      setErrorMessege('');
+      setShowPasswordError(false);
+      setPasswordErrorMessage('');
     }
   }, [values.password, values.confirmPassword]);
 
 
   const { registerUser } = useAuth();
+
   return (
     <div className="signUp">
       <form action=""
         onSubmit={async (e) => {
           e.preventDefault();
           setIsloading(true);
-          try {
-            const Response = await registerUser(email, values.password);
-            const docRef = doc(db, "users", Response.user.uid);
-            const user = {
-              uid: Response.user.uid,
-              email: Response.user.email,
-              displayName: Response.user.displayName,
-              photoURL: Response.user.photoURL,
-              enrolledClasses: [],
-            };
-            await setDoc(docRef, user);
-            console.log("Document written with ID: ", docRef.id);
-
-            navigate('/UpdateuserProfile');
-
-          } catch (err) {
-            console.log(err);
+          if (values.password !== values.confirmPassword) {
+            setShowErrorMessege(true);
+            setErrorMessege('Password and Confirm Password Must be Same');
+            setIsloading(false);
           }
-
-
-
+          else {
+            try {
+              registerUser(email, values.password).then((Response) => {
+                const docRef = doc(db, "users", Response.user.uid);
+                const user = {
+                  uid: Response.user.uid,
+                  email: Response.user.email,
+                  displayName: Response.user.displayName,
+                  photoURL: Response.user.photoURL,
+                  enrolledClasses: [],
+                };
+                setDoc(docRef, user).then(() => {
+                  navigate('/UpdateuserProfile');
+                }).catch((err) => {
+                  setShowErrorMessege(true);
+                  setErrorMessege(err.message);
+                });
+              }).catch((err) => {
+                console.log(err.code);
+                setIsloading(false);
+                setShowErrorMessege(true);
+                switch (err.code) {
+                  case 'auth/email-already-in-use':
+                    setErrorMessege('Email already in use');
+                    break;
+                  case 'auth/invalid-email':
+                    setErrorMessege('Invalid Email');
+                    break;
+                  case 'auth/weak-password':
+                    setErrorMessege('Please prefer a stronger password');
+                    break;
+                  case 'auth/network-request-failed':
+                    setErrorMessege('Plase Check Your internet connection');
+                    break;
+                  default:
+                    setErrorMessege('Something went wrong');
+                    break;
+                }
+              });
+            } catch (err) {
+              console.log(err)
+            }
+          }
         }
         }
       >
@@ -91,9 +121,7 @@ export function SignUp() {
           marginTop={'50px'}
           padding={'30px'}
           borderRadius={'20px'}>
-          <Alert variant="outlined" severity="error">
-            Password and Confirm Password must be same
-          </Alert>
+
           <Typography fontWeight={'Bold'} variant='h4' paddingBottom={4}>
             Get Started
           </Typography>
@@ -148,7 +176,13 @@ export function SignUp() {
               label="Confirm Password"
             />
           </FormControl>
-
+          <Collapse
+            in={showErrorMessege}
+          >
+            <Alert severity="error">
+              {errorMessege}
+            </Alert>
+          </Collapse>
           <LoadingButton loading={isloading} type='submit' size='medium' variant="contained" fullWidth sx={{ textTransform: 'none', marginTop: '20px' }}>
             <Typography variant='body1'>
               Sign Up
@@ -163,7 +197,7 @@ export function SignUp() {
           </Typography>
         </Box>
       </form>
-    </div>
+    </div >
   );
 }
 

@@ -1,24 +1,30 @@
 import React, { useEffect, useState } from 'react'
 import { Box, Stack, Card, Avatar, CardContent, CardActionArea, CardActions, CardHeader, CardMedia, Typography, IconButton, Grid } from '@mui/material'
 import WorkspacePremiumSharpIcon from '@mui/icons-material/WorkspacePremiumSharp';
-import FavoriteIcon from '@mui/icons-material/Favorite';
+import WorkspacePremiumOutlinedIcon from '@mui/icons-material/WorkspacePremiumOutlined';
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 import { useAuth } from '../../../../Contexts/AuthContext';
-import { onSnapshot, getDoc, doc, collection, writeBatch } from 'firebase/firestore';
+import { onSnapshot, getDoc, doc, collection, writeBatch, addDoc, runTransaction, query, where, getDocs, limit } from 'firebase/firestore';
 import { db } from '../../../../utils/firebaseDB';
-import ReactPhotoGrid from 'react-photo-grid';
 import { ImageConfig } from '../../../../config/imageConfig';
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import { ImageLayout } from './ImageLayout';
+import { prettyDOM } from '@testing-library/react';
+// import { async } from '@firebase/util';
 export const PostCard = ({ post, teacherEmail, adminEmail, subjectId }) => {
     console.log(adminEmail);
     const { currentUser } = useAuth();
     const batch = writeBatch(db);
-    const { postMessege, serverTimestamp, postAutherId, isVerified, id } = post;
+    const { postMessege, serverTimestamp, postAutherId, isVerified, id, likeCount } = post;
     const [autherDetails, setAutherDetails] = useState({});
     const [filesDetails, setFilesDetails] = useState([]);
-    const [isLiked, setIsLiked] = useState(false);
     const [verified, setVerified] = useState(null);
+    const [alreadyLiked, setAlreadyLiked] = useState(null);
+    const [verifyClicked, setVerifyClicked] = useState(false);
+    const [likeId, setLikeId] = useState(null);
     const [isUserTeacher, setIsUserTeacher] = useState(currentUser.email === teacherEmail || currentUser.email === adminEmail ? false : true);
+    const [isLiked, setIsLiked] = useState(false);
     console.log(isUserTeacher);
 
     useEffect(() => {
@@ -56,6 +62,104 @@ export const PostCard = ({ post, teacherEmail, adminEmail, subjectId }) => {
         }
 
     }, [id])
+
+
+    // useEffect(() => {
+
+    //     const q = query(collection(db, 'Postlikes'), where('userId', '==', currentUser.uid), where('PostId', '==', id), limit(1));
+    //     const unSubscribe = onSnapshot(q, (querySnapshot) => {
+    //         // console.log(querySnapshot.docs.length);
+    //         // setIsLiked(querySnapshot.docs.length > 0 ? true : false);
+    //         setLikeId(querySnapshot.docs.length > 0 ? querySnapshot.docs[0].id : null);
+    //     })
+    //     return () => {
+    //         unSubscribe();
+    //     }
+    // }, []);
+
+    const handleaddlike = async () => {
+        console.log('add like');
+        const q = query(collection(db, 'Postlikes'), where('userId', '==', currentUser.uid), where('PostId', '==', id), limit(1));
+        const likeSnapshot = onSnapshot(q, (querySnapshot) => {
+            if (querySnapshot.empty) {
+                setAlreadyLiked(false);
+                addLike();
+            } else {
+                // alert('You already liked this post');
+                querySnapshot.forEach((doc) => {
+                    setLikeId(doc.id);
+                })
+                setAlreadyLiked(true);
+            }
+        })
+    }
+
+    const handleLike = () => {
+        setIsLiked(!isLiked);
+        console.log(isLiked, 'is liked');
+        // console.log(setIsLiked(!isLiked));
+        // setIsLiked(true);
+        // console.log(isLiked, 'isLiked');
+        // if (verified) {
+        // handleaddlike();
+        // } else {
+        // unlike();
+        // }
+    }
+    const unlike = () => {
+        console.log('unlike');
+        const likeRef = doc(db, 'Postlikes', likeId);
+        batch.delete(likeRef);
+        batch.commit().then(() => {
+            // setIsLiked(false);
+            const newLikedPost = runTransaction(db, async (transaction) => {
+                const postRef = doc(db, 'posts', subjectId, 'posts', id);
+                const likedPost = await transaction.get(postRef);
+                if (!likedPost.exists()) {
+                    return;
+                }
+                const newlikeCount = likedPost.data().likeCount - 1;
+                transaction.update(postRef, {
+                    likeCount: newlikeCount,
+                });
+            })
+        }).catch((error) => {
+            console.log(error);
+        })
+    }
+
+    const addLike = async () => {
+        console.log('like');
+        if (!alreadyLiked) {
+            const likeRef = collection(db, 'Postlikes');
+            await addDoc(likeRef, {
+                PostId: id,
+                userId: currentUser.uid,
+                serverTimestamp: serverTimestamp,
+            }).then(() => {
+                // setLikeId(doc.id);
+                const postRef = doc(db, 'posts', subjectId, 'posts', id);
+                const newLikedPost = runTransaction(db, async (transaction) => {
+                    const likedPost = await transaction.get(postRef);
+                    if (!likedPost.exists()) {
+                        return;
+                    }
+                    const newlikeCount = likedPost.data().likeCount + 1;
+                    transaction.update(postRef, {
+                        likeCount: newlikeCount,
+                    });
+                })
+            }).catch((error) => {
+                console.log(error);
+            })
+        }
+    }
+
+    const handlelikeClicked = async() => {
+        await setIsLiked(prevState => !prevState);
+        console.log('like clicked');
+        console.log(isLiked, 'is liked');
+    }
 
     const handleVerifyClicked = () => {
         setVerified(!verified);
@@ -98,7 +202,7 @@ export const PostCard = ({ post, teacherEmail, adminEmail, subjectId }) => {
     }
     const images = filesDetails.filter((file) => file.type === 'image/png' || file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/gif' || file.type === 'image/bmp' || file.type === 'image/tiff' || file.type === 'image/webp');
     const imagesUrl = images.map((image) => image.url);
-    // console.log(imagestest);
+
     const files = filesDetails.filter((file) => file.type !== 'image/png' && file.type !== 'image/jpeg' && file.type !== 'image/jpg' && file.type !== 'image/gif' && file.type !== 'image/bmp' && file.type !== 'image/tiff' && file.type !== 'image/webp');
     return (
         <Box>
@@ -114,7 +218,6 @@ export const PostCard = ({ post, teacherEmail, adminEmail, subjectId }) => {
                     }
                     title={currentUser.displayName}
                     subheader="September 14, 2016"
-
                 >
 
                 </CardHeader>
@@ -179,10 +282,13 @@ export const PostCard = ({ post, teacherEmail, adminEmail, subjectId }) => {
                                 flexWrap: 'wrap',
                             }}
                         >
-                            <IconButton aria-label="add to favorites">
-                                <WorkspacePremiumSharpIcon />
+                            <IconButton onClick={() => {
+                                handlelikeClicked();
+                            }}  aria-label="add to favorites">
+                                {/* {isLiked ? <FavoriteOutlinedIcon /> : <FavoriteBorderOutlinedIcon />} */}
+                                <FavoriteBorderOutlinedIcon />
                             </IconButton>
-                            <Typography>like</Typography>
+                            {isLiked ? <Typography> You and {likeCount - 1} others Liked This</Typography> : <Typography>{likeCount} Liked this</Typography>}
                         </Box>
 
                         <Box
@@ -191,8 +297,10 @@ export const PostCard = ({ post, teacherEmail, adminEmail, subjectId }) => {
                                 alignItems: 'center',
                                 flexWrap: 'wrap',
                             }}>
-                            <IconButton onClick={handleVerifyClicked} disabled={isUserTeacher} aria-label="verify">
-                                <WorkspacePremiumSharpIcon />
+                            <IconButton onClick={() => {
+                                handleVerifyClicked();
+                            }} onAnimationEnd={() => { setVerifyClicked(false) }} disabled={isUserTeacher} aria-label="verify">
+                                {isVerified ? <WorkspacePremiumSharpIcon /> : <WorkspacePremiumOutlinedIcon />}
                             </IconButton>
                             {isVerified ? <Typography>Verified</Typography> : <Typography>Not Verified</Typography>}
                         </Box>

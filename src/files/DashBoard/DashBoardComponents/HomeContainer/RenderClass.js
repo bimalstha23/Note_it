@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { CreateClass } from '../../Classes/CreateClass'
 import { JoinClass } from '../../Classes/JoinClass'
-import { SpeedDial, SpeedDialAction, Box, Grid, Typography, Button, Dialog, DialogContentText, TextField, DialogContent, DialogTitle, DialogActions } from '@mui/material'
+import { SpeedDial, SpeedDialAction, Box, Grid, Typography,Alert,Snackbar } from '@mui/material'
 import { useAuth } from '../../../../Contexts/AuthContext'
 import { ClassCard } from '../HomeContainer/ClassCard'
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import GroupAddOutlinedIcon from '@mui/icons-material/GroupAddOutlined';
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
-import {db} from '../../../../utils/firebaseDB'
+import { db } from '../../../../utils/firebaseDB'
 import { collection, query, onSnapshot } from 'firebase/firestore'
 import { Navigate } from 'react-router-dom'
 
@@ -15,8 +15,10 @@ export const RenderClass = () => {
     const [createClassDialog, setCreateClassDialog] = useState(false);
     const [joinClassDialog, setJoinClassDialog] = useState(false);
     const [createdClassData, setCreatedClassData] = useState([]);
-    const[joinedClassData, setJoinedClassData] = useState([]);
-    const {currentUser} = useAuth();
+    const [joinedClassData, setJoinedClassData] = useState([]);
+    const [success, setSuccess] = useState(false);
+    const [successMessage, setSuccessMessage] = useState('');
+    const { currentUser } = useAuth();
     function fetchCreatedClasses() {
         try {
             const q = query(collection(db, 'CreatedClass', currentUser.email, 'Classes'));
@@ -58,7 +60,7 @@ export const RenderClass = () => {
 
     useEffect(() => {
         fetchJoinedClasses();
-    } ,[currentUser]);
+    }, [currentUser]);
 
     console.log(createdClassData);
     console.log(joinedClassData);
@@ -68,6 +70,13 @@ export const RenderClass = () => {
     ];
     return (
         <Box marginTop={4} sx={{ flexGrow: 1 }}>
+            <Snackbar
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                open={success} autoHideDuration={6000} onClose={() => setSuccess(false)}>
+                <Alert onClose={() => setSuccess(false)} severity="success" sx={{ width: '100%' }}>
+                    {successMessage}
+                </Alert>
+            </Snackbar>
             <Box
                 display={'flex'}
                 flexDirection={'row'}
@@ -101,7 +110,7 @@ export const RenderClass = () => {
                     <ClassCard key={item.id} classData={item} />
                 ))}
                 <CreateClass createClassDialog={createClassDialog} setCreateClassDialog={setCreateClassDialog} />
-                <JoinClass joinClassDialog={joinClassDialog} setJoinClassDialog={setJoinClassDialog} />
+                <JoinClass setSuccess={setSuccess} setSuccessMessage={setSuccessMessage} joinClassDialog={joinClassDialog} setJoinClassDialog={setJoinClassDialog} />
             </Grid>
         </Box>
     )

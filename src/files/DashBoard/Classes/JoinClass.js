@@ -1,26 +1,26 @@
 import React, { useState } from 'react'
-import { Card, Avatar, Divider, Slide, Toolbar, AppBar, IconButton, Box, Grid, Typography, Button, Dialog, DialogContentText, DialogContent, DialogTitle, DialogActions, CardHeader, TextField } from '@mui/material'
+import { Card, Avatar, Collapse, Alert, Slide, Toolbar, AppBar, IconButton, Box, Typography, Button, Dialog, CardHeader, TextField } from '@mui/material'
+import { LoadingButton } from '@mui/lab'
 import CloseIcon from '@mui/icons-material/Close';
 import { useAuth } from '../../../Contexts/AuthContext';
-import { setDoc, getDoc, doc, addDoc, collection, query } from 'firebase/firestore';
+import { setDoc, getDoc, doc, } from 'firebase/firestore';
 import { db } from '../../../utils/firebaseDB';
-import { ConstructionOutlined } from '@mui/icons-material';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
 export const JoinClass = (props) => {
-    // const [joinClassDialog, setJoinClassDialog] = useState(false);
-    const { joinClassDialog, setJoinClassDialog } = props;
+    const { joinClassDialog, setJoinClassDialog, setSuccess, setSuccessMessage } = props;
     const [OwnerEmail, setOwnerEmail] = useState('');
     const [classCode, setClassCode] = useState('');
     const [error, setError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+
     const [classData, setClassData] = useState(null);
     const [classExists, setClassExists] = useState(false);
     const { currentUser, SignOut } = useAuth();
-    console.log(currentUser.photoURL)
-    console.log(currentUser)
+    const [isLoading, setIsLoading] = useState(false);
     function handleClose() {
         setJoinClassDialog(false);
     }
@@ -36,8 +36,6 @@ export const JoinClass = (props) => {
     }
     return (
         <Box>
-
-            {/* Join Class  DialogActions */}
             <Dialog
                 fullScreen
                 open={joinClassDialog}
@@ -48,35 +46,36 @@ export const JoinClass = (props) => {
                     onSubmit={
                         async (e) => {
                             e.preventDefault();
-                            try {
-                                const classRef = doc(db, 'CreatedClass', OwnerEmail, 'Classes', classCode);
-                                const classSnap = await getDoc(classRef);
+                            setIsLoading(true);
+                            const classRef = doc(db, 'CreatedClass', OwnerEmail, 'Classes', classCode);
+                            await getDoc(classRef).then(async (classSnap) => {
                                 if (classSnap.exists() && classSnap.data().OwnerEmail !== currentUser.email) {
-                                    console.log(classSnap.data());
-                                    setClassExists(true);
-                                    setError(false);
                                     setClassData(classSnap.data());
+                                    const joinClassRef = doc(db, 'JoinedClasses', currentUser.email, 'Classes', classCode);
+                                    await setDoc(joinClassRef, classSnap.data()).then(() => {
+                                        setJoinClassDialog(false);
+                                        setSuccess(true);
+                                        setSuccessMessage('You have successfully joined the class');
+                                        setIsLoading(false);
+                                    }).catch(err => {
+                                        setError(true);
+                                        setErrorMessage(err.message);
+                                        setIsLoading(false);
+                                    });
                                 } else {
                                     setClassExists(false);
-                                    console.log("class does not exist");
                                     setError(true);
-                                    return;
+                                    setErrorMessage('Class does not exist or you are the owner of the class');
+                                    setIsLoading(false);
                                 }
-                            } catch (e) {
-                                console.log(e);
-                            }
-                            if (classExists) {
-                                try {
-                                    const joinClassRef = doc(db, 'JoinedClasses', currentUser.email, 'Classes', classCode);
-                                    await setDoc(joinClassRef, classData);
-                                    console.log("class Joined");
-                                } catch (e) {
-                                    console.log(e);
-                                    console.log("Error joining class");
-                                }
-                            }
-
-
+                            }).catch(err => {
+                                setError(true);
+                                setErrorMessage(err.message);
+                                setIsLoading(false);
+                            }).finally(() => {
+                                setIsLoading(false);
+                            })
+                            setIsLoading(false);
                         }
                     }>
 
@@ -93,11 +92,10 @@ export const JoinClass = (props) => {
                             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
                                 Join Class
                             </Typography>
-                            <Button type='submit' variant='outlined' autoFocus color="inherit"
-                            // onClick={handleSubmit}
-                            >
+                            <LoadingButton loading={isLoading} type='submit' variant='outlined' color='inherit'>
+
                                 Join
-                            </Button>
+                            </LoadingButton>
                         </Toolbar>
                     </AppBar>
                     <Box
@@ -151,13 +149,25 @@ export const JoinClass = (props) => {
                                 display={'flex'}
                                 flexDirection={'row'}
                             >
-                                <TextField value={OwnerEmail} onChange={(e) => setOwnerEmail(e.target.value)} label='Owner Email' id='outlined' margin='normal' variant='outlined'></TextField>
-                                <TextField value={classCode} onChange={(e) => setClassCode(e.target.value)} label='Class Code' id='outlined' margin='normal' variant='outlined' sx={{
+                                <TextField required type={'email'} value={OwnerEmail} autoFocus onChange={(e) => setOwnerEmail(e.target.value)} label='Owner Email' id='outlined' margin='normal' variant='outlined'></TextField>
+                                <TextField required type={'text'} value={classCode} onChange={(e) => setClassCode(e.target.value)} label='Class Code' id='outlined' margin='normal' variant='outlined' sx={{
                                     marginLeft: '20px',
                                 }}></TextField>
 
-
                             </Box>
+                            <Collapse in={error}>
+                                <Alert severity='error'
+                                    action={
+                                        <IconButton
+                                            onClick={() => setError(false)}
+                                            aria-label="close"
+                                        >
+                                            <CloseIcon />
+                                        </IconButton>
+                                    }>
+                                    {errorMessage}
+                                </Alert>
+                            </Collapse>
                         </Box>
 
                         {/* </Grid> */}

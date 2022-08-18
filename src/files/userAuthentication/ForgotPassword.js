@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, TextField, Box, Typography } from '@mui/material';
+import { Link, Alert, Collapse, TextField, Box, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { useAuth } from '../../Contexts/AuthContext';
 
@@ -7,28 +7,33 @@ export function ForgotPassword() {
   const [email, setEmail] = useState('');
   const [isloading, setIsloading] = useState(false);
   const { PasswordResetEmail } = useAuth();
-
+  const [showError, setShowError] = useState(false);
+  const [error, setError] = useState('');
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [success, setSuccess] = useState('');
   return (
     <form action=""
       onSubmit={
         async (e) => {
           e.preventDefault();
-          // setIsloading(true);
-          // try {
-          //     PasswordResetEmail(email);
-          //     console.log('email sent');
-          // }
-          // catch(err) {
-          //     console.log(err);
-          // } 
-
-          // setIsloading(false);
-
+          setIsloading(true);
           PasswordResetEmail(email).then((response) => {
-            console.log(response);
-          }
-          ).catch((err) => {
-            console.log(`we have an errror ${err}`)
+            setIsloading(false);
+            setShowSuccess(true);
+            setSuccess(`An email has been sent to ${email} with link to reset your password`);
+          }).catch((err) => {
+
+            setShowError(true);
+            switch (err.code) {
+              case 'auth/user-not-found':
+                setError('Invalid Email Address');
+                break;
+              case 'auth/too-many-requests':
+                setError('Plase Wait for Some Time to request for an Reset Email');
+              default:
+                setError('Something went wrong');
+                break;
+            }
           }).finally(() => {
             setIsloading(false);
           }
@@ -51,6 +56,16 @@ export function ForgotPassword() {
           Forgot Password.
         </Typography>
         <TextField onChange={(e) => { setEmail(e.target.value) }} type={'email'} margin='normal' id="outlined" label="Email" variant="outlined" fullWidth required />
+        <Collapse in={showSuccess}>
+          <Alert severity="success">
+            {success}
+          </Alert>
+        </Collapse>
+        <Collapse in={showError}>
+          <Alert severity="error">
+            {error}
+          </Alert>
+        </Collapse>
         <LoadingButton loading={isloading} type='submit' size='medium' variant="contained" fullWidth style={{ textTransform: 'none' }}>
           <Typography variant='body1'>
             Send
@@ -66,6 +81,6 @@ export function ForgotPassword() {
           <Link fontWeight={'Bold'} href='/' underline='none' color='inherit' > Sign In</Link>
         </Typography>
       </Box>
-    </form>
+    </form >
   )
 }

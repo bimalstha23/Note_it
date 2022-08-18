@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Tooltip, Dialog, DialogTitle, DialogContent, DialogActions, Stack, IconButton, Link, TextField, Container, Button, Grid, Box, Typography, Avatar, BottomNavigation, BottomNavigationAction } from '@mui/material'
 // import SearchIcon from '@mui/icons-material/Search'
 import { AddPost } from './AddPost';
-import { query, collection, onSnapshot } from 'firebase/firestore';
+import { query, collection, onSnapshot, orderBy } from 'firebase/firestore';
 import { db } from '../../../../utils/firebaseDB';
 import { useAuth } from '../../../../Contexts/AuthContext';
 import { PostCard } from './PostCard';
@@ -16,7 +16,7 @@ export const SubjectContent = (props) => {
     console.log(data.adminEmail);
     useEffect(() => {
         if (data.id) {
-            const q = query(collection(db, 'posts', data.id, 'posts'));
+            const q = query(collection(db, 'posts', data.id, 'posts'), orderBy('serverTimestamp', 'desc'));
             const unSubscribe = onSnapshot(q, (querySnapshot) => {
                 setPosts(
                     querySnapshot.docs.map((doc) => {

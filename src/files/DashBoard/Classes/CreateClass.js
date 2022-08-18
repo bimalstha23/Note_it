@@ -1,19 +1,15 @@
-import React,{useState} from 'react'
-import { Box,TextField, Grid, Typography, Button, Dialog, DialogContentText, DialogContent, DialogTitle, DialogActions } from '@mui/material'
+import React, { useState } from 'react'
+import { Box, TextField, Button, Dialog, DialogContent, DialogTitle, DialogActions } from '@mui/material'
 import { setDoc, doc, addDoc, collection } from 'firebase/firestore'
-import { async } from '@firebase/util'
-import {db} from '../../../utils/firebaseDB'
+import { db } from '../../../utils/firebaseDB'
 import { useAuth } from '../../../Contexts/AuthContext'
-// import { useUiContext } from '../../../Contexts/UiControlContext'
 
 export const CreateClass = (props) => {
-    // const [createClassDialog, setCreateClassDialog] = useState(false);
-    const {createClassDialog, setCreateClassDialog} = props;
+    const { createClassDialog, setCreateClassDialog } = props;
     const [className, setClassName] = useState('');
     const [InstituteName, setInstituteName] = useState('');
     const [subjectNumber, setSubjectNumber] = useState('');
     const [RoomNumber, setRoomNumber] = useState('');
-    // const {createClassDialog,setCreateClassDialog} = useUiContext();
     const { currentUser } = useAuth();
     function SetCreateClassDialog(value) {
         setCreateClassDialog(value);
@@ -31,21 +27,13 @@ export const CreateClass = (props) => {
                 <form action=""
                     onSubmit={
                         async (e) => {
-                            
                             e.preventDefault();
-                            // try {
                             const classData = {
                                 name: className,
                                 institute: InstituteName,
                                 subjectNumber: subjectNumber,
                                 roomNumber: RoomNumber,
                                 OwnerEmail: currentUser.email,
-                                Teacher: [{
-                                    name: currentUser.displayName,
-                                    email: currentUser.email,
-                                    uid: currentUser.uid
-                                },
-                                ]
                             }
                             const classRef = collection(db, 'CreatedClass', currentUser.email, 'Classes');
                             await addDoc(classRef, classData).then((res) => {

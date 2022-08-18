@@ -1,13 +1,14 @@
 import React from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Link, TextField, Box, Typography, InputLabel, OutlinedInput, IconButton, InputAdornment, FormControl } from '@mui/material';
+import { Link, TextField, Box, Typography, InputLabel, Collapse, Alert, OutlinedInput, IconButton, InputAdornment, FormControl } from '@mui/material';
 import { FacebookOutlined, Google, Visibility, VisibilityOff } from '@mui/icons-material'
 import { useAuth } from '../../Contexts/AuthContext';
 import { useMounted } from '../../Hooks/useMounted';
 import { LoadingButton } from '@mui/lab';
 import { updateCurrentUser } from 'firebase/auth';
-import { setDoc,doc } from 'firebase/firestore';
+import CloseIcon from '@mui/icons-material/Close';
+import { setDoc, doc } from 'firebase/firestore';
 import { db } from '../../utils/firebaseDB';
 
 export function LogInform() {
@@ -30,25 +31,45 @@ export function LogInform() {
     event.preventDefault();
   };
   const mounted = useMounted();
-  const [isloading, setIsloading] = useState(false);
+  const [isSignInloading, setIsSignInloading] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [email, setEmail] = useState('');
   const { loginUser, signinWithGoogle, signinWithFacebook } = useAuth();
+  const [showError, setShowError] = useState(false);
+  const [error, setError] = useState('');
   const Navigate = useNavigate();
+
   return (
     <div className="App">
       <form action=""
         onSubmit={(e) => {
           e.preventDefault();
-          setIsloading(true);
+          setIsSignInloading(true);
           console.log(email, values.password);
           const user = loginUser(email, values.password).then((response) => {
             Navigate('/');
           })
-            .catch((err) =>
-              console.log(`we have an errror ${err}`)).finally(() => {
-                setIsloading(false);
-              });
+            .catch((err) => {
+              setShowError(true);
+              switch (err.code) {
+                case 'auth/user-not-found':
+                  setError('User Does not exist Please Create an Account');
+                  break;
+                case 'auth/wrong-password':
+                  setError('Wrong password Please try again');
+                  break;
+                case 'auth/network-request-failed':
+                  setError('Plase Check Your internet connection');
+                  break;
+                default:
+                  setError('Something went wrong, please try again');
+                  break;
+              }
+            }).finally(() => {
+              setIsSignInloading(false);
+            });
         }}
+
       >
         <Box
           bgcolor={'primary'}
@@ -89,8 +110,16 @@ export function LogInform() {
               label="Password"
             />
           </FormControl>
+          <Collapse
+            in={showError}
+          >
+            <Alert severity="error"
+            >
+              {error}
+            </Alert>
+          </Collapse>
           <Link href='/ForgotPassword' fontWeight={'Bold'} textAlign={'right'} underline='none' color='inherit' sx={{ marginBottom: '20px', marginTop: '10px' }}> Forgot Password?</Link>
-          <LoadingButton loading={isloading} type='submit' size='medium' variant="contained" fullWidth style={{ textTransform: 'none' }}>
+          <LoadingButton loading={isSignInloading} type='submit' size='medium' variant="contained" fullWidth style={{ textTransform: 'none' }}>
             <Typography variant='body1'>
               Log In
             </Typography>
@@ -99,13 +128,13 @@ export function LogInform() {
             ----- OR -----
           </Typography>
 
-          <LoadingButton loading={isloading} onClick={() => {
-            setIsloading(true);
+          <LoadingButton loading={isGoogleLoading} onClick={() => {
+            setIsGoogleLoading(true);
             signinWithGoogle().then((res) => {
               const { user } = res;
               console.log(user);
-              const userRef = doc(db,"users",user.uid);
-              setDoc(userRef,{
+              const userRef = doc(db, "users", user.uid);
+              setDoc(userRef, {
                 email: user.email,
                 displayName: user.displayName,
                 photoURL: user.photoURL,
@@ -114,9 +143,9 @@ export function LogInform() {
               })
               Navigate('/home');
             }).catch((err) =>
-              console.log(`we have an errror ${err}`)
+              setIsGoogleLoading(false)
             ).finally(() => {
-              mounted.current && setIsloading(false);
+              mounted.current && setIsGoogleLoading(false);
             })
           }
           } size='medium' variant='contained' sx={{ textTransform: 'none' }} startIcon={<Google />}>
@@ -130,7 +159,7 @@ export function LogInform() {
                 Navigate('/home');
               }).catch((err) =>
                 console.log(`we have an errror ${err}`)).finally(() => {
-                  mounted.current && setIsloading(false);
+                  // mounted.current && setIsloading(false);
                 })
             }}
 
