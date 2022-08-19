@@ -2,9 +2,9 @@ import React, { useState } from 'react'
 import { Card, Avatar, Collapse, Alert, Slide, Toolbar, AppBar, IconButton, Box, Typography, Button, Dialog, CardHeader, TextField } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import CloseIcon from '@mui/icons-material/Close';
-import { useAuth } from '../../../Contexts/AuthContext';
+import { useAuth } from '../../../../../Contexts/AuthContext';
 import { setDoc, getDoc, doc, } from 'firebase/firestore';
-import { db } from '../../../utils/firebaseDB';
+import { db } from '../../../../../utils/firebaseDB';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;

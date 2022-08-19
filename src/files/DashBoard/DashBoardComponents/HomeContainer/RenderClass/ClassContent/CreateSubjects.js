@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Box, Dialog, TextField, DialogContent, DialogTitle, Button, DialogActions } from '@mui/material'
-import { db } from '../../../../utils/firebaseDB';
-import { useAuth } from '../../../../Contexts/AuthContext';
+import { db } from '../../../../../../utils/firebaseDB';
+import { useAuth } from '../../../../../../Contexts/AuthContext';
 import { collection, addDoc } from 'firebase/firestore';
 
 export const CreateSubjects = (props) => {

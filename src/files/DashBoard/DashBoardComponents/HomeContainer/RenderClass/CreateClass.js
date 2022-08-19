@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { Box, TextField, Button, Dialog, DialogContent, DialogTitle, DialogActions } from '@mui/material'
 import { setDoc, doc, addDoc, collection } from 'firebase/firestore'
-import { db } from '../../../utils/firebaseDB'
-import { useAuth } from '../../../Contexts/AuthContext'
+import { db } from '../../../../../utils/firebaseDB'
+import { useAuth } from '../../../../../Contexts/AuthContext'
 
 export const CreateClass = (props) => {
     const { createClassDialog, setCreateClassDialog } = props;

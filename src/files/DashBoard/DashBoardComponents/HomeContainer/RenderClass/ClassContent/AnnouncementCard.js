@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Box, Typography, } from '@mui/material'
-import { useAuth } from '../../../../Contexts/AuthContext'
-import { db } from '../../../../utils/firebaseDB'
+import { useAuth } from '../../../../../../Contexts/AuthContext'
+import { db } from '../../../../../../utils/firebaseDB'
 import { collection, query, onSnapshot } from 'firebase/firestore'
 
 export const AnnouncementCard = (props) => {

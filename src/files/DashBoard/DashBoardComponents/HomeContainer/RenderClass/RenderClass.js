@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { CreateClass } from '../../Classes/CreateClass'
-import { JoinClass } from '../../Classes/JoinClass'
+import { CreateClass } from './CreateClass'
+import { JoinClass } from './JoinClass'
 import { SpeedDial, SpeedDialAction, Box, Grid, Typography,Alert,Snackbar } from '@mui/material'
-import { useAuth } from '../../../../Contexts/AuthContext'
-import { ClassCard } from '../HomeContainer/ClassCard'
+import { useAuth } from '../../../../../Contexts/AuthContext'
+import { ClassCard } from './ClassCard'
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import GroupAddOutlinedIcon from '@mui/icons-material/GroupAddOutlined';
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
-import { db } from '../../../../utils/firebaseDB'
+import { db } from '../../../../../utils/firebaseDB'
 import { collection, query, onSnapshot } from 'firebase/firestore'
 import { Navigate } from 'react-router-dom'
 

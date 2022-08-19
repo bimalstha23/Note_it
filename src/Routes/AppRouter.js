@@ -8,12 +8,12 @@ import { Container, Grid } from "@mui/material";
 import { ProtectedRoute } from './ProtectedRoute.js';
 import { UpdateuserProfile } from '../files/userAuthentication/UpdateuserProfile.js';
 import { EmailVerification } from '../files/userAuthentication/EmailVerification.js';
-import { InnerContent } from '../files/DashBoard/DashBoardComponents/InnerContent.js';
+import { InnerContent } from '../files/DashBoard/InnerContent.js';
 import { MainHome } from '../files/DashBoard/DashBoardComponents/HomeContainer/MainHome.js';
-import { ChatRoom } from '../files/DashBoard/DashBoardComponents/ChatRoom.js';
+import { ChatRoom } from '../files/DashBoard/DashBoardComponents/Chat/ChatRoom.js';
 import { Navigate } from 'react-router-dom';
-import { Subjects } from '../files/DashBoard/Classes/Subjects/Subjects.js';
-import {SubjectContent} from '../files/DashBoard/Classes/Subjects/SubjectContent.js';
+import { Subjects } from '../files/DashBoard/DashBoardComponents/HomeContainer/RenderClass/ClassContent/Subjects.js';
+import {SubjectContent} from '../files/DashBoard/DashBoardComponents/HomeContainer/RenderClass/ClassContent/SubjectContent/SubjectContent.js';
 import {useAuth} from '../Contexts/AuthContext';
 import { collection, query, onSnapshot } from 'firebase/firestore'
 import {db} from '../utils/firebaseDB';

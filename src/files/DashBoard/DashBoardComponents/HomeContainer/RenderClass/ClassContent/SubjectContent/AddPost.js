@@ -2,11 +2,11 @@ import React, { useState } from 'react'
 import { Tooltip, Dialog, DialogTitle, DialogContent, DialogActions, Stack, IconButton, Link, TextField, Button, Box, Typography, Avatar } from '@mui/material'
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import AddLinkOutlinedIcon from '@mui/icons-material/AddLinkOutlined';
-import { useAuth } from '../../../../Contexts/AuthContext';
+import { useAuth } from '../../../../../../../Contexts/AuthContext';
 import DropFileInput from './DragandDrop/DropFileComponent';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { ImageConfig } from '../../../../config/imageConfig';
-import { Storage, db } from '../../../../utils/firebaseDB';
+import { ImageConfig } from '../../../../../../../config/imageConfig';
+import { Storage, db } from '../../../../../../../utils/firebaseDB';
 import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 

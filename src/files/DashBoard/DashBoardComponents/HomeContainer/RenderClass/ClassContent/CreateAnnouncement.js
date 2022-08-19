@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { Box, TextField, Grid, Typography, Button, Dialog, DialogContentText, DialogContent, DialogTitle, DialogActions } from '@mui/material'
 import { setDoc, doc, addDoc, collection, serverTimestamp } from 'firebase/firestore'
-import { db } from '../../../utils/firebaseDB'
-import { useAuth } from '../../../Contexts/AuthContext'
+import { db } from '../../../../../../utils/firebaseDB'
+import { useAuth } from '../../../../../../Contexts/AuthContext'
 
 export const CreateAnnouncement = (props) => {
   const { openAnnouncemtDialog, setOpenAnnouncemtDialog, ownerEmail, classID } = props;

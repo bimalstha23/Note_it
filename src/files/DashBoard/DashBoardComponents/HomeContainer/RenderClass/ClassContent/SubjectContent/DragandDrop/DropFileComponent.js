@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import './drop-file-input.css';
-import { ImageConfig } from '../../../../../config/imageConfig';
-import uploadImg from '../../../../../assets/upload.png';
+import { ImageConfig } from '../../../../../../../../config/imageConfig';
+import uploadImg from '../../../../../../../../assets/upload.png';
 import { Box,Dialog,DialogTitle, Typography, IconButton, Button } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 

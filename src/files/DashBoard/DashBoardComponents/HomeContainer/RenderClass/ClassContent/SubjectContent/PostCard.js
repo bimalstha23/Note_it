@@ -3,10 +3,10 @@ import { Box, Stack, Card, Avatar, CardContent, CardActionArea, CardActions, Car
 import WorkspacePremiumSharpIcon from '@mui/icons-material/WorkspacePremiumSharp';
 import WorkspacePremiumOutlinedIcon from '@mui/icons-material/WorkspacePremiumOutlined';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
-import { useAuth } from '../../../../Contexts/AuthContext';
+import { useAuth } from '../../../../../../../Contexts/AuthContext';
 import { onSnapshot, getDoc, doc, collection, writeBatch, serverTimestamp, addDoc, runTransaction, query, where, getDocs, limit } from 'firebase/firestore';
-import { db } from '../../../../utils/firebaseDB';
-import { ImageConfig } from '../../../../config/imageConfig';
+import { db } from '../../../../../../../utils/firebaseDB';
+import { ImageConfig } from '../../../../../../../config/imageConfig';
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import { ImageLayout } from './ImageLayout';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';

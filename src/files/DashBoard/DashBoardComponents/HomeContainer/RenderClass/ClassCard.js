@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, Typography, Grid } from '@mui/material'
 import { Link } from 'react-router-dom';
-import { SidebarTheme } from '../../../../utils/Themes';
+import { SidebarTheme } from '../../../../../utils/Themes';
 import { ThemeProvider } from '@mui/material/styles';
 
 export const ClassCard = (props) => {

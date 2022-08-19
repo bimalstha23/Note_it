@@ -3,8 +3,8 @@ import { Tooltip, Dialog, DialogTitle, DialogContent, DialogActions, Stack, Icon
 // import SearchIcon from '@mui/icons-material/Search'
 import { AddPost } from './AddPost';
 import { query, collection, onSnapshot, orderBy } from 'firebase/firestore';
-import { db } from '../../../../utils/firebaseDB';
-import { useAuth } from '../../../../Contexts/AuthContext';
+import { db } from '../../../../../../../utils/firebaseDB';
+import { useAuth } from '../../../../../../../Contexts/AuthContext';
 import { PostCard } from './PostCard';
 
 export const SubjectContent = (props) => {
