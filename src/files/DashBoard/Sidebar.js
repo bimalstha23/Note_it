@@ -47,7 +47,7 @@ export function Sidebar() {
               // marginButtom={'50px'}
               >
                 <CardMedia
-
+                  referrerPolicy='no-referrer'
                   component="img"
                   alt="Profile"
                   height="174px"
