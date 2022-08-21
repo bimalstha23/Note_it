@@ -1,10 +1,46 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Box, AppBar, Toolbar, TextField, Typography, Paper, IconButton } from '@mui/material'
+import { collection, query, addDoc, onSnapshot, serverTimestamp, orderBy } from 'firebase/firestore'
+import { useAuth } from '../../../../Contexts/AuthContext';
+import { db } from '../../../../utils/firebaseDB';
 import SendIcon from '@mui/icons-material/Send';
+import { useEffect } from 'react';
+import { Message } from './Message';
+
 export const ChatSpace = ({ data }) => {
 
     const { id, name } = data;
+    const { currentUser } = useAuth();
+    const [message, setMessage] = useState('');
+    const [messages, setMessages] = useState([]);
 
+    useEffect(() => {
+        const q = query(collection(db, 'ChatRoom', id, 'Messages'), orderBy('timestamp', 'asc'));
+        const unSubscribe = onSnapshot(q, (querySnapshot) => {
+            setMessages(querySnapshot.docs.map((doc) => {
+                return {
+                    ...doc.data(),
+                    id: doc.id
+                }
+            }));
+        })
+        return () => unSubscribe();
+    }, [id]);
+
+    console.log(messages);
+    const sendMessage = async () => {
+        try {
+            const q = collection(db, 'ChatRoom', id, 'Messages');
+            await addDoc(q, {
+                message,
+                sender: currentUser.uid,
+                timestamp: serverTimestamp()
+            });
+            setMessage('');
+        } catch (err) {
+            console.log(err);
+        }
+    }
     return (
         <Box>
             <AppBar
@@ -21,11 +57,17 @@ export const ChatSpace = ({ data }) => {
                 </Toolbar>
             </AppBar>
 
+            <Paper
+                elevation={0}
 
-            <Paper>
-
-
+            >
+                <Box>
+                    {messages.map((message) => (
+                        <Message key={message.id} messageData={message} />
+                    ))}
+                </Box>
             </Paper>
+
             <Box
                 display='flex'
                 flexDirection='row'
@@ -42,6 +84,7 @@ export const ChatSpace = ({ data }) => {
                 <form action=""
                     onSubmit={(e) => {
                         e.preventDefault()
+                        sendMessage()
                     }}
                 >
 
@@ -57,8 +100,9 @@ export const ChatSpace = ({ data }) => {
                             label='Type your message'
                             variant='outlined'
                             fullWidth
-                            rowsMax={4}
-                            placeholder='Type your message'
+                            type={'text'}
+                            value={message}
+                            onChange={(e) => { setMessage(e.target.value) }}
                         />
                         <IconButton type='submit'>
                             <SendIcon />
