@@ -11,7 +11,9 @@ export function Home() {
     <div className="App">
       <Box display={'flex'}>
         <Sidebar />
-        <Box display={'block'}>
+        <Box
+          marginLeft={10}
+          display={'block'}>
           <InnerContent />
         </Box>
       </Box>

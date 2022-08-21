@@ -3,26 +3,48 @@ import { Box, Typography, Grid } from '@mui/material'
 import { Link } from 'react-router-dom'
 
 export const SubjectCard = (props) => {
-    const { subjectData,classID } = props;
+  const { subjectData, classID } = props;
   return (
-    <Grid item xs={12} sm={6}>
-    <Box
-        width={'331px'}
+    <Grid item xs={6}>
+      <Box
+        width={'290px'}
         height={'136px'}
-        display={'flex'}
-        flexDirection={'column'}
         alignItems={'left'}
         margin={'auto'}
         boxShadow={'0 0 5px #ddd'}
         borderRadius={'25px'}
         padding={'30px'}
-    >
-        <Link to={`/${subjectData.id}`}>
-            <Typography>{subjectData.subjectName}</Typography>
-        </Link>
-        <Typography>{subjectData.teacherName}</Typography>
-        <Typography>{subjectData.teacherEmail}</Typography>
-    </Box>
-</Grid>
+        sx={{
+          backgroundColor: '#121212',
+          color: '#FFFFFF',
+          '&:hover': {
+            boxShadow: '0 0 5px #ddd',
+            backgroundColor: '#FFFFFF',
+            color: '#121212',
+          },
+        }}
+      >
+        <Box
+          // width={'100%'}
+          // height={'100%'}
+          component={Link}
+          to={`/${subjectData.id}`}
+          sx={{
+            textDecoration: 'none',
+            backgroundColor: '#121212',
+            color: '#FFFFFF',
+            '&:hover': {
+              backgroundColor: '#FFFFFF',
+              color: '#121212',
+            },
+          }}
+        >
+
+          <Typography>{subjectData.subjectName}</Typography>
+          <Typography>{subjectData.teacherName}</Typography>
+          <Typography>{subjectData.teacherEmail}</Typography>
+        </Box>
+      </Box>
+    </Grid>
   )
 }

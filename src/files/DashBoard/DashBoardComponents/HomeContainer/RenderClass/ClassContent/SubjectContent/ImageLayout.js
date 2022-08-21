@@ -28,7 +28,7 @@ const LayoutFortwoImage = (props) => {
     const { images } = props
     return (
         <Grid container spacing={1}>
-            <Grid item xs={12}>
+            <Grid maxHeight={'250px'} item xs={12}>
                 <img style={imageStyle} src={images[0]} alt="" />
             </Grid>
             <Grid item xs={12}>
@@ -42,7 +42,7 @@ const LayoutForthreeImage = (props) => {
     const { images } = props
     return (
         <Grid container spacing={1}>
-            <Grid item xs={12}>
+            <Grid maxHeight={'250px'} item xs={12}>
                 <img style={imageStyle} src={images[0]} alt="" />
             </Grid>
             <Grid item container xs={12}>
@@ -61,7 +61,7 @@ const LayoutForfourImage = (props) => {
     const { images } = props
     return (
         <Grid container>
-            <Grid item xs={12}>
+            <Grid maxHeight={'250px'} item xs={12}>
                 <img style={imageStyle} src={images[0]} alt="" />
             </Grid>
             <Grid item container xs={12}>

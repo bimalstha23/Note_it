@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Stack, Card, Avatar, CardContent, CardActionArea, CardActions, CardHeader, CardMedia, Typography, IconButton, Grid } from '@mui/material'
+import { Box, Button, Menu, MenuItem, Snackbar, Alert, Card, Avatar, CardContent, DialogActions, DialogTitle, CardActions, CardHeader, CardMedia, Typography, IconButton, Grid, Dialog, DialogContent, DialogContentText } from '@mui/material'
 import WorkspacePremiumSharpIcon from '@mui/icons-material/WorkspacePremiumSharp';
 import WorkspacePremiumOutlinedIcon from '@mui/icons-material/WorkspacePremiumOutlined';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import { useAuth } from '../../../../../../../Contexts/AuthContext';
-import { onSnapshot, getDoc, doc, collection, writeBatch, serverTimestamp, addDoc, runTransaction, query, where, getDocs, limit } from 'firebase/firestore';
+import { onSnapshot, getDoc, doc, collection, writeBatch, deleteDoc, serverTimestamp, addDoc, runTransaction, query, where, getDocs, limit } from 'firebase/firestore';
 import { db } from '../../../../../../../utils/firebaseDB';
 import { ImageConfig } from '../../../../../../../config/imageConfig';
+import WarningRoundedIcon from '@mui/icons-material/WarningRounded';
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import { ImageLayout } from './ImageLayout';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
@@ -14,6 +15,8 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import { saveAs } from 'file-saver';
 import moment from 'moment';
 import JSZip from 'jszip';
+import { PdfViewerDialog } from './PdfViewerDialog';
+
 
 export const PostCard = ({ post, teacherEmail, adminEmail, subjectId }) => {
     console.log(adminEmail);
@@ -21,12 +24,22 @@ export const PostCard = ({ post, teacherEmail, adminEmail, subjectId }) => {
     const { currentUser } = useAuth();
     const batch = writeBatch(db);
     const [isPostLiked, setIsPostLiked] = useState(null);
-    const { postMessege, serverTimestamp, postAutherId, isVerified, id, likeCount,DownloadCount } = post;
+    const { postMessege, serverTimestamp, postAutherId, isVerified, id, likeCount, DownloadCount } = post;
     const [autherDetails, setAutherDetails] = useState({});
     const [filesDetails, setFilesDetails] = useState([]);
     const [verified, setVerified] = useState(null);
     const [likeId, setLikeId] = useState(null);
     const [isUserTeacher, setIsUserTeacher] = useState(currentUser.email === teacherEmail || currentUser.email === adminEmail ? false : true);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const MenuOpen = Boolean(anchorEl);
+    const [ShowDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+    const [openDeleteAlert, setOpenDeleteAlert] = useState(false);
+    const [ShowEmptyFileAlert, setShowEmptyFileAlert] = useState(false);
+    const images = filesDetails.filter((file) => file.type === 'image/png' || file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/gif' || file.type === 'image/bmp' || file.type === 'image/tiff' || file.type === 'image/webp');
+    const imagesUrl = images.map((image) => image.url);
+    const files = filesDetails.filter((file) => file.type !== 'image/png' && file.type !== 'image/jpeg' && file.type !== 'image/jpg' && file.type !== 'image/gif' && file.type !== 'image/bmp' && file.type !== 'image/tiff' && file.type !== 'image/webp');
+    const filesUrl = files.map((file) => file.url);
+
 
     useEffect(() => {
         if (postAutherId) {
@@ -44,7 +57,6 @@ export const PostCard = ({ post, teacherEmail, adminEmail, subjectId }) => {
         }
     }, [postAutherId]);
 
-    console.log(autherDetails);
 
     useEffect(() => {
         if (id) {
@@ -66,7 +78,12 @@ export const PostCard = ({ post, teacherEmail, adminEmail, subjectId }) => {
 
     }, [id])
 
-
+    const handleMenuOpen = (event) => {
+        setAnchorEl(event.currentTarget);
+    }
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    }
     const handleVerifyPost = async () => {
         console.log('verifyClicked');
         if (currentUser.email === adminEmail || currentUser.email === teacherEmail) {
@@ -98,11 +115,6 @@ export const PostCard = ({ post, teacherEmail, adminEmail, subjectId }) => {
             alert('You are not authorized to unverify this post');
         }
     }
-    const images = filesDetails.filter((file) => file.type === 'image/png' || file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/gif' || file.type === 'image/bmp' || file.type === 'image/tiff' || file.type === 'image/webp');
-    const imagesUrl = images.map((image) => image.url);
-    const files = filesDetails.filter((file) => file.type !== 'image/png' && file.type !== 'image/jpeg' && file.type !== 'image/jpg' && file.type !== 'image/gif' && file.type !== 'image/bmp' && file.type !== 'image/tiff' && file.type !== 'image/webp');
-    const filesUrl = files.map((file) => file.url);
-
 
 
 
@@ -175,42 +187,103 @@ export const PostCard = ({ post, teacherEmail, adminEmail, subjectId }) => {
     }
 
     const makeZipFile = async () => {
-        try {
-            runTransaction(db, async (transaction) => {
-                const postRef = doc(db, 'posts', subjectId, 'posts', id);
-                const Post = await transaction.get(postRef);
-                if (!Post.exists()) {
-                    return;
-                }
-                const newDownloadCount = Post.data().DownloadCount + 1;
-                transaction.update(postRef, {
-                    DownloadCount: newDownloadCount,
-                });
-            })
+        if (filesDetails.lenghth > 0 || images.length > 0) {
+            try {
+                runTransaction(db, async (transaction) => {
+                    const postRef = doc(db, 'posts', subjectId, 'posts', id);
+                    const Post = await transaction.get(postRef);
+                    if (!Post.exists()) {
+                        return;
+                    }
+                    const newDownloadCount = Post.data().DownloadCount + 1;
+                    transaction.update(postRef, {
+                        DownloadCount: newDownloadCount,
+                    });
+                })
             } catch (error) {
-            console.log(error);
-        }
+                console.log(error);
+            }
 
-        zip.file("NoteIt.txt", "Just Note It");
-        const imageFolder = zip.folder("images");
-        const Documents = zip.folder("Documents");
-        images.map((image) => {
-            imageFolder.file(image.name, image.url);
+            zip.file("NoteIt.txt", "Just Note It");
+            const imageFolder = zip.folder("images");
+            const Documents = zip.folder("Documents");
+            images.map((image) => {
+                imageFolder.file(image.name, image.url);
+            })
+            files.map((Doc) => {
+                Documents.file(Doc.name, Doc.url);
+            })
+            await zip.generateAsync({ type: 'blob' }).then(function (content) {
+                console.log(content);
+                saveAs(content, currentUser.displayName);
+            }).catch(function (err) {
+                console.log(err);
+            })
+        } else {
+            setShowEmptyFileAlert(true);
+        }
+    }
+
+    const handleDeletePost = async () => {
+        const postRef = doc(db, 'posts', subjectId, 'posts', id);
+        // const postlikesRef = query(collection(db, 'Postlikes'), where('PostId', '==', id));
+        // const postFilesRef = collection(db, 'postFiles', id, 'files');
+        await deleteDoc(postRef).then(() => {
         })
-        files.map((Doc) => {
-            Documents.file(Doc.name, Doc.url);
-        })
-        await zip.generateAsync({ type: 'blob' }).then(function (content) {
-            console.log(content);
-            saveAs(content, currentUser.displayName);
-        }).catch(function (err) {
-            console.log(err);
-        })
+        console.log(ShowDeleteConfirmation, 'deleteConfirmation');
+        // await deleteDoc(postFilesRef);
+    }
+
+    const handleDeletAlertOpen = () => {
+        setOpenDeleteAlert(true);
+    }
+    const handleDeletAlertClose = () => {
+        setOpenDeleteAlert(false);
+        handleMenuClose();
+    }
+    const handleSnackBarClose = () => {
+        setShowEmptyFileAlert(false);
     }
 
     return (
+        <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="center"
+            width="100%"
+            height="100%"
+            bgcolor="background.paper"
+            boxShadow={1}
+            borderRadius={'5px'}
+            overflow="auto"
+            margin={2}
+        >
+            {/* //SnackBar For Empty File Downlooad */}
+            <Snackbar
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                onClose={handleSnackBarClose}
+                open={ShowEmptyFileAlert}
+                autoHideDuration={2000}
+            >
+                <Alert severity="error" sx={{ width: '100%' }}>
+                    There are no files attached to this post.
+                </Alert>
+            </Snackbar>
 
-        <Box>
+
+            {/* snackbar for delete post */}
+            <Snackbar
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                onClose={handleSnackBarClose}
+                open={ShowDeleteConfirmation}
+                autoHideDuration={2000}
+            >
+                <Alert severity="success" sx={{ width: '100%' }}>
+                    Post has been deleted.
+                </Alert>
+            </Snackbar>
+
             {post &&
                 <Card>
                     {post.serverTimestamp &&
@@ -220,9 +293,29 @@ export const PostCard = ({ post, teacherEmail, adminEmail, subjectId }) => {
                                     src={autherDetails.photoURL} className="avatar" />
                             }
                             action={
-                                <IconButton aria-label="settings">
-                                    <MoreVertIcon />
-                                </IconButton>
+                                <Box>
+                                    <Menu
+                                        id="menu"
+                                        anchorEl={anchorEl}
+                                        open={MenuOpen}
+                                        onClose={handleMenuClose}
+                                        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+                                        transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+                                    >
+                                        <MenuItem onClick={handleDeletAlertOpen}>Delete Post</MenuItem>
+                                        <MenuItem>Edit Post</MenuItem>
+                                    </Menu>
+
+                                    <IconButton
+                                        disabled={currentUser.email === autherDetails.email || currentUser.email === adminEmail || currentUser.email === teacherEmail ? false : true}
+                                        id='menu'
+                                        aria-controls={MenuOpen ? 'menu' : undefined}
+                                        aria-haspopup="true"
+                                        aria-label="settings"
+                                        onClick={handleMenuOpen}>
+                                        <MoreVertIcon />
+                                    </IconButton>
+                                </Box>
                             }
                             title={autherDetails.displayName}
                             subheader={moment(serverTimestamp.toDate()).fromNow()}
@@ -230,7 +323,7 @@ export const PostCard = ({ post, teacherEmail, adminEmail, subjectId }) => {
                         </CardHeader>
                     }
                     <CardContent>
-                        <Typography variant="body2" color="textSecondary" component="p">{postMessege}</Typography>
+                        <Typography paddingLeft={2} variant="caption" color="textSecondary" component="p">{postMessege}</Typography>
                     </CardContent>
 
                     <Box
@@ -238,37 +331,44 @@ export const PostCard = ({ post, teacherEmail, adminEmail, subjectId }) => {
                         margin={'auto'}
                         padding={'20px'}
                         borderRadius={'25px'}>
-                        <Box>
+                        <Box
+                            overflow={'hidden'}
+                            display="flex"
+                            maxHeight={'500px'}
+                        >
                             {imagesUrl.length > 0 ? <ImageLayout images={imagesUrl} /> : null}
                         </Box>
-                        <Grid container spacing={1}>
-                            {files.length > 0 ? files.map((item, index) => {
-                                return (
-                                    <Grid item xs={6}>
+                        <Box>
 
-                                        <Box
-                                            display="flex"
-                                            flexDirection="row"
-                                            boxShadow={'0 0 5px #ddd'}
-                                            borderRadius={'25px'}
-                                            padding={'10px'}
+                            <Grid container spacing={1}>
+                                {files.length > 0 ? files.map((item, index) => {
+                                    return (
+                                        <Grid item xs={6}>
 
-                                            sx={{
-                                                justifyContent: 'space-between',
-                                            }}
-                                            key={index}>
-                                            <img height={'50px'} src={ImageConfig[item.type.split('/')[1]] || ImageConfig['default']} alt="" />
-                                            <Box display={'flex'}
-                                                flexDirection={'column'}
-                                                paddingLeft={'5px'}>
-                                                <Typography variant="body" align="left" color="textPrimary">{item.name}</Typography>
-                                                {/* <Typography variant="body" align="left" color="textPrimary">{item.size}</Typography> */}
+                                            <Box
+                                                display="flex"
+                                                flexDirection="row"
+                                                boxShadow={'0 0 5px #ddd'}
+                                                borderRadius={'25px'}
+                                                padding={'10px'}
+                                                sx={{
+                                                    justifyContent: 'space-between',
+                                                }}
+                                                key={index}>
+                                                <img height={'50px'} src={ImageConfig[item.type.split('/')[1]] || ImageConfig['default']} alt="" />
+                                                <Box display={'flex'}
+                                                    flexDirection={'column'}
+                                                    paddingLeft={'5px'}>
+                                                    <Typography variant="body" align="left" color="textPrimary">{item.name}</Typography>
+                                                    {/* <Typography variant="body" align="left" color="textPrimary">{item.size}</Typography> */}
+                                                </Box>
+                                                <PdfViewerDialog src={item.url} />
                                             </Box>
-                                        </Box>
-                                    </Grid>
-                                )
-                            }) : null}
-                        </Grid>
+                                        </Grid>
+                                    )
+                                }) : null}
+                            </Grid>
+                        </Box>
                     </Box>
                     {/* </CardMedia> */}
 
@@ -341,6 +441,45 @@ export const PostCard = ({ post, teacherEmail, adminEmail, subjectId }) => {
 
                 </Card >
             }
+
+            <Dialog
+                open={openDeleteAlert}
+                onClose={handleDeletAlertClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle>
+                    <Box
+                        display={'flex'}
+                        flexDirection={'row'}
+                        alignItems='center'
+                        flexWrap='wrap'>
+                        <WarningRoundedIcon style={{ color: 'red' }} />
+                        <Typography paddingLeft={2} variant="h6" align="left" color="textPrimary">
+                            Are you Sure About Deleting The Post?
+                        </Typography>
+                    </Box>
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Deleting The Post Will Delete All The Files And Images Related To The Post And It Will Be Permanently Deleted.
+                    </DialogContentText>
+                </DialogContent>
+
+                <DialogActions>
+                    <Button onClick={handleDeletAlertClose} color="primary">
+                        Cancel
+                    </Button>
+                    <Button onClick={() => {
+                        handleDeletePost()
+                        setShowDeleteConfirmation(true)
+                    }} color="primary" autoFocus>
+                        Delete
+                    </Button>
+                </DialogActions>
+
+            </Dialog>
+
         </Box >
     )
 }

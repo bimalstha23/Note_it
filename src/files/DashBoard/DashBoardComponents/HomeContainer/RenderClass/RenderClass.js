@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { CreateClass } from './CreateClass'
 import { JoinClass } from './JoinClass'
-import { SpeedDial, SpeedDialAction, Box, Grid, Typography,Alert,Snackbar } from '@mui/material'
+import { SpeedDial, SpeedDialAction, Box, Grid, Typography, Alert, Snackbar } from '@mui/material'
 import { useAuth } from '../../../../../Contexts/AuthContext'
 import { ClassCard } from './ClassCard'
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
@@ -62,14 +62,16 @@ export const RenderClass = () => {
         fetchJoinedClasses();
     }, [currentUser]);
 
-    console.log(createdClassData);
-    console.log(joinedClassData);
     const actions = [
         { icon: <CreateOutlinedIcon />, name: 'Create Class', onClick: () => setCreateClassDialog(true) },
         { icon: <GroupAddOutlinedIcon />, name: 'Join Class', onClick: () => setJoinClassDialog(true) },
     ];
     return (
-        <Box marginTop={4} sx={{ flexGrow: 1 }}>
+        <Box
+            // marginTop={4}
+            width={'1000px'}
+            padding={'30px'}
+        >
             <Snackbar
                 anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                 open={success} autoHideDuration={6000} onClose={() => setSuccess(false)}>
@@ -101,17 +103,22 @@ export const RenderClass = () => {
                     ))}
                 </SpeedDial>
             </Box>
-            <Grid container spacing={2}>
-                {/* <Grid item xs={12} sm={6}> */}
-                {createdClassData.map((item) => (
-                    <ClassCard key={item.id} classData={item} />
-                ))}
-                {joinedClassData.map((item) => (
-                    <ClassCard key={item.id} classData={item} />
-                ))}
-                <CreateClass createClassDialog={createClassDialog} setCreateClassDialog={setCreateClassDialog} />
-                <JoinClass setSuccess={setSuccess} setSuccessMessage={setSuccessMessage} joinClassDialog={joinClassDialog} setJoinClassDialog={setJoinClassDialog} />
+            <Grid  container spacing={1}>
+                <Grid container item xs={8}>
+                    {createdClassData.map((item) => (
+                        <ClassCard key={item.id} classData={item} />
+                    ))}
+                    {joinedClassData.map((item) => (
+                        <ClassCard key={item.id} classData={item} />
+                    ))}
+                </Grid>
+                <Grid container item xs={4}>
+                    this is calendar section
+                    </Grid>
+                
             </Grid>
+            <CreateClass createClassDialog={createClassDialog} setCreateClassDialog={setCreateClassDialog} />
+            <JoinClass setSuccess={setSuccess} setSuccessMessage={setSuccessMessage} joinClassDialog={joinClassDialog} setJoinClassDialog={setJoinClassDialog} />
         </Box>
     )
 }

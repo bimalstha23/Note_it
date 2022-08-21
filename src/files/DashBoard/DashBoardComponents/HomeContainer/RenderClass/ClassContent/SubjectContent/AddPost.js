@@ -18,9 +18,13 @@ export const AddPost = ({ subjectId }) => {
     const [fileList, setFileList] = useState([]);
     const [postMessege, setPostMessege] = useState('');
     const [postLink, setPostLink] = useState('');
-    const [linkList, setLinkList] = useState([]);
-    
-    console.log(linkList);
+    // const [linkList, setLinkList] = useState([]);
+
+
+    // const handlePdfDialog(src){
+
+    // }
+
     const makePost = async (e) => {
         // preventDefault(e);
         const postData = {
@@ -44,7 +48,6 @@ export const AddPost = ({ subjectId }) => {
             console.log(error);
         }
     }
-
     const addFiles = async (id) => {
         fileList.map(async (file) => {
             const storageRef = ref(Storage, subjectId + '/' + 'files' + '/' + file.name);
@@ -90,7 +93,7 @@ export const AddPost = ({ subjectId }) => {
         updatedList.splice(fileList.indexOf(file), 1);
         setFileList(updatedList);
     }
-    
+
 
 
     return (
@@ -125,6 +128,7 @@ export const AddPost = ({ subjectId }) => {
                                                     boxShadow={'0 0 5px #ddd'}
                                                     borderRadius={'25px'}
                                                     padding={'10px'}
+                                                    // onClick = {handlePdfDialog}
                                                     sx={{
                                                         justifyContent: 'space-between',
                                                     }}

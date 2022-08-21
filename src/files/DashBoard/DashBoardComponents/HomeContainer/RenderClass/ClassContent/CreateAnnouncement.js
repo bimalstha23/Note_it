@@ -33,7 +33,7 @@ export const CreateAnnouncement = (props) => {
                   // announcedBy: currentUser.name,
                   title: title,
                   description: description,
-                  createdAt: serverTimestamp(),
+                  serverTimestamp: serverTimestamp(),
                 }
                 const announcementRef = collection(db, 'Announcement', classID, 'Announcements');
                 try {

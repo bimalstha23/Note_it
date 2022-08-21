@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Paper, Typography, Card, CardMedia, CssBaseline, Drawer, Divider, Toolbar, List, Box, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { Typography, Card, CardMedia, CssBaseline, Drawer, Divider, Toolbar, List, Box, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
