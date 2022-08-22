@@ -1,18 +1,61 @@
-import React, { useState } from 'react'
-import { Box, AppBar, Toolbar, TextField, Typography, Paper, IconButton } from '@mui/material'
+import React, { useState, useRef } from 'react'
+import { Box, AppBar, Avatar, Toolbar, TextField, Typography, Button } from '@mui/material'
 import { collection, query, addDoc, onSnapshot, serverTimestamp, orderBy } from 'firebase/firestore'
 import { useAuth } from '../../../../Contexts/AuthContext';
 import { db } from '../../../../utils/firebaseDB';
 import SendIcon from '@mui/icons-material/Send';
 import { useEffect } from 'react';
 import { Message } from './Message';
+import { styled } from '@mui/system';
+
+const CustomButton = styled(Button)({
+    backgroundColor: '#f5f5f5',
+    // padding: '10px',
+    // margin: '10px',
+    color: '#121212',
+})
+
+
+const CustomTextField = styled(TextField)({
+    '& label': {
+        color: 'white',
+    },
+    '& label.Mui-focused': {
+        color: 'white',
+    },
+    '& .MuiInput-underline:after': {
+        borderBottomColor: 'white',
+    },
+    '& .MuiOutlinedInput-root': {
+        '& fieldset': {
+            borderColor: 'white',
+        },
+        '&:hover fieldset': {
+            borderColor: 'blue',
+        },
+        '&.Mui-focused fieldset': {
+            borderColor: 'White',
+        },
+    },
+    input: {
+        color: 'white',
+    }
+});
 
 export const ChatSpace = ({ data }) => {
 
+    const messegeEndRef = useRef(null);
     const { id, name } = data;
     const { currentUser } = useAuth();
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
+    const scrollToBottom = () => {
+        messegeEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages]);
 
     useEffect(() => {
         const q = query(collection(db, 'ChatRoom', id, 'Messages'), orderBy('timestamp', 'asc'));
@@ -42,7 +85,10 @@ export const ChatSpace = ({ data }) => {
         }
     }
     return (
-        <Box>
+        <Box
+            backgroundColor='#121212'
+        // height='100vh'
+        >
             <AppBar
                 position='static'
                 sx={{
@@ -57,16 +103,27 @@ export const ChatSpace = ({ data }) => {
                 </Toolbar>
             </AppBar>
 
-            <Paper
-                elevation={0}
 
+            <Box
+                display='flex'
+                flexDirection='column'
+                flexGrow={1}
+                height='540px'
+                overflowY='scroll'
+                p={2}
+                marginTop={2}
+                backgroundColor='#121212'
+                style={{
+                    border: "2px solid black",
+                    overflow: "hidden",
+                    overflowY: "scroll" // added scroll
+                }}
             >
-                <Box>
-                    {messages.map((message) => (
-                        <Message key={message.id} messageData={message} />
-                    ))}
-                </Box>
-            </Paper>
+                {messages.map((message) => (
+                    <Message key={message.id} messageData={message} />
+                ))}
+                <div ref={messegeEndRef} />
+            </Box>
 
             <Box
                 display='flex'
@@ -74,9 +131,8 @@ export const ChatSpace = ({ data }) => {
                 // alignItems='center'
                 // justifyContent='space-between'
                 padding={2}
-                position='fixed'
+
                 width='850px'
-                bottom={0}
             // sx={{
             //     width: 1,
             // }}
@@ -91,22 +147,40 @@ export const ChatSpace = ({ data }) => {
                     <Box
                         display='flex'
                         flexDirection='row'
+                        color='#ffffff'
                         // width={1}
                         sx={{
                             width: '800px',
                         }}
                     >
-                        <TextField
+                        <Avatar
+                            // marginLeft={2}
+                            // marginRight={2}
+                            // padding={2}
+                            src={currentUser.photoURL}
+                            alt={currentUser.displayName}
+                            sx={{
+                                margin: 'auto',
+                                marginRight: '18px',
+                                width: '35px',
+                                height: '35px',
+                            }}
+                        />
+
+                        <CustomTextField
                             label='Type your message'
                             variant='outlined'
+                            size='small'
                             fullWidth
+                            padding={'10px'}
                             type={'text'}
                             value={message}
+                            // color='#ffffff'
                             onChange={(e) => { setMessage(e.target.value) }}
                         />
-                        <IconButton type='submit'>
-                            <SendIcon />
-                        </IconButton>
+                        <CustomButton sx={{ marginLeft: '8px' }} type='submit' variant="contained" endIcon={<SendIcon />}>
+                            Send
+                        </CustomButton>
                     </Box>
                 </form>
             </Box>
