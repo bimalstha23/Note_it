@@ -17,23 +17,15 @@ export const JoinClass = (props) => {
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
-    const [classData, setClassData] = useState(null);
-    const [classExists, setClassExists] = useState(false);
+    // const [classData, setClassData] = useState(null);
+    // const [classExists, setClassExists] = useState(false);
     const { currentUser, SignOut } = useAuth();
     const [isLoading, setIsLoading] = useState(false);
     function handleClose() {
         setJoinClassDialog(false);
     }
-    function handleClickOpen() {
-        setJoinClassDialog(true);
-    }
 
-    function handleSubmit(e) {
-        e.preventDefault();
-        console.log('submit');
-        console.log(OwnerEmail, classCode);
-        setJoinClassDialog(false);
-    }
+    
     return (
         <Box>
             <Dialog
@@ -50,7 +42,7 @@ export const JoinClass = (props) => {
                             const classRef = doc(db, 'CreatedClass', OwnerEmail, 'Classes', classCode);
                             await getDoc(classRef).then(async (classSnap) => {
                                 if (classSnap.exists() && classSnap.data().OwnerEmail !== currentUser.email) {
-                                    setClassData(classSnap.data());
+                                    // setClassData(classSnap.data());
                                     const joinClassRef = doc(db, 'JoinedClasses', currentUser.email, 'Classes', classCode);
                                     await setDoc(joinClassRef, classSnap.data()).then(() => {
                                         setJoinClassDialog(false);
@@ -63,7 +55,7 @@ export const JoinClass = (props) => {
                                         setIsLoading(false);
                                     });
                                 } else {
-                                    setClassExists(false);
+                                    // setClassExists(false);
                                     setError(true);
                                     setErrorMessage('Class does not exist or you are the owner of the class');
                                     setIsLoading(false);

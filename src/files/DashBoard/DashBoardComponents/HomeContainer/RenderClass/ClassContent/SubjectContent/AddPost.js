@@ -14,7 +14,7 @@ export const AddPost = ({ subjectId }) => {
     const { currentUser } = useAuth();
     const [showinputField, setShowinputField] = useState(false);
     const [showuploadDialog, setShowuploadDialog] = useState(false);
-    const [showLinkDialog, setShowLinkDialog] = useState(false);
+    // const [showLinkDialog, setShowLinkDialog] = useState(false);
     const [fileList, setFileList] = useState([]);
     const [postMessege, setPostMessege] = useState('');
     const [postLink, setPostLink] = useState('');
@@ -50,9 +50,10 @@ export const AddPost = ({ subjectId }) => {
     }
     const addFiles = async (id) => {
         fileList.map(async (file) => {
-            const storageRef = ref(Storage, subjectId + '/' + 'files' + '/' + file.name);
+            // const storageRef = ref(Storage, subjectId + '/' + 'files' + '/'  + file.name);
+            const storageRef = ref(Storage,`${subjectId}/files/${file.name}`);
             try {
-                const uploadTask = await uploadBytesResumable(storageRef, file);
+                await uploadBytesResumable(storageRef, file);
                 const downloadUrl = await getDownloadURL(storageRef);
                 console.log(downloadUrl);
                 const urlData = {
@@ -61,7 +62,7 @@ export const AddPost = ({ subjectId }) => {
                     type: file.type,
                 }
                 const DocRef = collection(db, 'postFiles', id, 'files');
-                const doc = await addDoc(DocRef, urlData);
+                await addDoc(DocRef, urlData);
                 console.log(id);
             } catch (error) {
                 console.log(error);
@@ -206,7 +207,7 @@ export const AddPost = ({ subjectId }) => {
             </Box>
             <Box>
                 <Dialog
-                    open={showLinkDialog}
+                    // open={showLinkDialog}
                     onClose={handleClose}>
                     <DialogTitle>Add Link</DialogTitle>
                     <DialogContent>

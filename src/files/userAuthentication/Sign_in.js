@@ -6,8 +6,6 @@ import { FacebookOutlined, Google, Visibility, VisibilityOff } from '@mui/icons-
 import { useAuth } from '../../Contexts/AuthContext';
 import { useMounted } from '../../Hooks/useMounted';
 import { LoadingButton } from '@mui/lab';
-import { updateCurrentUser } from 'firebase/auth';
-import CloseIcon from '@mui/icons-material/Close';
 import { setDoc, doc } from 'firebase/firestore';
 import { db } from '../../utils/firebaseDB';
 
@@ -46,7 +44,7 @@ export function LogInform() {
           e.preventDefault();
           setIsSignInloading(true);
           console.log(email, values.password);
-          const user = loginUser(email, values.password).then((response) => {
+          loginUser(email, values.password).then((response) => {
             Navigate('/');
           })
             .catch((err) => {

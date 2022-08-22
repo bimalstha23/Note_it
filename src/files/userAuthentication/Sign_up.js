@@ -1,12 +1,12 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Alert, Typography, Box, TextField, FormControl, Collapse, InputLabel, OutlinedInput, InputAdornment, IconButton, Link, } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import { useAuth } from '../../Contexts/AuthContext';
-import { useMounted } from '../../Hooks/useMounted';
-import { addDoc, doc, setDoc, collection, getDoc, query, where } from 'firebase/firestore';
+// import { useMounted } from '../../Hooks/useMounted';
+import { doc, setDoc,} from 'firebase/firestore';
 import { db } from '../../utils/firebaseDB'
 
 export function SignUp() {
@@ -32,25 +32,25 @@ export function SignUp() {
   };
 
   const navigate = useNavigate();
-  const mounted = useMounted();
+  // const mounted = useMounted();
   const [isloading, setIsloading] = useState(false);
   const [email, setEmail] = useState('');
   const [showErrorMessege, setShowErrorMessege] = useState(false);
   const [errorMessege, setErrorMessege] = useState('');
-  const [confirmPasswordDirty, setConfirmPasswordDirty] = useState(false);
-  const [ShowPasswordError, setShowPasswordError] = useState(false);
-  const [PasswordErrorMessage, setPasswordErrorMessage] = useState('');
+  // const [confirmPasswordDirty, setConfirmPasswordDirty] = useState(false);
+  // const [ShowPasswordError, setShowPasswordError] = useState(false);
+  // const [PasswordErrorMessage, setPasswordErrorMessage] = useState('');
   //   password and confirm passowrd validation 
-  useEffect(() => {
-    if (values.password !== values.confirmPassword) {
-      setShowPasswordError(true);
-      setPasswordErrorMessage('Password and Confirm Password Must be Same');
-    }
-    else {
-      setShowPasswordError(false);
-      setPasswordErrorMessage('');
-    }
-  }, [values.password, values.confirmPassword]);
+  // useEffect(() => {
+  //   if (values.password !== values.confirmPassword) {
+  //     setShowPasswordError(true);
+  //     setPasswordErrorMessage('Password and Confirm Password Must be Same');
+  //   }
+  //   else {
+  //     setShowPasswordError(false);
+  //     setPasswordErrorMessage('');
+  //   }
+  // }, [values.password, values.confirmPassword]);
 
 
   const { registerUser } = useAuth();
@@ -157,7 +157,7 @@ export function SignUp() {
               type={values.showPassword ? 'text' : 'password'}
               value={values.confirmPassword}
               required
-              error={showErrorMessege && confirmPasswordDirty ? true : false}
+              // error={showErrorMessege && confirmPasswordDirty ? true : false}
               // helperText={errorMessege}
               placeholder={errorMessege}
               onChange={handleChange('confirmPassword')}

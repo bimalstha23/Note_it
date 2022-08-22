@@ -14,7 +14,7 @@ export const ChatList = () => {
   function fetchCreatedClasses() {
     try {
       const q = query(collection(db, 'CreatedClass', currentUser.email, 'Classes'));
-      const unSubscribe = onSnapshot(q, (querySnapshot) => {
+       onSnapshot(q, (querySnapshot) => {
         setCreatedClassData(querySnapshot.docs.map((doc) => {
           return {
             ...doc.data(),
@@ -29,7 +29,7 @@ export const ChatList = () => {
   function fetchJoinedClasses() {
     try {
       const q = query(collection(db, 'JoinedClasses', currentUser.email, 'Classes'));
-      const unSubscribe = onSnapshot(q, (querySnapshot) => {
+       onSnapshot(q, (querySnapshot) => {
         setJoinedClassData(querySnapshot.docs.map((doc) => {
           return {
             ...doc.data(),

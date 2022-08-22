@@ -1,11 +1,11 @@
-import React, { useState, } from 'react'
+import React  from 'react'
 import { Box, Typography,Grid } from '@mui/material'
 import moment from 'moment';
 
 
 export const AnnouncementCard = (props) => {
     const { data } = props;
-    const { title, description, serverTimestamp, id, } = data;
+    const { title, description, serverTimestamp,} = data;
 
     return (
         <Grid item xs = {12}>

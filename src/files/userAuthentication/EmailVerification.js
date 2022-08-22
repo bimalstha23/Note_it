@@ -1,10 +1,8 @@
-import React, { useContext, useState, createContext, useEffect } from 'react'
-import { auth, } from '../../utils/firebaseDB';
-import { Button, Alert, Collapse, Link, Box, Typography } from '@mui/material';
+import React, { useState, } from 'react'
+import {  Alert, Collapse, Link, Box, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { useAuth } from '../../Contexts/AuthContext';
 import { sendEmailVerification } from 'firebase/auth';
-import { Navigate } from 'react-router-dom';
 
 export const EmailVerification = () => {
 
@@ -16,9 +14,7 @@ export const EmailVerification = () => {
     const { currentUser } = useAuth();
     const Name = currentUser.displayName;
 
-    function isverified() {
-
-    }
+   
 
     return (
         <form action=""

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Box, TextField, Button, Dialog, DialogContent, DialogTitle, DialogActions } from '@mui/material'
-import { setDoc, doc, addDoc, collection } from 'firebase/firestore'
+import {  addDoc, collection } from 'firebase/firestore'
 import { db } from '../../../../../utils/firebaseDB'
 import { useAuth } from '../../../../../Contexts/AuthContext'
 
@@ -17,9 +17,9 @@ export const CreateClass = (props) => {
     function handleClose() {
         SetCreateClassDialog(false);
     }
-    function handleClickOpen() {
-        SetCreateClassDialog(true);
-    }
+    // function handleClickOpen() {
+    //     SetCreateClassDialog(true);
+    // }
 
     return (
         <Box>

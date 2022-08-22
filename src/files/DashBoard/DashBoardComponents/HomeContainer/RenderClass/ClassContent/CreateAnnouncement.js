@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { Box, TextField, Grid, Typography, Button, Dialog, DialogContentText, DialogContent, DialogTitle, DialogActions } from '@mui/material'
-import { setDoc, doc, addDoc, collection, serverTimestamp } from 'firebase/firestore'
+import { Box, TextField,  Button, Dialog,  DialogContent, DialogTitle, DialogActions } from '@mui/material'
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
 import { db } from '../../../../../../utils/firebaseDB'
 import { useAuth } from '../../../../../../Contexts/AuthContext'
 
@@ -10,15 +10,13 @@ export const CreateAnnouncement = (props) => {
   const [description, setDescription] = useState('');
   const { currentUser } = useAuth();
 
-  function SetCreateClassDialog(value) {
+  function SetCreateAnnouncementDialog(value) {
     setOpenAnnouncemtDialog(value);
   }
   function handleClose() {
-    SetCreateClassDialog(false);
+    SetCreateAnnouncementDialog(false);
   }
-  function handleClickOpen() {
-    SetCreateClassDialog(true);
-  }
+  
 
   return (
     <Box>
@@ -27,10 +25,8 @@ export const CreateAnnouncement = (props) => {
           onSubmit={
             async (e) => {
               e.preventDefault();
-              console.log("submit");
               if (currentUser.email === ownerEmail) {
                 const announcementData = {
-                  // announcedBy: currentUser.name,
                   title: title,
                   description: description,
                   serverTimestamp: serverTimestamp(),
@@ -38,6 +34,7 @@ export const CreateAnnouncement = (props) => {
                 const announcementRef = collection(db, 'Announcement', classID, 'Announcements');
                 try {
                   await addDoc(announcementRef, announcementData)
+                  SetCreateAnnouncementDialog(false);
                 }
                 catch (error) {
                   console.log(error);

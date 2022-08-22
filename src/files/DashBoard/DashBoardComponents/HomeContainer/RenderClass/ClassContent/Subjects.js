@@ -4,21 +4,14 @@ import {
     Typography,
     Grid,
     Button,
-    Dialog,
-    DialogContentText,
-    DialogContent,
-    DialogTitle,
-    DialogActions,
-    TextField,
     SpeedDial,
     SpeedDialAction,
 } from "@mui/material";
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import { useAuth, AuthContext } from "../../../../../../Contexts/AuthContext";
-import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import { CreateSubjects } from "./CreateSubjects";
 import { SubjectCard } from "./SubjectCard";
-import { doc, collection, query, onSnapshot, limit } from "firebase/firestore";
+import {  collection, query, onSnapshot, limit } from "firebase/firestore";
 import { db } from "../../../../../../utils/firebaseDB";
 import CampaignRoundedIcon from '@mui/icons-material/CampaignRounded';
 import GroupAddOutlinedIcon from '@mui/icons-material/GroupAddOutlined';
@@ -31,7 +24,7 @@ export const Subjects = (props) => {
     const [openDialog, setOpenDialog] = useState(false);
     const [openAnnouncemtDialog, setOpenAnnouncemtDialog] = useState(false);
     const [announcementData, setAnnouncementData] = useState([]);
-    const [SubjectData, setSubjectData] = useState([]);
+    // const [SubjectData, setSubjectData] = useState([]);
     const { currentUser } = useAuth();
     const { data } = props;
     const { OwnerEmail, name, id } = data;
@@ -59,10 +52,10 @@ export const Subjects = (props) => {
         }
     }, [currentUser.email])
 
-    function handleOpenDialog() {
-        setOpenDialog(true);
-    }
-    console.log(SubjectData);
+    // function handleOpenDialog() {
+    //     setOpenDialog(true);
+    // }
+    // console.log(SubjectData);
     const actions = [
         { icon: <CampaignRoundedIcon />, name: 'Create Announcement', onClick: () => setOpenAnnouncemtDialog(true) },
         { icon: <GroupAddOutlinedIcon />, name: 'add Subject', onClick: () => setOpenDialog(true) },

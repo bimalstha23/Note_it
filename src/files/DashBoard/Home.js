@@ -1,12 +1,9 @@
-import React, { useState } from 'react'
-import { Typography, Box, Button, Toolbar } from "@mui/material";
-import { useAuth } from "../../Contexts/AuthContext";
+import React from 'react'
+import { Box, } from "@mui/material";
 import { Sidebar } from "./Sidebar";
-import { MainHome } from "./DashBoardComponents/HomeContainer/MainHome";
 import { InnerContent } from "./InnerContent";
 
 export function Home() {
-  const { currentUser, SignOut } = useAuth();
   return (
     <div className="App">
       <Box display={'flex'}>

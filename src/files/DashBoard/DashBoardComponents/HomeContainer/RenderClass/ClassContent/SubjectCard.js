@@ -3,7 +3,7 @@ import { Box, Typography, Grid } from '@mui/material'
 import { Link } from 'react-router-dom'
 
 export const SubjectCard = (props) => {
-  const { subjectData, classID } = props;
+  const { subjectData } = props;
   return (
     <Grid item xs={6}>
       <Box

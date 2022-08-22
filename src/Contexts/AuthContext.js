@@ -16,7 +16,6 @@ import {
     sendPasswordResetEmail,
     // sendEmailVerification,
 } from "firebase/auth";
-import { setDoc, doc, addDoc } from 'firebase/firestore';
 
 
 export const AuthContext = createContext({
@@ -29,9 +28,7 @@ export const AuthContext = createContext({
     PasswordResetEmail: () => Promise,
     updateUser: () => Promise,
     setSubjects: () => { },
-    createdClassData: [],
-    subject: [],
-    // verifyEmail: () => Promise,
+
 });
 
 
@@ -39,11 +36,8 @@ export const AuthContext = createContext({
 export const useAuth = () => useContext(AuthContext);
 
 export function AuthcontextProvider({ children }) {
-    const [createdClassData, setCreatedClassData] = useState([]);
-    const [joinedClassData, setJoinedClassData] = useState([]);
     const [subject, setSubjects] = useState([]);
     const [classID, setClassID] = useState();
-    const [state, setState] = useState('');
     const [currentUser, setCurrentUser] = useState("null");
 
     useEffect(() => {
@@ -143,8 +137,6 @@ export function AuthcontextProvider({ children }) {
         PasswordResetEmail,
         updateUser,
         setSubjects,
-        createdClassData,
-        joinedClassData,
         subject,
         setClassID,
     };

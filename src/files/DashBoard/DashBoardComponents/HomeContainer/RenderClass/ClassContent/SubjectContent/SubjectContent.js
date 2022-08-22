@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react'
-import { Tooltip, Dialog, DialogTitle, DialogContent, DialogActions, Stack, IconButton, Link, TextField, Container, Button, Grid, Box, Typography, Avatar, BottomNavigation, BottomNavigationAction } from '@mui/material'
+import {  Container, Grid, Box, Typography, } from '@mui/material'
 // import SearchIcon from '@mui/icons-material/Search'
 import { AddPost } from './AddPost';
 import { query, collection, onSnapshot, orderBy } from 'firebase/firestore';
 import { db } from '../../../../../../../utils/firebaseDB';
-import { useAuth } from '../../../../../../../Contexts/AuthContext';
+// import { useAuth } from '../../../../../../../Contexts/AuthContext';
 import { PostCard } from './PostCard';
 
 export const SubjectContent = (props) => {
-    const { currentUser } = useAuth();
+    // const { currentUser } = useAuth();
     const { data } = props;
     // const { id, name, institute, subjectNumber } = data;
-    const [value, setValue] = useState(0);
+    // const [value, setValue] = useState(0);
     const [posts, setPosts] = useState([]);
     console.log(data.adminEmail);
     useEffect(() => {

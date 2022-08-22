@@ -30,6 +30,7 @@ export function ForgotPassword() {
                 break;
               case 'auth/too-many-requests':
                 setError('Plase Wait for Some Time to request for an Reset Email');
+                break;
               default:
                 setError('Something went wrong');
                 break;

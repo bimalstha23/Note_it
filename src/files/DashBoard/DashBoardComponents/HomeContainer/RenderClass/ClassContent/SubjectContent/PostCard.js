@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Button, Menu, MenuItem, Snackbar, Alert, Card, Avatar, CardContent, DialogActions, DialogTitle, CardActions, CardHeader, CardMedia, Typography, IconButton, Grid, Dialog, DialogContent, DialogContentText } from '@mui/material'
+import { Box, Button, Menu, MenuItem, Snackbar, Alert, Card, Avatar, CardContent, DialogActions, DialogTitle, CardActions, CardHeader,  Typography, IconButton, Grid, Dialog, DialogContent, DialogContentText } from '@mui/material'
 import WorkspacePremiumSharpIcon from '@mui/icons-material/WorkspacePremiumSharp';
 import WorkspacePremiumOutlinedIcon from '@mui/icons-material/WorkspacePremiumOutlined';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import { useAuth } from '../../../../../../../Contexts/AuthContext';
-import { onSnapshot, getDoc, doc, collection, writeBatch, deleteDoc, serverTimestamp, addDoc, runTransaction, query, where, getDocs, limit } from 'firebase/firestore';
+import { onSnapshot, getDoc,addDoc, doc, collection, writeBatch, deleteDoc,  runTransaction, query, where, getDocs, limit } from 'firebase/firestore';
 import { db } from '../../../../../../../utils/firebaseDB';
 import { ImageConfig } from '../../../../../../../config/imageConfig';
 import WarningRoundedIcon from '@mui/icons-material/WarningRounded';
@@ -19,7 +19,6 @@ import { PdfViewerDialog } from './PdfViewerDialog';
 
 
 export const PostCard = ({ post, teacherEmail, adminEmail, subjectId }) => {
-    console.log(adminEmail);
     const zip = new JSZip();
     const { currentUser } = useAuth();
     const batch = writeBatch(db);
@@ -27,9 +26,7 @@ export const PostCard = ({ post, teacherEmail, adminEmail, subjectId }) => {
     const { postMessege, serverTimestamp, postAutherId, isVerified, id, likeCount, DownloadCount } = post;
     const [autherDetails, setAutherDetails] = useState({});
     const [filesDetails, setFilesDetails] = useState([]);
-    const [verified, setVerified] = useState(null);
-    const [likeId, setLikeId] = useState(null);
-    const [isUserTeacher, setIsUserTeacher] = useState(currentUser.email === teacherEmail || currentUser.email === adminEmail ? false : true);
+    const isUserTeacher  = currentUser.email === teacherEmail || currentUser.email === adminEmail ? false : true;
     const [anchorEl, setAnchorEl] = useState(null);
     const MenuOpen = Boolean(anchorEl);
     const [ShowDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
@@ -38,7 +35,6 @@ export const PostCard = ({ post, teacherEmail, adminEmail, subjectId }) => {
     const images = filesDetails.filter((file) => file.type === 'image/png' || file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/gif' || file.type === 'image/bmp' || file.type === 'image/tiff' || file.type === 'image/webp');
     const imagesUrl = images.map((image) => image.url);
     const files = filesDetails.filter((file) => file.type !== 'image/png' && file.type !== 'image/jpeg' && file.type !== 'image/jpg' && file.type !== 'image/gif' && file.type !== 'image/bmp' && file.type !== 'image/tiff' && file.type !== 'image/webp');
-    const filesUrl = files.map((file) => file.url);
 
 
     useEffect(() => {
@@ -124,7 +120,6 @@ export const PostCard = ({ post, teacherEmail, adminEmail, subjectId }) => {
             getDocs(q).then((snapshot) => {
                 if (snapshot.docs.length > 0) {
                     setIsPostLiked(true);
-                    setLikeId(snapshot.docs[0].id);
                 } else {
                     setIsPostLiked(false);
                 }
@@ -142,7 +137,7 @@ export const PostCard = ({ post, teacherEmail, adminEmail, subjectId }) => {
             serverTimestamp: serverTimestamp,
         }).then(() => {
             const postRef = doc(db, 'posts', subjectId, 'posts', id);
-            const newLikedPost = runTransaction(db, async (transaction) => {
+           runTransaction(db, async (transaction) => {
                 const likedPost = await transaction.get(postRef);
                 if (!likedPost.exists()) {
                     return;
@@ -160,12 +155,12 @@ export const PostCard = ({ post, teacherEmail, adminEmail, subjectId }) => {
     const unlike = () => {
         const likeRef = collection(db, 'Postlikes');
         const q = query(likeRef, where('userId', '==', currentUser.uid), where('PostId', '==', id), limit(1));
-        const likeSnapshot = getDocs(q).then((snapshot) => {
+        getDocs(q).then((snapshot) => {
             if (snapshot.docs.length > 0) {
                 const likeId = snapshot.docs[0].id;
                 batch.delete(doc(db, 'Postlikes', likeId));
                 batch.commit().then(() => {
-                    const newLikedPost = runTransaction(db, async (transaction) => {
+                    runTransaction(db, async (transaction) => {
                         const postRef = doc(db, 'posts', subjectId, 'posts', id);
                         const likedPost = await transaction.get(postRef);
                         if (!likedPost.exists()) {
@@ -207,10 +202,10 @@ export const PostCard = ({ post, teacherEmail, adminEmail, subjectId }) => {
             zip.file("NoteIt.txt", "Just Note It");
             const imageFolder = zip.folder("images");
             const Documents = zip.folder("Documents");
-            images.map((image) => {
+            images.forEach((image) => {
                 imageFolder.file(image.name, image.url);
             })
-            files.map((Doc) => {
+            files.forEach((Doc) => {
                 Documents.file(Doc.name, Doc.url);
             })
             await zip.generateAsync({ type: 'blob' }).then(function (content) {
@@ -226,12 +221,8 @@ export const PostCard = ({ post, teacherEmail, adminEmail, subjectId }) => {
 
     const handleDeletePost = async () => {
         const postRef = doc(db, 'posts', subjectId, 'posts', id);
-        // const postlikesRef = query(collection(db, 'Postlikes'), where('PostId', '==', id));
-        // const postFilesRef = collection(db, 'postFiles', id, 'files');
         await deleteDoc(postRef).then(() => {
         })
-        console.log(ShowDeleteConfirmation, 'deleteConfirmation');
-        // await deleteDoc(postFilesRef);
     }
 
     const handleDeletAlertOpen = () => {

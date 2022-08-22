@@ -20,7 +20,7 @@ export const PdfViewerDialog = (props) => {
             </IconButton>
 
             <Dialog fullWidth={true} maxWidth={'lg'} open={open} onClose={handleClose}>
-                <iframe src={props.src} style={{ width: '100%', height: '1000px' }} />
+                <iframe title={props.name} src={props.src} style={{ width: '100%', height: '1000px' }} />
                 {/* <DocViewer documents={props.src} pluginRenderers={DocViewerRenderers} style={{ width: '100%', height: '1000px' }}   /> */}
                 {/* <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.14.305/build/pdf.worker.min.js"> */}
                         {/* <Viewer fileUrl={props.src} />                 */}

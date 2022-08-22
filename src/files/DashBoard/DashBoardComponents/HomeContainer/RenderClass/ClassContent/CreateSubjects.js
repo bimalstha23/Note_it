@@ -11,7 +11,7 @@ export const CreateSubjects = (props) => {
     const [subjectCode, setSubjectCode] = useState('');
     const [teacherName, setTeacherName] = useState('');
     const [teacherEmail, setTeacherEmail] = useState('');
-    const [adminEmail, setAdminEmail] = useState(currentUser.email);
+    const  adminEmail = currentUser.email;
 
     function handleCloseDialog() {
         setOpenDialog(false);
