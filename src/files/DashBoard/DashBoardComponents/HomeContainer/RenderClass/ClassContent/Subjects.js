@@ -11,7 +11,7 @@ import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import { useAuth, AuthContext } from "../../../../../../Contexts/AuthContext";
 import { CreateSubjects } from "./CreateSubjects";
 import { SubjectCard } from "./SubjectCard";
-import {  collection, query, onSnapshot, limit } from "firebase/firestore";
+import { collection, query, onSnapshot, limit } from "firebase/firestore";
 import { db } from "../../../../../../utils/firebaseDB";
 import CampaignRoundedIcon from '@mui/icons-material/CampaignRounded';
 import GroupAddOutlinedIcon from '@mui/icons-material/GroupAddOutlined';
@@ -37,7 +37,7 @@ export const Subjects = (props) => {
 
     useEffect(() => {
         if (currentUser.email) {
-            const q = query(collection(db, "Announcement", id, "Announcements"),limit(3));
+            const q = query(collection(db, "Announcement", id, "Announcements"), limit(3));
             const unSubscribe = onSnapshot(q, (querySnapshot) => {
                 setAnnouncementData(
                     querySnapshot.docs.map((doc) => {
@@ -89,8 +89,12 @@ export const Subjects = (props) => {
             >
                 <Box >
                     <Typography padding={'5px'} fontWeight={'bold'} variant="h6"> {name} </Typography>
-                    <Typography padding={'5px'} variant="body2"> {OwnerEmail} </Typography>
-                    <Typography padding={'5px'} variant="body2"> {id} </Typography>
+                    {currentUser.email === OwnerEmail ? (
+                        <Box>
+                            <Typography padding={'5px'} variant="body2"> {OwnerEmail} </Typography>
+                            <Typography padding={'5px'} variant="body2"> {id} </Typography>
+                        </Box>
+                    ) : (null)}
                 </Box>
                 <Box>
                     {currentUser.email === OwnerEmail ? (
@@ -133,8 +137,8 @@ export const Subjects = (props) => {
                     ownerEmail={OwnerEmail}
                 />
             </Box>
-            <Grid  container spacing={2}>
-                <Grid container item xs ={8}>
+            <Grid marginTop={2} container spacing={2}>
+                <Grid container item xs={8}>
                     {subject.map((item) => (
                         <SubjectCard key={item.id} subjectData={item} classID={id} />
                     ))}

@@ -62,7 +62,7 @@ export const Message = ({ messageData }) => {
                                     }}
                                 >
                                     <Typography color={'#ffffff'} variant='body2'>{senderDetails.displayName} </Typography>
-                                    <Typography color={'rgba(255, 255, 255, 0.65)'} paddingLeft={'20px'} variant='caption'>{moment(timestamp.toDate()).fromNow()}</Typography>
+                                    <Typography color={'rgba(255, 255, 255, 0.65)'} paddingLeft={'20px'} variant='caption'>{moment(timestamp.toDate()).calendar()}</Typography>
                                 </Box>
                             </Box>
                             <Box ml={5}
@@ -117,7 +117,7 @@ export const Message = ({ messageData }) => {
                                         }}
                                     >
                                         <Typography color={'#ffffff'} variant='body2'>You </Typography>
-                                        <Typography color={'rgba(255, 255, 255, 0.65)'} paddingLeft={'20px'} variant='caption'>{moment(timestamp.toDate()).fromNow()}</Typography>
+                                        <Typography color={'rgba(255, 255, 255, 0.65)'} paddingLeft={'20px'} variant='caption'>{moment(timestamp.toDate()).calendar()}</Typography>
                                     </Box>
                                     <Avatar
                                         sx={{

@@ -9,6 +9,7 @@ import GroupAddOutlinedIcon from '@mui/icons-material/GroupAddOutlined';
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
 import { db } from '../../../../../utils/firebaseDB'
 import { collection, query, onSnapshot } from 'firebase/firestore'
+import { TODO } from '../TODO'
 import { Navigate } from 'react-router-dom'
 
 export const RenderClass = () => {
@@ -22,7 +23,7 @@ export const RenderClass = () => {
     function fetchCreatedClasses() {
         try {
             const q = query(collection(db, 'CreatedClass', currentUser.email, 'Classes'));
-             onSnapshot(q, (querySnapshot) => {
+            onSnapshot(q, (querySnapshot) => {
                 setCreatedClassData(querySnapshot.docs.map((doc) => {
                     return {
                         ...doc.data(),
@@ -103,7 +104,7 @@ export const RenderClass = () => {
                     ))}
                 </SpeedDial>
             </Box>
-            <Grid  container spacing={1}>
+            <Grid container spacing={1}>
                 <Grid container item xs={8}>
                     {createdClassData.map((item) => (
                         <ClassCard key={item.id} classData={item} />
@@ -113,9 +114,13 @@ export const RenderClass = () => {
                     ))}
                 </Grid>
                 <Grid container item xs={4}>
-                    this is calendar section
-                    </Grid>
-                
+
+                    <Box>
+
+                        <TODO />
+                    </Box>
+                </Grid>
+
             </Grid>
             <CreateClass createClassDialog={createClassDialog} setCreateClassDialog={setCreateClassDialog} />
             <JoinClass setSuccess={setSuccess} setSuccessMessage={setSuccessMessage} joinClassDialog={joinClassDialog} setJoinClassDialog={setJoinClassDialog} />
