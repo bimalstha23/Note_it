@@ -1,8 +1,10 @@
 import React from 'react'
 import { Box, Typography, Grid } from '@mui/material'
 import { Link } from 'react-router-dom';
-
+import { useAuth } from '../../../../../Contexts/AuthContext';
 export const ClassCard = (props) => {
+    const { Themes } = useAuth();
+    const backgroundColor = Themes.backgroundColor;
     const { classData } = props;
     return (
         <Grid item xs={6}>
@@ -15,7 +17,7 @@ export const ClassCard = (props) => {
                 borderRadius={'25px'}
                 padding={'30px'}
                 sx={{
-                    backgroundColor: '#121212',
+                    backgroundColor: {backgroundColor},
                     color: '#FFFFFF',
                     '&:hover': {
                         boxShadow: '0 0 5px #ddd',

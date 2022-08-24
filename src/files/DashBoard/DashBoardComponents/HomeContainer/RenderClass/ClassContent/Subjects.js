@@ -25,7 +25,8 @@ export const Subjects = (props) => {
     const [openAnnouncemtDialog, setOpenAnnouncemtDialog] = useState(false);
     const [announcementData, setAnnouncementData] = useState([]);
     // const [SubjectData, setSubjectData] = useState([]);
-    const { currentUser } = useAuth();
+    const { currentUser, Themes } = useAuth();
+    const backgroundColor = Themes.backgroundColor;
     const { data } = props;
     const { OwnerEmail, name, id } = data;
     // const {id} =useParams();
@@ -52,10 +53,6 @@ export const Subjects = (props) => {
         }
     }, [currentUser.email])
 
-    // function handleOpenDialog() {
-    //     setOpenDialog(true);
-    // }
-    // console.log(SubjectData);
     const actions = [
         { icon: <CampaignRoundedIcon />, name: 'Create Announcement', onClick: () => setOpenAnnouncemtDialog(true) },
         { icon: <GroupAddOutlinedIcon />, name: 'add Subject', onClick: () => setOpenDialog(true) },
@@ -63,13 +60,9 @@ export const Subjects = (props) => {
 
     return (
         <Box
-            // display="flex"
-            // flexDirection="column"
-            // alignItems="center"
-            // justifyContent="center"
+
             width="1100px"
-            // width={'80%'}
-            // height="100%"
+
             padding="50px"
         >
 
@@ -83,7 +76,7 @@ export const Subjects = (props) => {
                 paddingLeft="20px"
                 paddingRight="20px"
                 sx={{
-                    backgroundColor: '#121212',
+                    backgroundColor: { backgroundColor },
                     color: '#fff',
                 }}
             >
@@ -99,7 +92,10 @@ export const Subjects = (props) => {
                 <Box>
                     {currentUser.email === OwnerEmail ? (
                         <Box >
-                            <Button sx={{ color: '#ffff' }} variant={'outlined'} startIcon={<SettingsIcon />}>Custumize your class</Button>
+                            <Button sx={{
+                                color: '#ffff',
+                                backgroundColor: { backgroundColor },
+                            }} variant={'contained'} startIcon={<SettingsIcon />}>Custumize your class</Button>
                             <SpeedDial
                                 ariaLabel="SpeedDial basic example"
                                 width={'30px'}
@@ -122,8 +118,6 @@ export const Subjects = (props) => {
             </Box>
 
             <Box display={"flex"} flexDirection={"row"}>
-
-
                 <CreateSubjects
                     openDialog={openDialog}
                     setOpenDialog={setOpenDialog}
@@ -138,6 +132,8 @@ export const Subjects = (props) => {
                 />
             </Box>
             <Grid marginTop={2} container spacing={2}>
+
+
                 <Grid container item xs={8}>
                     {subject.map((item) => (
                         <SubjectCard key={item.id} subjectData={item} classID={id} />

@@ -10,11 +10,7 @@ import {
     FacebookAuthProvider,
     signOut,
     updateProfile,
-
-    // createUser,
-    // confirmPasswordReset,
     sendPasswordResetEmail,
-    // sendEmailVerification,
 } from "firebase/auth";
 
 
@@ -28,7 +24,9 @@ export const AuthContext = createContext({
     PasswordResetEmail: () => Promise,
     updateUser: () => Promise,
     setSubjects: () => { },
-
+    setTheme: () => { },
+    Theme: null,
+    Themes: null,
 });
 
 
@@ -39,6 +37,37 @@ export function AuthcontextProvider({ children }) {
     const [subject, setSubjects] = useState([]);
     const [classID, setClassID] = useState();
     const [currentUser, setCurrentUser] = useState("null");
+    const [Theme, setTheme] = useState(null);
+    const [Themes, setThemes] = useState({});
+    console.log(Theme);
+    console.log(Themes);
+
+    useEffect(() => {
+        if (Theme === null) {
+            setTheme("Black");
+        } else if (Theme === "Purple") {
+            setThemes({ backgroundColor: "#5502BF", color: "#ffffff",paperColor:'rgba(229, 209, 255, 1)' });
+            document.body.style.backgroundColor = "rgba(229, 209, 255, 1)";
+        } else if (Theme === "Blue") {
+            setThemes({ backgroundColor: "rgba(0, 99, 216, 1)", color: "#ffffff",paperColor: "rgba(191, 216, 245, 1)" });
+            document.body.style.backgroundColor = "rgba(191, 216, 245, 1)";
+        } else if (Theme === "Black") {
+            document.body.style.backgroundColor = "#ffffff";
+            setThemes({ backgroundColor: "#121212", color: "#ffffff",paperColor: "#ffffff" });
+        }
+    }, [Theme]);
+
+    useEffect(() => {
+        if (Theme) {
+            localStorage.setItem("theme", Theme);
+        }
+    }, [Theme]);
+
+    useEffect(() => {
+        if (localStorage.getItem("theme")) {
+            setTheme(localStorage.getItem("theme"));
+        }
+    })
 
     useEffect(() => {
         if (classID) {
@@ -99,10 +128,6 @@ export function AuthcontextProvider({ children }) {
     const signinWithGoogle = async () => {
         const provider = new GoogleAuthProvider();
         const res = await signInWithPopup(auth, provider);
-        // console.log(res);
-        // const userRef = doc(db, "users",res.user.uid);
-        // const user = { ...res.user, enrolledClasses: []};
-        // await setDoc(userRef, user);
         return res;
     }
 
@@ -139,6 +164,9 @@ export function AuthcontextProvider({ children }) {
         setSubjects,
         subject,
         setClassID,
+        Theme,
+        setTheme,
+        Themes,
     };
     return (
         <AuthContext.Provider value={values}>

@@ -6,11 +6,16 @@ import { InnerContent } from "./InnerContent";
 export function Home() {
   return (
     <div className="App">
-      <Box display={'flex'}>
+
+      <Box display={'flex'}
+        flexDirection={'row'} >
         <Sidebar />
         <Box
-          marginLeft={10}
-          display={'block'}>
+          container
+          // marginLeft={10}
+          fullwidth={false}
+        // display={'block'}
+        >
           <InnerContent />
         </Box>
       </Box>

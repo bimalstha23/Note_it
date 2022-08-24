@@ -9,12 +9,13 @@ export const ChatList = () => {
 
   const [createdClassData, setCreatedClassData] = useState([]);
   const [joinedClassData, setJoinedClassData] = useState([]);
-  const { currentUser } = useAuth();
-
+  const { currentUser,Themes } = useAuth();
+  const backgroundColor = Themes.backgroundColor;
+  const paperColor = Themes.paperColor;
   function fetchCreatedClasses() {
     try {
       const q = query(collection(db, 'CreatedClass', currentUser.email, 'Classes'));
-       onSnapshot(q, (querySnapshot) => {
+      onSnapshot(q, (querySnapshot) => {
         setCreatedClassData(querySnapshot.docs.map((doc) => {
           return {
             ...doc.data(),
@@ -29,7 +30,7 @@ export const ChatList = () => {
   function fetchJoinedClasses() {
     try {
       const q = query(collection(db, 'JoinedClasses', currentUser.email, 'Classes'));
-       onSnapshot(q, (querySnapshot) => {
+      onSnapshot(q, (querySnapshot) => {
         setJoinedClassData(querySnapshot.docs.map((doc) => {
           return {
             ...doc.data(),
@@ -64,12 +65,15 @@ export const ChatList = () => {
       </Box>
       <Paper
         style={{
+          backgroundColor: paperColor,
+          // color: '#ffffff',
           height: '100vh',
           maxHeight: '100vh',
           overflowY: 'scroll',
         }}
       >
-        <List>
+        <List
+        >
           {createdClassData.map(item => (
             <ListItem key={item.name}>
               <ListItemButton component={Link} to={`/chatroom/${item.id}`} >

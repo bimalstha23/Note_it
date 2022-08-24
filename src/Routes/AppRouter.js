@@ -17,7 +17,7 @@ import { useAuth } from '../Contexts/AuthContext';
 import { ChatSpace } from '../files/DashBoard/DashBoardComponents/Chat/ChatSpace.js';
 import { collection, query, onSnapshot } from 'firebase/firestore'
 import { db } from '../utils/firebaseDB';
-
+import { Settings } from '../files/DashBoard/DashBoardComponents/Settings/Settings.js';
 
 export function AppRouter() {
   const [createdClassData, setCreatedClassData] = useState([]);
@@ -112,6 +112,7 @@ export function AppRouter() {
                 <Route key={index} path={`/chatroom/${data.id}`} element={<ChatSpace data={data} />} />
               ))}
             </Route>
+            <Route path="settings" element={<Settings />} />
           </Route>
           {/* </ProtectedRoute> */}
 

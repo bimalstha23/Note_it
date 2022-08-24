@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from 'react'
-import {  Container, Grid, Box, Typography, } from '@mui/material'
-// import SearchIcon from '@mui/icons-material/Search'
+import { Container, Grid, Box, Typography, } from '@mui/material'
 import { AddPost } from './AddPost';
 import { query, collection, onSnapshot, orderBy } from 'firebase/firestore';
 import { db } from '../../../../../../../utils/firebaseDB';
-// import { useAuth } from '../../../../../../../Contexts/AuthContext';
 import { PostCard } from './PostCard';
+import { useAuth } from '../../../../../../../Contexts/AuthContext';
 
 export const SubjectContent = (props) => {
-    // const { currentUser } = useAuth();
+
+    const { Themes } = useAuth();
+    const backgroundColor = Themes.backgroundColor;
     const { data } = props;
-    // const { id, name, institute, subjectNumber } = data;
-    // const [value, setValue] = useState(0);
+
+
     const [posts, setPosts] = useState([]);
-    console.log(data.adminEmail);
+
     useEffect(() => {
         if (data.id) {
             const q = query(collection(db, 'posts', data.id, 'posts'), orderBy('serverTimestamp', 'desc'));
@@ -53,40 +54,18 @@ export const SubjectContent = (props) => {
                         height={'111px'}
                         // marginRight={'20px'}
                         sx={{
-                            backgroundColor: '#121212',
+                            backgroundColor: { backgroundColor },
                             color: '#fff',
                         }}
                     >
                         <Typography variant='h6'>{data.subjectName.toUpperCase()}</Typography>
                         <Typography variant='caption'>{data.teacherName.toUpperCase()}</Typography>
                     </Box>
-                    {/* 
-                    <Box
-                    >
-                        <BottomNavigation
-                        margin={'auto'}
-                            justify={'center'}
-                            showLabels
-                            value={value}
-                            onChange={(event, newValue) => {
-                                setValue(newValue);
-                            }}
-                            sx={{
-                                position: 'fixed',
-                                right: '0',
-                                left: '100px',
-                                width: '100%',
-                            }}
-                            >
-                            <BottomNavigationAction label="Recents" />
-                            <BottomNavigationAction label="Favorites" />
-                            <BottomNavigationAction label="Archive" />
-                        </BottomNavigation>
-                    </Box> */}
+                    
                     <AddPost subjectId={data.id} />
                     <Box>
                         {posts.map((post) => (
-                            <PostCard key={post.id} subjectId  = {data.id} adminEmail={data.adminEmail} teacherEmail = {data.teacherEmail} post={post} />
+                            <PostCard key={post.id} subjectId={data.id} adminEmail={data.adminEmail} teacherEmail={data.teacherEmail} post={post} />
                         ))}
                     </Box>
                 </Box>

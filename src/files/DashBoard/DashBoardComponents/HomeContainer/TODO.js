@@ -1,8 +1,5 @@
 import React from 'react'
 import { Box } from '@mui/material'
-// import { DateRangePicker } from 'react-date-range';
-import 'react-date-range/dist/styles.css'; 
-import 'react-date-range/dist/theme/default.css';
 
 export const TODO = () => {
     // const [value, setValue] = React.useState([null, null]);
@@ -20,6 +17,7 @@ export const TODO = () => {
                 // onChange={(e) => setValue(e.selection)}
 
             /> */}
+            for calendar
         </Box>
     )
 }

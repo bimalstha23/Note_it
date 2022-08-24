@@ -46,9 +46,13 @@ export const ChatSpace = ({ data }) => {
 
     const messegeEndRef = useRef(null);
     const { id, name } = data;
-    const { currentUser } = useAuth();
+    const { currentUser,Themes } = useAuth();
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
+
+    const backgroundColor = Themes.backgroundColor;
+    const paperColor = Themes.paperColor;
+
     const scrollToBottom = () => {
         messegeEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
@@ -86,13 +90,13 @@ export const ChatSpace = ({ data }) => {
     }
     return (
         <Box
-            backgroundColor='#121212'
+            backgroundColor={backgroundColor}
         // height='100vh'
         >
             <AppBar
                 position='static'
                 sx={{
-                    backgroundColor: '#fff',
+                    backgroundColor: paperColor,
                     color: '#000',
                 }}
             >
@@ -112,9 +116,8 @@ export const ChatSpace = ({ data }) => {
                 overflowY='scroll'
                 p={2}
                 marginTop={2}
-                backgroundColor='#121212'
+                backgroundColor={backgroundColor}
                 style={{
-                    border: "2px solid black",
                     overflow: "hidden",
                     overflowY: "scroll" // added scroll
                 }}

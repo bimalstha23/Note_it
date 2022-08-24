@@ -1,5 +1,6 @@
 import { createTheme } from '@mui/material/styles';
 
+
 export const MainTheme = createTheme({
     palette: {
         primary: {
@@ -32,7 +33,7 @@ export const MainTheme = createTheme({
     //         }
     //     }
     // },
-  
+
 
 });
 

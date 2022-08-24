@@ -20,7 +20,8 @@ import { PdfViewerDialog } from './PdfViewerDialog';
 
 export const PostCard = ({ post, teacherEmail, adminEmail, subjectId }) => {
     const zip = new JSZip();
-    const { currentUser } = useAuth();
+    const { currentUser,Themes } = useAuth();
+    const paperColor = Themes.paperColor;
     const batch = writeBatch(db);
     const [isPostLiked, setIsPostLiked] = useState(null);
     const { postMessege, serverTimestamp, postAutherId, isVerified, id, likeCount, DownloadCount } = post;
@@ -244,7 +245,7 @@ export const PostCard = ({ post, teacherEmail, adminEmail, subjectId }) => {
             justifyContent="center"
             width="100%"
             height="100%"
-            bgcolor="background.paper"
+            bgcolor={paperColor}
             boxShadow={1}
             borderRadius={'5px'}
             overflow="auto"
@@ -276,7 +277,11 @@ export const PostCard = ({ post, teacherEmail, adminEmail, subjectId }) => {
             </Snackbar>
 
             {post &&
-                <Card>
+                <Card
+                    sx={{
+                        backgroundColor: paperColor,
+                    }}
+                >
                     {post.serverTimestamp &&
                         <CardHeader
                             avatar={

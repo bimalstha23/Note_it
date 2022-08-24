@@ -10,6 +10,7 @@ import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
 import { db } from '../../../../../utils/firebaseDB'
 import { collection, query, onSnapshot } from 'firebase/firestore'
 import { TODO } from '../TODO'
+// import {EmptyClass} from './EmptyClass'
 import { Navigate } from 'react-router-dom'
 
 export const RenderClass = () => {
@@ -106,12 +107,15 @@ export const RenderClass = () => {
             </Box>
             <Grid container spacing={1}>
                 <Grid container item xs={8}>
-                    {createdClassData.map((item) => (
-                        <ClassCard key={item.id} classData={item} />
-                    ))}
-                    {joinedClassData.map((item) => (
-                        <ClassCard key={item.id} classData={item} />
-                    ))}
+
+
+                            {createdClassData.map((item) => (
+                                <ClassCard key={item.id} classData={item} />
+                            ))
+                            }
+                            {joinedClassData.map((item) => (
+                                <ClassCard key={item.id} classData={item} />
+                            ))}
                 </Grid>
                 <Grid container item xs={4}>
 

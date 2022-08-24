@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Typography, Card, CardMedia, CssBaseline, Drawer, Divider, Toolbar, List, Box, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { Typography,  CssBaseline, Drawer, Divider, Toolbar, List, Box, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
@@ -14,16 +14,27 @@ import { sidebarNavigation } from '../../config/SidebarNavigation';
 
 export function Sidebar() {
   const drawerWidth = 240;
-  const { currentUser, SignOut } = useAuth();
-  console.log(currentUser.photoURL)
+  const { currentUser, Themes, SignOut } = useAuth();
+  const backgroundColor = Themes.backgroundColor;
   return (
     <Box sx={{
-      width:'150px'
-      }}>
+      backgroundColor: { backgroundColor },
+      color: '#FFFFFF',
+      // width:'150px'
+    }}>
       <CssBaseline />
       <ThemeProvider theme={SidebarTheme}>
         <Drawer
-          sx={{ 
+          PaperProps={{
+            sx: {
+              backgroundColor: { backgroundColor },
+              color: '#FFFFFF',
+            }
+          }}
+
+          sx={{
+            backgroundColor: { backgroundColor },
+            color: '#FFFFFF',
             width: drawerWidth,
             flexShrink: 0,
             '& .MuiDrawer-paper': {
@@ -40,25 +51,23 @@ export function Sidebar() {
               flexDirection={'column'}
               margin={'auto'}
               marginTop={'50px'}
+              sx={{
+                backgroundColor: { backgroundColor },
+              }}
             >
-              <Card
-                // Shape={'circle'}
+              
+              <Box
+                display={'flex'}
                 margin={'auto'}
-              // marginButtom={'50px'}
+                borderRadius={'25px'}
+
               >
-                <CardMedia
-                  referrerPolicy='no-referrer'
-                  component="img"
-                  alt="Profile"
-                  height="174px"
-                  width="174px"
-                  sx={{
-                    borderRadius: '25px',
-                    marginBottom: '20px',
-                  }}
-                  image={currentUser.photoURL}
-                />
-              </Card>
+                <img
+                  height={'174px'}
+                  width={'174px'}
+                  style={{ borderRadius: '25px' }}
+                  src={currentUser.photoURL} alt={currentUser.displayName} />
+              </Box>
               <Typography paddingBottom={'15px'} variant="body" align="center" color="textPrimary">
                 {currentUser.displayName}
               </Typography>
@@ -98,6 +107,6 @@ export function Sidebar() {
           </List>
         </Drawer>
       </ThemeProvider>
-      </Box>
+    </Box>
   );
 }
