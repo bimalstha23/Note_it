@@ -59,7 +59,7 @@ export const SubjectContent = (props) => {
                         }}
                     >
                         <Typography variant='h6'>{data.subjectName.toUpperCase()}</Typography>
-                        <Typography variant='caption'>{data.teacherName.toUpperCase()}</Typography>
+                        <Typography color = {'#A1A1A1'}  variant='subtitle1'>{data.teacherName.toUpperCase()}</Typography>
                     </Box>
                     
                     <AddPost subjectId={data.id} />

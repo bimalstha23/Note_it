@@ -9,7 +9,8 @@ import GroupAddOutlinedIcon from '@mui/icons-material/GroupAddOutlined';
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
 import { db } from '../../../../../utils/firebaseDB'
 import { collection, query, onSnapshot } from 'firebase/firestore'
-import { TODO } from '../TODO'
+// import { TODO } from '../TODO'
+import {CalendarComp} from '../Calendar'
 // import {EmptyClass} from './EmptyClass'
 import { Navigate } from 'react-router-dom'
 
@@ -106,7 +107,7 @@ export const RenderClass = () => {
                 </SpeedDial>
             </Box>
             <Grid container spacing={1}>
-                <Grid container item xs={8}>
+                <Grid container rowSpacing={3} item xs={8}>
 
 
                             {createdClassData.map((item) => (
@@ -120,8 +121,7 @@ export const RenderClass = () => {
                 <Grid container item xs={4}>
 
                     <Box>
-
-                        <TODO />
+                        <CalendarComp />
                     </Box>
                 </Grid>
 

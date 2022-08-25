@@ -32,6 +32,11 @@ export const Subjects = (props) => {
     // const {id} =useParams();
     const { setClassID, subject } = useContext(AuthContext);
 
+
+    const copyToClipboard = (str) => {
+        navigator.clipboard.writeText(str);
+    }
+
     useEffect(() => {
         setClassID(id);
     }, [])
@@ -84,8 +89,16 @@ export const Subjects = (props) => {
                     <Typography padding={'5px'} fontWeight={'bold'} variant="h6"> {name} </Typography>
                     {currentUser.email === OwnerEmail ? (
                         <Box>
-                            <Typography padding={'5px'} variant="body2"> {OwnerEmail} </Typography>
-                            <Typography padding={'5px'} variant="body2"> {id} </Typography>
+                            <Typography
+                                sx={{
+                                    cursor: 'pointer',
+                                }}
+                                color={'#A1A1A1'} padding={'5px'} variant='subtitle1' onClick = {copyToClipboard(OwnerEmail)}> {OwnerEmail} </Typography>
+                            <Typography
+                                sx={{
+                                    cursor: 'pointer',
+                                }}
+                                color={'#A1A1A1'} padding={'5px'} variant="subtitle1" onClick = {copyToClipboard(id)}> {id} </Typography>
                         </Box>
                     ) : (null)}
                 </Box>
@@ -134,13 +147,13 @@ export const Subjects = (props) => {
             <Grid marginTop={2} container spacing={2}>
 
 
-                <Grid container item xs={8}>
+                <Grid container rowSpacing={3} item xs={8}>
                     {subject.map((item) => (
                         <SubjectCard key={item.id} subjectData={item} classID={id} />
                     ))}
                 </Grid>
 
-                <Grid container item xs={4}>
+                <Grid container rowSpacing={3} item xs={4}>
                     {announcementData.map((data) => {
                         return <AnnouncementCard data={data} />;
                     })}

@@ -19,16 +19,25 @@ export const JoinClass = (props) => {
 
     // const [classData, setClassData] = useState(null);
     // const [classExists, setClassExists] = useState(false);
-    const { currentUser, SignOut } = useAuth();
+    const { currentUser, SignOut, Themes } = useAuth();
     const [isLoading, setIsLoading] = useState(false);
+    const paperColor = Themes.paperColor;
+    const backgroundColor = Themes.backgroundColor;
+
     function handleClose() {
         setJoinClassDialog(false);
     }
 
-    
+
     return (
         <Box>
             <Dialog
+
+                PaperProps={{
+                    style: {
+                        backgroundColor: paperColor,
+                    }
+                }}
                 fullScreen
                 open={joinClassDialog}
                 onClose={handleClose}
@@ -71,7 +80,12 @@ export const JoinClass = (props) => {
                         }
                     }>
 
-                    <AppBar sx={{ position: 'relative' }}>
+                    <AppBar
+                        sx={{
+                            position: 'relative',
+                            backgroundColor: backgroundColor,
+                            // color: '#000',
+                        }}>
                         <Toolbar>
                             <IconButton
                                 edge="start"
@@ -104,6 +118,10 @@ export const JoinClass = (props) => {
                         >
                             <Card
                                 variant='none'
+                                backgroundColor={paperColor}
+                                sx={{
+                                    backgroundColor: paperColor,
+                                }}
                             >
 
                                 <Typography>You're Currently Sign in as</Typography>

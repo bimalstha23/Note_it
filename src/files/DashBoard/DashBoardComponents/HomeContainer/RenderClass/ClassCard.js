@@ -41,10 +41,10 @@ export const ClassCard = (props) => {
                     }}
                 >
                     {/* <Link style={{textDecoration:'none'}} to={`/home/${classData.id}`}> */}
-                    <Typography>{classData.name}</Typography>
+                    <Typography variant='body1' fontWeight={'bold'}   >{classData.name}</Typography>
                     {/* </Link> */}
-                    <Typography>{classData.institute}</Typography>
-                    <Typography>Subject:{classData.subjectNumber}</Typography>
+                    <Typography variant='subtitle1' color={'#A1A1A1'} >{classData.institute}</Typography>
+                    <Typography variant='subtitle1' color={'#A1A1A1'}>Subject:{classData.subjectNumber}</Typography>
                 </Box>
             </Box>
         </Grid>

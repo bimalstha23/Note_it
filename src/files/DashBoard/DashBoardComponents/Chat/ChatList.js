@@ -10,7 +10,6 @@ export const ChatList = () => {
   const [createdClassData, setCreatedClassData] = useState([]);
   const [joinedClassData, setJoinedClassData] = useState([]);
   const { currentUser,Themes } = useAuth();
-  const backgroundColor = Themes.backgroundColor;
   const paperColor = Themes.paperColor;
   function fetchCreatedClasses() {
     try {
