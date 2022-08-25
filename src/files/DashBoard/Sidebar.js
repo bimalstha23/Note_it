@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { Typography,  CssBaseline, Drawer, Divider, Toolbar, List, Box, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Typography, CssBaseline, Drawer, Divider, Toolbar, List, Box, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
@@ -11,11 +11,23 @@ import { SidebarTheme } from '../../utils/Themes';
 import { ThemeProvider } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
 import { sidebarNavigation } from '../../config/SidebarNavigation';
+import { doc, onSnapshot, } from 'firebase/firestore';
+import {db} from '../../utils/firebaseDB';
 
 export function Sidebar() {
   const drawerWidth = 240;
   const { currentUser, Themes, SignOut } = useAuth();
   const backgroundColor = Themes.backgroundColor;
+  const [userData, setUserData] = useState({});
+
+  useEffect(() => {
+    const q = doc(db, 'users',currentUser.uid);
+    onSnapshot(q, (doc) => {
+      setUserData(doc.data());
+    }
+    )
+  }, [currentUser]);
+
   return (
     <Box sx={{
       backgroundColor: { backgroundColor },
@@ -55,7 +67,7 @@ export function Sidebar() {
                 backgroundColor: { backgroundColor },
               }}
             >
-              
+
               <Box
                 display={'flex'}
                 margin={'auto'}
@@ -66,10 +78,10 @@ export function Sidebar() {
                   height={'174px'}
                   width={'174px'}
                   style={{ borderRadius: '25px' }}
-                  src={currentUser.photoURL} alt={currentUser.displayName} />
+                  src={userData.photoURL} alt={userData.displayName} />
               </Box>
               <Typography paddingBottom={'15px'} variant="body" align="center" color="textPrimary">
-                {currentUser.displayName}
+                {userData.displayName}
               </Typography>
 
             </Box>
