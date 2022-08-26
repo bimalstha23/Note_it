@@ -20,7 +20,7 @@ export const CreateAnnouncement = (props) => {
 
   return (
     <Box>
-      <Dialog fullWidth={''} open={openAnnouncemtDialog} onClose={handleClose}>
+      <Dialog  open={openAnnouncemtDialog} onClose={handleClose}>
         <form action=""
           onSubmit={
             async (e) => {

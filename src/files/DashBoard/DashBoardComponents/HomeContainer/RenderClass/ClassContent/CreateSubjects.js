@@ -36,6 +36,7 @@ export const CreateSubjects = (props) => {
                                 const subjectRef = collection(db, 'CreatedSubject', classID, 'Subjects');
                                 try {
                                     await addDoc(subjectRef, subjectData)
+                                    setOpenDialog(false);
                                 }
                                 catch (error) {
                                     console.log(error);

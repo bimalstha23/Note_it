@@ -155,7 +155,7 @@ export const Subjects = (props) => {
 
                 <Grid container rowSpacing={3} item xs={4}>
                     {announcementData.map((data) => {
-                        return <AnnouncementCard data={data} />;
+                        return <AnnouncementCard key={data.id} data={data} />;
                     })}
                 </Grid>
             </Grid>

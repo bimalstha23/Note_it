@@ -4,6 +4,8 @@ import { ProfilePic } from './ProfilePic'
 import { useAuth } from '../../../../Contexts/AuthContext'
 import { ChangePassword } from './ChangePassword'
 import { ChooseTheme } from './ChooseTheme'
+
+
 export const Settings = () => {
     const { currentUser, Themes } = useAuth();
     const backgroundColor = Themes.backgroundColor;

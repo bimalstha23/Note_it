@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Button, Menu, MenuItem, Snackbar, Alert, Card, Avatar, CardContent, DialogActions, DialogTitle, CardActions, CardHeader,  Typography, IconButton, Grid, Dialog, DialogContent, DialogContentText } from '@mui/material'
+import { Box, Button, Menu, MenuItem, Snackbar, Alert, Card, Avatar, CardContent, DialogActions, DialogTitle, CardActions, CardHeader, Typography, IconButton, Grid, Dialog, DialogContent, DialogContentText } from '@mui/material'
 import WorkspacePremiumSharpIcon from '@mui/icons-material/WorkspacePremiumSharp';
 import WorkspacePremiumOutlinedIcon from '@mui/icons-material/WorkspacePremiumOutlined';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import { useAuth } from '../../../../../../../Contexts/AuthContext';
-import { onSnapshot, getDoc,addDoc, doc, collection, writeBatch, deleteDoc,  runTransaction, query, where, getDocs, limit } from 'firebase/firestore';
+import { onSnapshot, getDoc, addDoc, doc, collection, writeBatch, deleteDoc, runTransaction, query, where, getDocs, limit } from 'firebase/firestore';
 import { db } from '../../../../../../../utils/firebaseDB';
 import { ImageConfig } from '../../../../../../../config/imageConfig';
 import WarningRoundedIcon from '@mui/icons-material/WarningRounded';
@@ -20,14 +20,14 @@ import { PdfViewerDialog } from './PdfViewerDialog';
 
 export const PostCard = ({ post, teacherEmail, adminEmail, subjectId }) => {
     const zip = new JSZip();
-    const { currentUser,Themes } = useAuth();
+    const { currentUser, Themes } = useAuth();
     const paperColor = Themes.paperColor;
     const batch = writeBatch(db);
     const [isPostLiked, setIsPostLiked] = useState(null);
     const { postMessege, serverTimestamp, postAutherId, isVerified, id, likeCount, DownloadCount } = post;
     const [autherDetails, setAutherDetails] = useState({});
     const [filesDetails, setFilesDetails] = useState([]);
-    const isUserTeacher  = currentUser.email === teacherEmail || currentUser.email === adminEmail ? false : true;
+    const isUserTeacher = currentUser.email === teacherEmail || currentUser.email === adminEmail ? false : true;
     const [anchorEl, setAnchorEl] = useState(null);
     const MenuOpen = Boolean(anchorEl);
     const [ShowDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
@@ -44,7 +44,6 @@ export const PostCard = ({ post, teacherEmail, adminEmail, subjectId }) => {
             const fetchUserDetails = async () => {
                 try {
                     const userSnapshot = await getDoc(userRef);
-                    // console.log(userSnapshot.data());
                     setAutherDetails(userSnapshot.data());
                 } catch (error) {
                     console.log(error);
@@ -98,7 +97,6 @@ export const PostCard = ({ post, teacherEmail, adminEmail, subjectId }) => {
     }
 
     const handleUnVerifyPost = async () => {
-        console.log('unverifyClicked');
         if (currentUser.email === adminEmail || currentUser.email === teacherEmail) {
             const postRef = doc(db, 'posts', subjectId, 'posts', id);
             try {
@@ -138,7 +136,7 @@ export const PostCard = ({ post, teacherEmail, adminEmail, subjectId }) => {
             serverTimestamp: serverTimestamp,
         }).then(() => {
             const postRef = doc(db, 'posts', subjectId, 'posts', id);
-           runTransaction(db, async (transaction) => {
+            runTransaction(db, async (transaction) => {
                 const likedPost = await transaction.get(postRef);
                 if (!likedPost.exists()) {
                     return;
@@ -313,13 +311,13 @@ export const PostCard = ({ post, teacherEmail, adminEmail, subjectId }) => {
                                     </IconButton>
                                 </Box>
                             }
-                            title={autherDetails.displayName}
-                            subheader={moment(serverTimestamp.toDate()).fromNow()}
+                            title={<Typography fontWeight={'bold'} variant='body1'>{autherDetails.displayName}</Typography>}
+                            subheader={<Typography variant='subtitle2' color={'#A1A1A1'}  > {moment(serverTimestamp.toDate()).fromNow()} </Typography>}
                         >
                         </CardHeader>
                     }
                     <CardContent>
-                        <Typography paddingLeft={2} variant="caption" color="textSecondary" component="p">{postMessege}</Typography>
+                        <Typography paddingLeft={2} variant='body1' color="textSecondary" component="p">{postMessege}</Typography>
                     </CardContent>
 
                     <Box
@@ -397,7 +395,7 @@ export const PostCard = ({ post, teacherEmail, adminEmail, subjectId }) => {
                                             <FavoriteBorderIcon />
                                         </IconButton>
                                     )}
-                                {isPostLiked ? <Typography> You and {likeCount - 1} students Liked This</Typography> : <Typography>{likeCount} Student Liked this</Typography>}
+                                {isPostLiked ? <Typography variant='body2'> You and {likeCount - 1} other Students Liked This</Typography > : likeCount > 0 ? <Typography variant='body2'>{likeCount} Student Liked this</Typography> : null}
                             </Box>
 
                             <Box
@@ -419,7 +417,7 @@ export const PostCard = ({ post, teacherEmail, adminEmail, subjectId }) => {
                                     )
                                 }
 
-                                {isVerified ? <Typography>Verified</Typography> : <Typography>Not Verified</Typography>}
+                                {isVerified ? <Typography variant='body2' >Verified</Typography> : <Typography variant='body2'>Not Verified</Typography>}
                             </Box>
                             <Box
                                 sx={{
@@ -430,7 +428,7 @@ export const PostCard = ({ post, teacherEmail, adminEmail, subjectId }) => {
                                 <IconButton onClick={makeZipFile} aria-label="Download">
                                     <FileDownloadOutlinedIcon />
                                 </IconButton>
-                                <Typography>{DownloadCount} Downloads</Typography>
+                                <Typography variant='body2'>{DownloadCount} Downloads</Typography>
                             </Box>
                         </Box>
                     </CardActions>

@@ -12,7 +12,6 @@ export const ClassCard = (props) => {
                 width={'290px'}
                 height={'136px'}
                 alignItems={'left'}
-                margin={'auto'}
                 boxShadow={'0 0 5px #ddd'}
                 borderRadius={'25px'}
                 padding={'30px'}

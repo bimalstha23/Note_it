@@ -81,7 +81,7 @@ export function LogInform() {
           borderRadius={'25px'}
         >
           <Typography fontWeight={'Bold'} variant='h4' paddingBottom={4}>
-            We1come back
+            Welcome Back
           </Typography>
           <TextField onChange={(e) => { setEmail(e.target.value) }} type={'email'} margin='normal' id="outlined" label="Email" variant="outlined" fullWidth required />
           {/* <TextField  type={'password'} margin='normal' id="outlined" label="Password" variant="outlined" fullWidth required /> */}

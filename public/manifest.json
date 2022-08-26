@@ -1,0 +1,25 @@
+{
+    "short_name": "Note it",
+    "name": "Note it",
+    "icons": [
+        {
+            "src": "logo1616.png",
+            "sizes": "64x64 32x32 24x24 16x17",
+            "type": "image/x-icon/png"
+        },
+        {
+            "src": "logo1616.png",
+            "type": "image/png",
+            "sizes": "16x17"
+        },
+        {
+            "src": "logo1616.png",
+            "type": "image/png",
+            "sizes": "512x512"
+        }
+    ],
+    "start_url": ".",
+    "display": "standalone",
+    "theme_color": "#000000",
+    "background_color": "#ffffff"
+}

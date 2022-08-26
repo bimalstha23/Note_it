@@ -18,7 +18,7 @@ import { ChatSpace } from '../files/DashBoard/DashBoardComponents/Chat/ChatSpace
 import { collection, query, onSnapshot } from 'firebase/firestore'
 import { db } from '../utils/firebaseDB';
 import { Settings } from '../files/DashBoard/DashBoardComponents/Settings/Settings.js';
-
+import {TODO} from '../files/DashBoard/DashBoardComponents/TODO/TODO.js';
 export function AppRouter() {
   const [createdClassData, setCreatedClassData] = useState([]);
   const [joinedClassData, setJoinedClassData] = useState([]);
@@ -113,6 +113,7 @@ export function AppRouter() {
               ))}
             </Route>
             <Route path="settings" element={<Settings />} />
+            <Route path="todo" element={<TODO />} />
           </Route>
           {/* </ProtectedRoute> */}
 

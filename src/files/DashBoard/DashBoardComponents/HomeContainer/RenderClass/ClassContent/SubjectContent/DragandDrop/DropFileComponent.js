@@ -10,7 +10,6 @@ const DropFileInput = props => {
 
     const wrapperRef = useRef(null);
     const {showuploadDialog, setShowuploadDialog,onFileChange} = props;
-    console.log(showuploadDialog)
     const [fileList, setFileList] = useState([]);
     const onDragEnter = () => wrapperRef.current.classList.add('dragover');
     const onDragLeave = () => wrapperRef.current.classList.remove('dragover');

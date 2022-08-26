@@ -39,18 +39,16 @@ export function AuthcontextProvider({ children }) {
     const [currentUser, setCurrentUser] = useState("null");
     const [Theme, setTheme] = useState(null);
     const [Themes, setThemes] = useState({});
-    console.log(Theme);
-    console.log(Themes);
 
     useEffect(() => {
         if (Theme === null) {
             setTheme("Black");
         } else if (Theme === "Purple") {
-            setThemes({ backgroundColor: "#5502BF", color: "#ffffff",paperColor:'rgba(229, 209, 255, 1)' });
-            document.body.style.backgroundColor = "rgba(229, 209, 255, 1)";
+            setThemes({ backgroundColor: "#351194", color: "#ffffff",paperColor:'#F5EDFF' });
+            document.body.style.backgroundColor = "#F5EDFF";
         } else if (Theme === "Blue") {
-            setThemes({ backgroundColor: "rgba(0, 99, 216, 1)", color: "#ffffff",paperColor: "rgba(191, 216, 245, 1)" });
-            document.body.style.backgroundColor = "rgba(191, 216, 245, 1)";
+            setThemes({ backgroundColor: "#004789", color: "#ffffff",paperColor: "#DEEFFF" });
+            document.body.style.backgroundColor = "#DEEFFF";
         } else if (Theme === "Black") {
             document.body.style.backgroundColor = "#ffffff";
             setThemes({ backgroundColor: "#121212", color: "#ffffff",paperColor: "#ffffff" });
@@ -100,8 +98,6 @@ export function AuthcontextProvider({ children }) {
     }, [classID]);
 
 
-    console.log(subject);
-    //geting current user from firebase
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, user => {
             setCurrentUser(user);

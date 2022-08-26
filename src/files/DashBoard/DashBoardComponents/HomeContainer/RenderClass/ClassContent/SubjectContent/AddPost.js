@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Tooltip, Dialog, DialogTitle, DialogContent, DialogActions, Stack, IconButton, Link, TextField, Button, Box, Typography, Avatar } from '@mui/material'
+import { Tooltip,  Stack, IconButton, Link, TextField, Button, Box, Typography, Avatar } from '@mui/material'
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import AddLinkOutlinedIcon from '@mui/icons-material/AddLinkOutlined';
 import { useAuth } from '../../../../../../../Contexts/AuthContext';
@@ -17,7 +17,6 @@ export const AddPost = ({ subjectId }) => {
     // const [showLinkDialog, setShowLinkDialog] = useState(false);
     const [fileList, setFileList] = useState([]);
     const [postMessege, setPostMessege] = useState('');
-    const [postLink, setPostLink] = useState('');
     // const [linkList, setLinkList] = useState([]);
 
 
@@ -30,7 +29,6 @@ export const AddPost = ({ subjectId }) => {
         const postData = {
             serverTimestamp: serverTimestamp(),
             postMessege: postMessege,
-            postLink: postLink,
             postAutherId: currentUser.uid,
             postAutherEmail: currentUser.email,
             postAutherName: currentUser.displayName,
@@ -83,9 +81,7 @@ export const AddPost = ({ subjectId }) => {
         }
     }
 
-    const handleClose = () => {
-        setShowuploadDialog(false);
-    }
+    
     const onFileChange = (fileList) => {
         setFileList(fileList);
     }
@@ -206,7 +202,7 @@ export const AddPost = ({ subjectId }) => {
                 </form>
             </Box>
             <Box>
-                <Dialog
+                {/* <Dialog
                     // open={showLinkDialog}
                     onClose={handleClose}>
                     <DialogTitle>Add Link</DialogTitle>
@@ -221,7 +217,7 @@ export const AddPost = ({ subjectId }) => {
                             Add
                         </Button>
                     </DialogActions>
-                </Dialog>
+                </Dialog> */}
 
                 <DropFileInput
                     showuploadDialog={showuploadDialog}

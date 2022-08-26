@@ -1,29 +1,24 @@
 
 export const sidebarNavigation = [
     {
-        name: 'Home',
+        name: 'HOME',
         to: '/home',
         Text: 'home',
     },
     {
-        name: 'chatroom',
+        name: 'CHATROOM',
         to: '/chatroom',
-        Text: 'chatroom',
+        Text: 'CHATROOM',
 
     },
     {
-        name: 'Classroom',
-        to: '/Classroom',
-        Text: 'Classroom',
-    },
-    {
-        name: 'notes',
+        name: 'TODO',
         to: '/notes',
         Text: 'notes',
     },
     {
-        name: 'settings',
+        name: 'SETTINGS',
         to: '/settings',
-        Text: 'settings',
+        Text: 'SETTINGS',
     }
 ]

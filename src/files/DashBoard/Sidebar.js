@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Typography, CssBaseline, Drawer, Divider, Toolbar, List, Box, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
@@ -11,22 +11,14 @@ import { SidebarTheme } from '../../utils/Themes';
 import { ThemeProvider } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
 import { sidebarNavigation } from '../../config/SidebarNavigation';
-import { doc, onSnapshot, } from 'firebase/firestore';
-import {db} from '../../utils/firebaseDB';
+import NoteitWhite from '../../assets/NoteitWhite.png';
 
 export function Sidebar() {
   const drawerWidth = 240;
   const { currentUser, Themes, SignOut } = useAuth();
   const backgroundColor = Themes.backgroundColor;
-  const [userData, setUserData] = useState({});
 
-  useEffect(() => {
-    const q = doc(db, 'users',currentUser.uid);
-    onSnapshot(q, (doc) => {
-      setUserData(doc.data());
-    }
-    )
-  }, [currentUser]);
+  
 
   return (
     <Box sx={{
@@ -58,30 +50,43 @@ export function Sidebar() {
           anchor="left"
         >
           <Toolbar>
+
             <Box
               display={'flex'}
               flexDirection={'column'}
               margin={'auto'}
-              marginTop={'50px'}
+              marginTop={'15px'}
               sx={{
                 backgroundColor: { backgroundColor },
               }}
             >
+              <Box
+                display={'flex'}
+                flexDirection={'row'}
+              >
+                <img src={NoteitWhite} alt="Noteit" style={{ width: '37px', height: '37px' }} />
+                <Typography sx={{
+                  marginTop: '13px',
+                }}>note it</Typography>
+              </Box>
 
               <Box
                 display={'flex'}
                 margin={'auto'}
                 borderRadius={'25px'}
-
               >
                 <img
                   height={'174px'}
                   width={'174px'}
-                  style={{ borderRadius: '25px' }}
-                  src={userData.photoURL} alt={userData.displayName} />
+                  // refferrerPolicy="no-referrer"
+                  style={{
+                    borderRadius: '25px',
+                    objectFit: 'cover'
+                  }}
+                  src={currentUser.photoURL} alt={currentUser.displayName} />
               </Box>
-              <Typography paddingBottom={'15px'} variant="body" align="center" color="textPrimary">
-                {userData.displayName}
+              <Typography fontWeight={'bold'} paddingBottom={'15px'} variant="body1" align="center" color="textPrimary">
+                {currentUser.displayName}
               </Typography>
 
             </Box>
@@ -100,8 +105,11 @@ export function Sidebar() {
             ))}
           </List>
           {/* <Divider /> */}
-          <List>
-
+          <List
+            sx={{
+              bottom: '-120px',
+            }}
+          >
             {['Sign Out'].map((text, index) => (
               <ListItem key={text} disablePadding>
                 <ListItemButton
