@@ -41,7 +41,6 @@ export const Message = ({ messageData }) => {
                             <Box
                                 display='flex'
                                 flexDirection='row'
-                                // alignItems='center'
                                 justifyContent='flex-start'
                                 flexWrap='wrap'
                             >
@@ -77,7 +76,6 @@ export const Message = ({ messageData }) => {
                                     padding: '10px',
                                     borderRadius: '0px 25px 25px 25px',
                                     backgroundColor: '#f5f5f5',
-
                                 }}
                             >
                                 <Typography
