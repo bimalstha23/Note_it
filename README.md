@@ -1,4 +1,6 @@
 # Getting Started with Create React App
+ A web Based platform to make communicate and resourse sharing easy among students and teachers...
+ ( 4th semester project of KCC)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
