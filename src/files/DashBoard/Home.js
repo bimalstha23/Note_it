@@ -12,9 +12,7 @@ export function Home() {
         <Sidebar />
         <Box
           container
-          // marginLeft={10}
           fullwidth={false}
-        // display={'block'}
         >
           <InnerContent />
         </Box>

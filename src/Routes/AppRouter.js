@@ -85,13 +85,10 @@ export function AppRouter() {
           {/* <ProtectedRoute> */}
           <Route path="/" element={<InnerContent />}>
             <Route path="/" element={<Navigate replace to='home' />} />
-            {/* <Route path="/home/:id*" element={<Subjects />} /> */}
             {/* path for the created classes */}
             {createdClassData.map((Classdata, index) => (
               <Route key={index} path={`/home/${Classdata.id}`} element={<Subjects data={Classdata} />} >
-                {/* <Route path={`/home/${Classdata.id}/:id`}></Route> */}
               </Route>
-              // <Route key={index} path={`/${Classdata.id}/${subjectdata.id}`} element={ <SubjectContent/>} />
             ))}
             {/* path for the created classes */}
             {joinedClassData.map((data, index) => (
@@ -104,7 +101,6 @@ export function AppRouter() {
 
             <Route path="home" element={<MainHome />} />
             <Route path="chatroom" element={<ChatRoom />}>
-              {/* <Route path="/chatroom" element={<ChatSpace />} /> */}
               {createdClassData.map((Classdata, index) => (
                 <Route key={index} path={`/chatroom/${Classdata.id}`} element={<ChatSpace data={Classdata} />} />
               ))}

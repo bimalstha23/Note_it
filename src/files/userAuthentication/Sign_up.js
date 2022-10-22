@@ -5,7 +5,6 @@ import { Alert, Typography, Box, TextField, FormControl, Collapse, InputLabel, O
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import { useAuth } from '../../Contexts/AuthContext';
-// import { useMounted } from '../../Hooks/useMounted';
 import { doc, setDoc,} from 'firebase/firestore';
 import { db } from '../../utils/firebaseDB'
 
@@ -24,7 +23,6 @@ export function SignUp() {
   };
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
-    // setConfirmPasswordDirty(true);
   };
 
   const handleMouseDownPassword = (event) => {
@@ -32,25 +30,10 @@ export function SignUp() {
   };
 
   const navigate = useNavigate();
-  // const mounted = useMounted();
   const [isloading, setIsloading] = useState(false);
   const [email, setEmail] = useState('');
   const [showErrorMessege, setShowErrorMessege] = useState(false);
   const [errorMessege, setErrorMessege] = useState('');
-  // const [confirmPasswordDirty, setConfirmPasswordDirty] = useState(false);
-  // const [ShowPasswordError, setShowPasswordError] = useState(false);
-  // const [PasswordErrorMessage, setPasswordErrorMessage] = useState('');
-  //   password and confirm passowrd validation 
-  // useEffect(() => {
-  //   if (values.password !== values.confirmPassword) {
-  //     setShowPasswordError(true);
-  //     setPasswordErrorMessage('Password and Confirm Password Must be Same');
-  //   }
-  //   else {
-  //     setShowPasswordError(false);
-  //     setPasswordErrorMessage('');
-  //   }
-  // }, [values.password, values.confirmPassword]);
 
 
   const { registerUser } = useAuth();
@@ -200,5 +183,3 @@ export function SignUp() {
     </div >
   );
 }
-
-// export default SignUp;

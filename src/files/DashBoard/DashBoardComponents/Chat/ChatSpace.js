@@ -10,8 +10,6 @@ import { styled } from '@mui/system';
 
 const CustomButton = styled(Button)({
     backgroundColor: '#f5f5f5',
-    // padding: '10px',
-    // margin: '10px',
     color: '#121212',
 })
 
@@ -91,7 +89,6 @@ export const ChatSpace = ({ data }) => {
     return (
         <Box
             backgroundColor={backgroundColor}
-        // height='100vh'
         >
             <AppBar
                 position='static'
@@ -131,14 +128,9 @@ export const ChatSpace = ({ data }) => {
             <Box
                 display='flex'
                 flexDirection='row'
-                // alignItems='center'
-                // justifyContent='space-between'
                 padding={2}
 
                 width='850px'
-            // sx={{
-            //     width: 1,
-            // }}
             >
                 <form action=""
                     onSubmit={(e) => {
@@ -151,15 +143,11 @@ export const ChatSpace = ({ data }) => {
                         display='flex'
                         flexDirection='row'
                         color='#ffffff'
-                        // width={1}
                         sx={{
                             width: '800px',
                         }}
                     >
                         <Avatar
-                            // marginLeft={2}
-                            // marginRight={2}
-                            // padding={2}
                             src={currentUser.photoURL}
                             alt={currentUser.displayName}
                             sx={{
@@ -178,7 +166,6 @@ export const ChatSpace = ({ data }) => {
                             padding={'10px'}
                             type={'text'}
                             value={message}
-                            // color='#ffffff'
                             onChange={(e) => { setMessage(e.target.value) }}
                         />
                         <CustomButton sx={{ marginLeft: '8px' }} type='submit' variant="contained" endIcon={<SendIcon />}>

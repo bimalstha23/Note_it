@@ -24,7 +24,6 @@ export function Sidebar() {
     <Box sx={{
       backgroundColor: { backgroundColor },
       color: '#FFFFFF',
-      // width:'150px'
     }}>
       <CssBaseline />
       <ThemeProvider theme={SidebarTheme}>
@@ -78,7 +77,6 @@ export function Sidebar() {
                 <img
                   height={'174px'}
                   width={'174px'}
-                  // refferrerPolicy="no-referrer"
                   style={{
                     borderRadius: '25px',
                     objectFit: 'cover'
@@ -104,7 +102,6 @@ export function Sidebar() {
               </ListItem>
             ))}
           </List>
-          {/* <Divider /> */}
           <List
             sx={{
               bottom: '-120px',

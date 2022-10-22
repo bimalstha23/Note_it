@@ -3,7 +3,6 @@ import { Grid } from '@mui/material'
 import { Outlet } from 'react-router-dom'
 import{Box} from '@mui/material'
 import { ChatList } from './ChatList'
-// import { ChatSpace } from './ChatSpace'
 
 export const ChatRoom = () => {
   return (

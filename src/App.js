@@ -8,11 +8,9 @@ function App() {
   const Theme = MainTheme;
   return (
     <ThemeProvider theme={Theme}>
-      {/* <DBContextProvider> */}
         <AuthcontextProvider>
           <AppRouter />
         </AuthcontextProvider>
-      {/* </DBContextProvider> */}
     </ThemeProvider>
   );
 }

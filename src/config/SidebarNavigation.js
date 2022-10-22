@@ -13,8 +13,8 @@ export const sidebarNavigation = [
     },
     {
         name: 'TODO',
-        to: '/notes',
-        Text: 'notes',
+        to: '/todo',
+        Text: 'TODO',
     },
     {
         name: 'SETTINGS',

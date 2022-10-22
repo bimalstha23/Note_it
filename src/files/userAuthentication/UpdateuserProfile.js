@@ -65,15 +65,9 @@ export const UpdateuserProfile = () => {
                         }
                     } alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
                 </Stack>
-                {/* <Box display={'flex'}
-            flexDirection={'row'}
-          // sx={{paddingBottom:'10px'}}
-          > */}
                 <TextField value={firstName} onChange={(e) => { setFirstName(e.target.value) }} type={'text'} margin='normal' id="outlined" label="First Name" variant="outlined"
-                    //   sx={{ paddingRight: '10px' }}
                     required />
                 <TextField value={lastName} onChange={(e) => { setLastName(e.target.value) }} type={'text'} margin='normal' id="outlined" label="Last Name" variant="outlined" required />
-                {/* </Box> */}
 
                 <LoadingButton loading={isloading} type='submit' size='medium' variant="contained" fullWidth style={{ textTransform: 'none' }}>
                     <Typography variant='body1'>
