@@ -55,12 +55,6 @@ export function AppRouter() {
     }
   }
   useEffect(() => {
-    // if (loading) return;
-    // if (!currentUser) Navigate("/login", { replace: true });
-  }, [currentUser]);
-
-  useEffect(() => {
-    // if (loading) return;
     fetchCreatedClasses();
   }, [currentUser]);
 
